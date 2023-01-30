@@ -26,7 +26,7 @@ import io.github.oblarg.oblog.annotations.Log;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // region Fields
+    // #region Fields
 
     private static RobotContainer instance;
     @Log.BooleanBox(name = "Gyro Con.", methodName = "navXIsConnected", rowIndex = 1, columnIndex = 3, width = 1, height = 1)
@@ -38,7 +38,7 @@ public class RobotContainer {
     private double rotationExpo;
     private Gamepad controller;
 
-    // endregion
+    // #endregion
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
