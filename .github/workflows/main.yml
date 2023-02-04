@@ -20,4 +20,4 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - run: ./gradlew spotlessCheck
+      - run: ./gradlew.bat spotlessCheck
