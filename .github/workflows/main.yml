@@ -23,4 +23,4 @@ jobs:
         # Grant execute permission for gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew.bat
-      - run: ./gradlew.bat spotlessCheck
+      - run: ./gradlew spotlessCheck
