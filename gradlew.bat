@@ -1,4 +1,4 @@
-@echo OFF
+@echo off
 if "%OS%"=="Windows_NT" setlocal
 
 set DIRNAME=%~dp0
