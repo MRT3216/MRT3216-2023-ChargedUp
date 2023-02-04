@@ -8,7 +8,7 @@ set APP_HOME=%DIRNAME%
 @rem Resolve any "." and ".." in APP_HOME to make it shorter.
 for %%i in "%APP_HOME%" do set APP_HOME=%%~fi
 
-JAVA_EXE=java.exe
+
 %JAVA_EXE% -version >NUL 2>&1
 if %ERRORLEVEL% equ 0 goto execute
 
