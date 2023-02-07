@@ -5,7 +5,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.OI.Gamepad;
+import static edu.wpi.first.wpilibj2.command.Commands.*;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
@@ -36,7 +37,7 @@ public class RobotContainer {
     private double autoStartDelayTime;
     private double translationExpo;
     private double rotationExpo;
-    private Gamepad controller;
+    private CommandXboxController controller;
 
     // #endregion
 
@@ -85,8 +86,11 @@ public class RobotContainer {
         }
 
         // Resets the Robots Odometry and Gyro values
-        controller.Y.whenPressed(() -> RobotContainer.getInstance().getDriveSystem().resetGyroAndOdometry(true),
-                driveSystem);
+        // controller.Y.whenPressed(() ->
+        // RobotContainer.getInstance().getDriveSystem().resetGyroAndOdometry(true),
+        // driveSystem);
+        controller.y().onTrue(runOnce(() -> this.driveSystem.resetGyroAndOdometry(true)));
+
     }
 
     public void disablePIDSubsystems() {
