@@ -1,13 +1,13 @@
 import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO
 
 plugins {
-   id "java"
-   id "edu.wpi.first.GradleRIO" version "2023.2.1"
-   id "com.diffplug.gradle.spotless" version "4.5.1"
+    id "java"
+    id "edu.wpi.first.GradleRIO" version "2023.2.1"
+    id "com.diffplug.gradle.spotless" version "4.5.1"
 }
 
 repositories {
-  maven { url 'https://jitpack.io' }
+    maven { url 'https://jitpack.io' }
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -24,7 +24,7 @@ deploy {
             // or from command line. If not found an exception will be thrown.
             // You can use getTeamOrDefault(team) instead of getTeamNumber if you
             // want to store a team number in this file.
-            
+
             //team = project.frc.getTeamNumber()
             team = project.frc.getTeamOrDefault(3216)
             debug = project.frc.getDebugOrDefault(false)
@@ -94,46 +94,46 @@ jar {
 
 // Configuring Spotless
 spotless {
-   java {
-      target fileTree('.') {
+    java {
+        target fileTree('.') {
             include '**/*.java'
             exclude '**/build/**', '**/build-*/**'
-      }
-      //toggleOffOn()
-      googleJavaFormat()
-      removeUnusedImports()
-      trimTrailingWhitespace()
-      endWithNewline()
-   }
-   groovyGradle {
-      target fileTree('.') {
+        }
+        //toggleOffOn()
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    groovyGradle {
+        target fileTree('.') {
             include '**/*.gradle'
             exclude '**/build/**', '**/build-*/**'
-      }
-      greclipse()
-      indentWithSpaces(4)
-      trimTrailingWhitespace()
-      endWithNewline()
-   }
-   format 'xml', {
-      target fileTree('.') {
+        }
+        greclipse()
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    format 'xml', {
+        target fileTree('.') {
             include '**/*.xml'
             exclude '**/build/**', '**/build-*/**'
-      }
-      eclipseWtp('xml')
-      trimTrailingWhitespace()
-      indentWithSpaces(2)
-      endWithNewline()
-   }
-   format 'misc', {
-      target fileTree('.') {
+        }
+        eclipseWtp('xml')
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    format 'misc', {
+        target fileTree('.') {
             include '**/*.md', '**/.gitignore'
             exclude '**/build/**', '**/build-*/**'
-      }
-      trimTrailingWhitespace()
-      indentWithSpaces(2)
-      endWithNewline()
-   }
+        }
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
 }
 
 // Configure jar and deploy tasks
