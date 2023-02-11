@@ -7,9 +7,8 @@
 
 package frc.robot.settings;
 
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-import edu.wpi.first.math.util.Units;
+
 import edu.wpi.first.wpilibj.Filesystem;
 
 public final class Constants {
