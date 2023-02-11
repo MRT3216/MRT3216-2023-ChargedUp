@@ -45,6 +45,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     private RobotContainer() {
+        this.controller = new CommandXboxController(0);
         this.autoStartDelayTime = Constants.Auto.kStartDelayTime;
         this.translationExpo = Constants.OI.kTranslationExpo;
         this.rotationExpo = Constants.OI.kRotationnExpo;
