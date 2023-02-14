@@ -3,9 +3,12 @@ package frc.robot;
 // region Imports
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
+
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
 import frc.robot.commands.TeleDrive;
@@ -63,6 +66,7 @@ public class RobotContainer {
     }
 
     public void initSubsystems() {
+        Timer.delay(1);
         this.driveSystem = SwerveSubsystem.getInstance();
         this.autoChooser = AutoChooser.getInstance();
     }
