@@ -16,7 +16,7 @@ public final class Constants {
         // TODO: set these values
         public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(8.43); //rotating inverse of other wheels
         public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(76.99 + 180);
-        public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(16.52) + 180;
+        public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(16.52 + 180);
         public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(-67.15 + 180);
 
         // TODO: set these values
