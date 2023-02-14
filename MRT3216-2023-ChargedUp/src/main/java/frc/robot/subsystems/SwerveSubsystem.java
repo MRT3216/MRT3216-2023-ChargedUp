@@ -184,16 +184,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
         double blVoltage = states[2].speedMetersPerSecond;
         double brVoltage = states[3].speedMetersPerSecond;
 
-        // flVoltage = MathUtil.clamp(flVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
-        // frVoltage = MathUtil.clamp(frVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
-        // blVoltage = MathUtil.clamp(blVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
-        // brVoltage = MathUtil.clamp(brVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
-
-        // SmartDashboard.putNumber("Front Left Velocity", flVoltage);
-        // SmartDashboard.putNumber("Front Right Velocity", frVoltage);
-        // SmartDashboard.putNumber("Back Left Velocity", blVoltage);
-        // SmartDashboard.putNumber("Back Right Velocity", brVoltage);
-
         flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
         frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
         blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
@@ -304,7 +294,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The current state of the module.
      */
-
     public SwerveModuleState getState(SwerveModule module) {
         return new SwerveModuleState(module.getDriveVelocity(), new Rotation2d(module.getSteerAngle()));
     }
@@ -322,6 +311,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     public void resetGyroAndOdometry(boolean _input) {
         if (_input) {
             this.zeroGyroscope();
+            // TODO: zeroGyroscope() doesn't reset odometry anymore, figure out if we need it here.
             _input = false;
         }
     }
