@@ -16,7 +16,7 @@ public final class Constants {
         // TODO: set these values
         public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(8.43); //rotating inverse of other wheels
         public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(76.99 + 180);
-        public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(16.52 + 180);
+        public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(24.52);
         public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(-67.15 + 180);
 
         // TODO: set these values
@@ -27,7 +27,7 @@ public final class Constants {
          * The maximum voltage that will be delivered to the drive motors.
          * <p>
          * This can be reduced to cap the robot's maximum speed. Typically, this is
-         * useful during initial testing of the robot.
+         * useful during initial testing of the robot.%
          */
         public static final double MAX_VOLTAGE = 12.0;
         // The formula for calculating the theoretical maximum velocity is:
