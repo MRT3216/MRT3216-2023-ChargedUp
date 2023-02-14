@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 
-
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
 import frc.robot.commands.TeleDrive;
@@ -33,7 +32,7 @@ public class RobotContainer {
     // #region Fields
 
     private static RobotContainer instance;
-    @Log.BooleanBox(name = "Gyro Con.", methodName = "navXIsConnected", rowIndex = 1, columnIndex = 3, width = 1, height = 1)
+    @Log.BooleanBox(name = "Gyro Con.", methodName = "gyroConnected", rowIndex = 1, columnIndex = 3, width = 1, height = 1)
     private SwerveSubsystem driveSystem;
 
     private AutoChooser autoChooser;
@@ -133,17 +132,13 @@ public class RobotContainer {
         return this.autoStartDelayTime;
     }
 
-    // @Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue =
-    // Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1,
-    // rowIndex = 2, columnIndex = 0, height = 1, width = 1)
-    // public void setTranslationExpo(double expo) {
-    // this.translationExpo = expo;
-    // }
+    @Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue = Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 2, columnIndex = 0, height = 1, width = 1)
+    public void setTranslationExpo(double expo) {
+        this.translationExpo = expo;
+    }
 
-    // @Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue
-    // = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1,
-    // rowIndex = 2, columnIndex = 1, height = 1, width = 1)
-    // public void setRotationExpo(double expo) {
-    // this.rotationExpo = expo;
-    // }
+    @Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
+    public void setRotationExpo(double expo) {
+        this.rotationExpo = expo;
+    }
 }

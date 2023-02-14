@@ -165,15 +165,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
             states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
         }
 
-        double flVoltage;
-        double frVoltage;
-        double blVoltage;
-        double brVoltage;
-
-        flVoltage = states[0].speedMetersPerSecond;
-        frVoltage = states[1].speedMetersPerSecond;
-        blVoltage = states[2].speedMetersPerSecond;
-        brVoltage = states[3].speedMetersPerSecond;
+        double flVoltage = states[0].speedMetersPerSecond;
+        double frVoltage = states[1].speedMetersPerSecond;
+        double blVoltage = states[2].speedMetersPerSecond;
+        double brVoltage = states[3].speedMetersPerSecond;
 
         // flVoltage = MathUtil.clamp(flVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
         // frVoltage = MathUtil.clamp(frVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
@@ -317,11 +312,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
-    public boolean navXIsConnected() {
-        return this.navx.isConnected();
-    }
-
-    // region Logging
+    // #region Logging
 
     @Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
     private AHRS getGyro() {
@@ -411,7 +402,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     public void resetPosition(boolean _input) {
         if (_input) {
             // Reset the odometry with new 0 heading and zero Position.
-            // m_odometry.resetPosition(new Pose2d(), new Rotation2d());
+            // TODO: Do we need this?
             _input = false;
         }
     }
@@ -435,6 +426,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     public double getGyroDegrees() {
         return this.getGyroscopeRotation().getDegrees();
     }
+
+    // #endregion
 
     public static SwerveSubsystem getInstance() {
         if (instance == null) {

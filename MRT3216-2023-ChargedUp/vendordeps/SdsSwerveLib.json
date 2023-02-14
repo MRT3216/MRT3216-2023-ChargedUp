@@ -11,7 +11,7 @@
       {
         "groupId": "com.github.democat3457",
         "artifactId": "swerve-lib",
-        "version": "2023.1.2.1"
+        "version": "2023.1.2.2"
       }
     ],
     "jniDependencies": [],
