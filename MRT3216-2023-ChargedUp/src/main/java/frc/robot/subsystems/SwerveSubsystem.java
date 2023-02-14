@@ -24,6 +24,7 @@ import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_CANCODER;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_DRIVE;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.swervedrivespecialties.swervelib.MkModuleConfiguration;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
 import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
@@ -50,7 +51,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class SwerveSubsystem extends SubsystemBase implements Loggable {
     private static SwerveSubsystem instance;
-    private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             // Front left
             new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
             // Front right
@@ -61,27 +62,30 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
             new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0));
 
     // connected over USB
-    private final AHRS m_navx;
+    private final AHRS navx;
 
     // These are our modules. We initialize them in the constructor.
-    private final SwerveModule m_frontLeftModule;
-    private final SwerveModule m_frontRightModule;
-    private final SwerveModule m_backLeftModule;
-    private final SwerveModule m_backRightModule;
-    private final SwerveModule[] m_swerveModules;
+    private final SwerveModule frontLeftModule;
+    private final SwerveModule frontRightModule;
+    private final SwerveModule backLeftModule;
+    private final SwerveModule backRightModule;
+    private final SwerveModule[] swerveModules;
 
-    private final SwerveDriveOdometry m_odometry;
+    private final SwerveDriveOdometry odometry;
 
-    private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
     private Gains thetaGains;
 
     private SwerveSubsystem() {
-        m_navx = new AHRS(SerialPort.Port.kUSB1);
+        navx = new AHRS(SerialPort.Port.kUSB1);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        MkModuleConfiguration moduleConfig = MkModuleConfiguration.getDefaultSteerNEO();
+        moduleConfig.setDriveCurrentLimit(40.0);
+        moduleConfig.setSteerCurrentLimit(30.0);
 
-        m_frontLeftModule = new MkSwerveModuleBuilder()
+        this.frontLeftModule = new MkSwerveModuleBuilder(moduleConfig)
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, LEFT_FRONT_DRIVE)
                 .withSteerMotor(MotorType.NEO, LEFT_FRONT_ANGLE)
@@ -89,7 +93,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 .withSteerOffset(LEFT_FRONT_STEER_OFFSET)
                 .build();
 
-        m_frontRightModule = new MkSwerveModuleBuilder()
+        this.frontRightModule = new MkSwerveModuleBuilder()
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, RIGHT_FRONT_DRIVE)
                 .withSteerMotor(MotorType.NEO, RIGHT_FRONT_ANGLE)
@@ -97,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 .withSteerOffset(RIGHT_FRONT_STEER_OFFSET)
                 .build();
 
-        m_backLeftModule = new MkSwerveModuleBuilder()
+        this.backLeftModule = new MkSwerveModuleBuilder()
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, LEFT_REAR_DRIVE)
                 .withSteerMotor(MotorType.NEO, LEFT_REAR_ANGLE)
@@ -105,7 +109,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 .withSteerOffset(LEFT_REAR_STEER_OFFSET)
                 .build();
 
-        m_backRightModule = new MkSwerveModuleBuilder()
+        this.backRightModule = new MkSwerveModuleBuilder()
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, RIGHT_REAR_DRIVE)
                 .withSteerMotor(MotorType.NEO, RIGHT_REAR_ANGLE)
@@ -113,17 +117,17 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 .withSteerOffset(RIGHT_REAR_STEER_OFFSET)
                 .build();
 
-        m_swerveModules = new SwerveModule[] {
-                m_frontLeftModule,
-                m_frontRightModule,
-                m_backLeftModule,
-                m_backRightModule };
+        this.swerveModules = new SwerveModule[] {
+                this.frontLeftModule,
+                this.frontRightModule,
+                this.backLeftModule,
+                this.backRightModule };
 
-        m_odometry = new SwerveDriveOdometry(m_kinematics, new Rotation2d(), new SwerveModulePosition[] {
-                m_frontLeftModule.getPosition(),
-                m_frontRightModule.getPosition(),
-                m_backLeftModule.getPosition(),
-                m_backRightModule.getPosition() });
+        this.odometry = new SwerveDriveOdometry(this.kinematics, new Rotation2d(), new SwerveModulePosition[] {
+                this.frontLeftModule.getPosition(),
+                this.frontRightModule.getPosition(),
+                this.backLeftModule.getPosition(),
+                this.backRightModule.getPosition() });
 
         thetaGains = Auto.kAutoThetaGains;
     }
@@ -134,14 +138,14 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
      */
     public void zeroGyroscope() {
         System.out.println("Zeroing Gyroscope");
-        m_navx.zeroYaw();
+        this.navx.zeroYaw();
 
         // Reset the odometry with new 0 heading but same position.
-        m_odometry.resetPosition(
-                Rotation2d.fromDegrees(m_navx.getFusedHeading()),
-                new SwerveModulePosition[] { m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
-                        m_backLeftModule.getPosition(), m_backRightModule.getPosition() },
-                new Pose2d(m_odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(0.0)));
+        this.odometry.resetPosition(
+                Rotation2d.fromDegrees(this.navx.getFusedHeading()),
+                new SwerveModulePosition[] { this.frontLeftModule.getPosition(), this.frontRightModule.getPosition(),
+                        this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+                new Pose2d(this.odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(0.0)));
     }
 
     /**
@@ -149,44 +153,45 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
      * it takes some time to run.
      */
     public void calibrateGyroscope() {
-        m_navx.calibrate();
+        this.navx.calibrate();
     }
 
     public Rotation2d getGyroscopeRotation() {
         // // We have to invert the angle of the NavX so that rotating the robot
         // counter-clockwise makes the angle increase.
-        return Rotation2d.fromDegrees(-m_navx.getYaw());
+        return Rotation2d.fromDegrees(-this.navx.getYaw());
     }
 
     public Pose2d getCurrentRobotPose() {
-        return m_odometry.getPoseMeters();
+        return this.odometry.getPoseMeters();
     }
 
     public void setCurrentRobotPose(Pose2d pose) {
-        m_odometry
+        this.odometry
                 .resetPosition(getGyroscopeRotation(),
-                        new SwerveModulePosition[] { m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
-                                m_backLeftModule.getPosition(), m_backRightModule.getPosition() },
+                        new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+                                this.frontRightModule.getPosition(),
+                                this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
                         pose);
     }
 
     public void stop() {
-        for (SwerveModule m_swerveModule : m_swerveModules) {
-            m_swerveModule.set(0, m_swerveModule.getSteerAngle());
+        for (SwerveModule swerveModule : this.swerveModules) {
+            swerveModule.set(0, swerveModule.getSteerAngle());
         }
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
-        m_chassisSpeeds = chassisSpeeds;
+        this.chassisSpeeds = chassisSpeeds;
     }
 
     @Override
     public void periodic() {
-        SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+        SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
 
-        for (int i = 0; i < m_swerveModules.length; i++) {
-            m_swerveModules[i].set(
+        for (int i = 0; i < this.swerveModules.length; i++) {
+            this.swerveModules[i].set(
                     states[i].speedMetersPerSecond / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE,
                     states[i].angle.getRadians());
         }
@@ -194,11 +199,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
         var gyroAngle = this.getGyroscopeRotation();
 
         // Update the pose
-        m_odometry.update(gyroAngle, new SwerveModulePosition[] {
-                m_frontLeftModule.getPosition(),
-                m_frontRightModule.getPosition(),
-                m_backLeftModule.getPosition(),
-                m_backRightModule.getPosition() });
+        this.odometry.update(gyroAngle, new SwerveModulePosition[] {
+                this.frontLeftModule.getPosition(),
+                this.frontRightModule.getPosition(),
+                this.backLeftModule.getPosition(),
+                this.backRightModule.getPosition() });
     }
 
     /**
@@ -212,7 +217,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     }
 
     public boolean gyroConnected() {
-        return this.m_navx.isConnected();
+        return this.navx.isConnected();
     }
 
     public Gains getThetaGains() {
@@ -229,93 +234,93 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     }
 
     public boolean navXIsConnected() {
-        return m_navx.isConnected();
+        return this.navx.isConnected();
     }
 
     // region Logging
 
     @Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
     private AHRS getGyro() {
-        return m_navx;
+        return this.navx;
     }
 
     @Log.NumberBar(name = "FL Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public double getFrontLeftSpeed() {
-        return m_frontLeftModule.getDriveVelocity();
+        return this.frontLeftModule.getDriveVelocity();
     }
 
     @Log.Dial(name = "FL Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public double getFrontLeftAngle() {
-        return Math.IEEEremainder(Math.toDegrees(m_frontLeftModule.getSteerAngle()),
+        return Math.IEEEremainder(Math.toDegrees(this.frontLeftModule.getSteerAngle()),
                 180);
     }
 
     @Log.NumberBar(name = "FR Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 5, height = 1, width = 1)
     public double getFrontRightSpeed() {
-        return m_frontRightModule.getDriveVelocity();
+        return this.frontRightModule.getDriveVelocity();
     }
 
     @Log.Dial(name = "FR Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
     public double getFrontRightAngle() {
-        return Math.IEEEremainder(Math.toDegrees(m_frontRightModule.getSteerAngle()),
+        return Math.IEEEremainder(Math.toDegrees(this.frontRightModule.getSteerAngle()),
                 180);
     }
 
     @Log.Dial(name = "BL Angle", min = -90, max = 90, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public double getBackLeftAngle() {
-        return Math.IEEEremainder(Math.toDegrees(m_backLeftModule.getSteerAngle()),
+        return Math.IEEEremainder(Math.toDegrees(this.backLeftModule.getSteerAngle()),
                 180);
     }
 
     @Log.NumberBar(name = "BL Velocity", min = -5, max = 5, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
     public double getBackLeftSpeed() {
-        return m_backLeftModule.getDriveVelocity();
+        return this.backLeftModule.getDriveVelocity();
     }
 
     @Log.NumberBar(name = "BR Velocity", min = -5, max = 5, rowIndex = 1, columnIndex = 5, height = 1, width = 1)
     public double getBackRightSpeed() {
-        return m_backRightModule.getDriveVelocity();
+        return this.backRightModule.getDriveVelocity();
     }
 
     @Log.Dial(name = "BR Angle", min = -90, max = 90, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
     public double getBackRightAngle() {
-        return Math.IEEEremainder(Math.toDegrees(m_backRightModule.getSteerAngle()),
+        return Math.IEEEremainder(Math.toDegrees(this.backRightModule.getSteerAngle()),
                 180);
     }
 
     @Log(name = "x-Position", rowIndex = 2, columnIndex = 6, height = 1, width = 1)
     public double getYPos() {
-        return m_odometry.getPoseMeters().getY();
+        return this.odometry.getPoseMeters().getY();
     }
 
     @Log(name = "y-Position", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
     public double getXPos() {
-        return m_odometry.getPoseMeters().getX();
+        return this.odometry.getPoseMeters().getX();
     }
 
     @Log(name = "theta-Position", rowIndex = 4, columnIndex = 6, height = 1, width = 1)
     public double getThetaPos() {
-        return m_odometry.getPoseMeters().getRotation().getDegrees();
+        return this.odometry.getPoseMeters().getRotation().getDegrees();
     }
 
     @Log(name = "x-Velocity", rowIndex = 2, columnIndex = 7, height = 1, width = 1)
     public double getRobotXVelocity() {
-        return m_chassisSpeeds.vxMetersPerSecond;
+        return this.chassisSpeeds.vxMetersPerSecond;
     }
 
     @Log(name = "y-Velocity", rowIndex = 3, columnIndex = 7, height = 1, width = 1)
     public double getRobotYVelocity() {
-        return m_chassisSpeeds.vyMetersPerSecond;
+        return this.chassisSpeeds.vyMetersPerSecond;
     }
 
     @Log(name = "theta-Velocity", rowIndex = 4, columnIndex = 7, height = 1, width = 1)
     public double getRobotThetaVelocity() {
-        return m_chassisSpeeds.omegaRadiansPerSecond;
+        return this.chassisSpeeds.omegaRadiansPerSecond;
     }
 
     @Log.BooleanBox(name = "Gyro Int?", rowIndex = 0, columnIndex = 0)
     public boolean getGyroInterference() {
-        return this.m_navx.isMagneticDisturbance();
+        return this.navx.isMagneticDisturbance();
     }
 
     @Config.ToggleButton(name = "ResetPosition", defaultValue = false, rowIndex = 4, columnIndex = 0, height = 1, width = 2)
