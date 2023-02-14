@@ -30,12 +30,12 @@ import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -71,7 +71,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     private final SwerveModule backRightModule;
     private final SwerveModule[] swerveModules;
 
-    private final SwerveDriveOdometry odometry;
+    public final SwerveDrivePoseEstimator poseEstimator;
 
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
@@ -123,13 +123,100 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 this.backLeftModule,
                 this.backRightModule };
 
-        this.odometry = new SwerveDriveOdometry(this.kinematics, new Rotation2d(), new SwerveModulePosition[] {
-                this.frontLeftModule.getPosition(),
-                this.frontRightModule.getPosition(),
-                this.backLeftModule.getPosition(),
-                this.backRightModule.getPosition() });
+        this.poseEstimator = new SwerveDrivePoseEstimator(kinematics, getGyroscopeRotation(), getPositions(),
+                new Pose2d());
 
-        thetaGains = Auto.kAutoThetaGains;
+        this.thetaGains = Auto.kAutoThetaGains;
+    }
+
+    @Override
+    public void periodic() {
+        this.poseEstimator.update(getGyroscopeRotation(), getPositions());
+
+        final double zeroDeadzone = 0.001;
+
+        // Set deadzone on translation
+        if (Math.abs(this.chassisSpeeds.vxMetersPerSecond) < zeroDeadzone) {
+            this.chassisSpeeds.vxMetersPerSecond = 0;
+        }
+        if (Math.abs(this.chassisSpeeds.vyMetersPerSecond) < zeroDeadzone) {
+            this.chassisSpeeds.vyMetersPerSecond = 0;
+        }
+
+        // Hockey-lock if stopped by setting rotation to realllly low number
+        if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
+                this.chassisSpeeds.vyMetersPerSecond == 0 &&
+                Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
+            this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
+        }
+
+        /*
+         * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
+         * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
+         * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
+         */
+
+        SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
+
+        SwerveModulePosition[] positions = getPositions();
+        for (int i = 0; i < states.length; i++) {
+            states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
+        }
+
+        double flVoltage;
+        double frVoltage;
+        double blVoltage;
+        double brVoltage;
+
+        flVoltage = states[0].speedMetersPerSecond;
+        frVoltage = states[1].speedMetersPerSecond;
+        blVoltage = states[2].speedMetersPerSecond;
+        brVoltage = states[3].speedMetersPerSecond;
+
+        // flVoltage = MathUtil.clamp(flVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
+        // frVoltage = MathUtil.clamp(frVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
+        // blVoltage = MathUtil.clamp(blVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
+        // brVoltage = MathUtil.clamp(brVoltage, 0, MAX_VELOCITY_METERS_PER_SECOND);
+
+        // SmartDashboard.putNumber("Front Left Velocity", flVoltage);
+        // SmartDashboard.putNumber("Front Right Velocity", frVoltage);
+        // SmartDashboard.putNumber("Back Left Velocity", blVoltage);
+        // SmartDashboard.putNumber("Back Right Velocity", brVoltage);
+
+        flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+        frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+        blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+        brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+
+        this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
+        this.frontRightModule.set(frVoltage, states[1].angle.getRadians());
+        this.backLeftModule.set(blVoltage, states[2].angle.getRadians());
+        this.backRightModule.set(brVoltage, states[3].angle.getRadians());
+
+        /*
+         * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+         * This is what we had before. Trying similar code from Team 5431 (uses
+         * democat's library)
+         * SwerveModuleState[] states =
+         * this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
+         * SwerveDriveKinematics.desaturateWheelSpeeds(states,
+         * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
+         * 
+         * for (int i = 0; i < this.swerveModules.length; i++) {
+         * this.swerveModules[i].set(
+         * states[i].speedMetersPerSecond / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND *
+         * Drivetrain.MAX_VOLTAGE,
+         * states[i].angle.getRadians());
+         * }
+         * 
+         * var gyroAngle = this.getGyroscopeRotation();
+         * 
+         * // Update the pose
+         * this.odometry.update(gyroAngle, getPositions());
+         * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+         */
     }
 
     /**
@@ -138,14 +225,20 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
      */
     public void zeroGyroscope() {
         System.out.println("Zeroing Gyroscope");
-        this.navx.zeroYaw();
+        this.navx.reset();
 
-        // Reset the odometry with new 0 heading but same position.
-        this.odometry.resetPosition(
-                Rotation2d.fromDegrees(this.navx.getFusedHeading()),
-                new SwerveModulePosition[] { this.frontLeftModule.getPosition(), this.frontRightModule.getPosition(),
-                        this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
-                new Pose2d(this.odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(0.0)));
+        /*
+         * Lande - I can't remember why we had this last year, but I'm removing it for
+         * now
+         * // Reset the odometry with new 0 heading but same position.
+         * this.odometry.resetPosition(
+         * Rotation2d.fromDegrees(this.navx.getFusedHeading()),
+         * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+         * this.frontRightModule.getPosition(),
+         * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+         * new Pose2d(this.odometry.getPoseMeters().getTranslation(),
+         * Rotation2d.fromDegrees(0.0)));
+         */
     }
 
     /**
@@ -160,20 +253,23 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
         // // We have to invert the angle of the NavX so that rotating the robot
         // counter-clockwise makes the angle increase.
         return Rotation2d.fromDegrees(-this.navx.getYaw());
-    }
+    };
 
-    public Pose2d getCurrentRobotPose() {
-        return this.odometry.getPoseMeters();
-    }
-
-    public void setCurrentRobotPose(Pose2d pose) {
-        this.odometry
-                .resetPosition(getGyroscopeRotation(),
-                        new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
-                                this.frontRightModule.getPosition(),
-                                this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
-                        pose);
-    }
+    /*
+     * public Pose2d getCurrentRobotPose() {
+     * return this.odometry.getPoseMeters();
+     * }
+     * 
+     * 
+     * public void setCurrentRobotPose(Pose2d pose) {
+     * this.odometry
+     * .resetPosition(getGyroscopeRotation(),
+     * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+     * this.frontRightModule.getPosition(),
+     * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+     * pose);
+     * }
+     */
 
     public void stop() {
         for (SwerveModule swerveModule : this.swerveModules) {
@@ -181,29 +277,17 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
-    public void drive(ChassisSpeeds chassisSpeeds) {
-        this.chassisSpeeds = chassisSpeeds;
-    }
-
-    @Override
-    public void periodic() {
-        SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
-
-        for (int i = 0; i < this.swerveModules.length; i++) {
-            this.swerveModules[i].set(
-                    states[i].speedMetersPerSecond / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE,
-                    states[i].angle.getRadians());
-        }
-
-        var gyroAngle = this.getGyroscopeRotation();
-
-        // Update the pose
-        this.odometry.update(gyroAngle, new SwerveModulePosition[] {
+    public SwerveModulePosition[] getPositions() {
+        return new SwerveModulePosition[] {
                 this.frontLeftModule.getPosition(),
                 this.frontRightModule.getPosition(),
                 this.backLeftModule.getPosition(),
-                this.backRightModule.getPosition() });
+                this.backRightModule.getPosition()
+        };
+    }
+
+    public void drive(ChassisSpeeds chassisSpeeds) {
+        this.chassisSpeeds = chassisSpeeds;
     }
 
     /**
@@ -290,17 +374,17 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
     @Log(name = "x-Position", rowIndex = 2, columnIndex = 6, height = 1, width = 1)
     public double getYPos() {
-        return this.odometry.getPoseMeters().getY();
+        return this.poseEstimator.getEstimatedPosition().getY();
     }
 
     @Log(name = "y-Position", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
     public double getXPos() {
-        return this.odometry.getPoseMeters().getX();
+        return this.poseEstimator.getEstimatedPosition().getX();
     }
 
     @Log(name = "theta-Position", rowIndex = 4, columnIndex = 6, height = 1, width = 1)
     public double getThetaPos() {
-        return this.odometry.getPoseMeters().getRotation().getDegrees();
+        return this.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
     }
 
     @Log(name = "x-Velocity", rowIndex = 2, columnIndex = 7, height = 1, width = 1)
