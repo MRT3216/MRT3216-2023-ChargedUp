@@ -39,6 +39,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -80,12 +81,15 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     private SwerveSubsystem() {
         navx = new AHRS(SerialPort.Port.kUSB1);
 
-        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
         MkModuleConfiguration moduleConfig = MkModuleConfiguration.getDefaultSteerNEO();
         moduleConfig.setDriveCurrentLimit(40.0);
         moduleConfig.setSteerCurrentLimit(30.0);
 
         this.frontLeftModule = new MkSwerveModuleBuilder(moduleConfig)
+                .withLayout(shuffleboardTab.getLayout("Front Left Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(0, 0))
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, LEFT_FRONT_DRIVE)
                 .withSteerMotor(MotorType.NEO, LEFT_FRONT_ANGLE)
@@ -94,6 +98,9 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 .build();
 
         this.frontRightModule = new MkSwerveModuleBuilder()
+                .withLayout(shuffleboardTab.getLayout("Front Right Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(2, 0))
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, RIGHT_FRONT_DRIVE)
                 .withSteerMotor(MotorType.NEO, RIGHT_FRONT_ANGLE)
@@ -102,6 +109,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 .build();
 
         this.backLeftModule = new MkSwerveModuleBuilder()
+                .withLayout(shuffleboardTab.getLayout("Back Right Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(6, 0))
+
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, LEFT_REAR_DRIVE)
                 .withSteerMotor(MotorType.NEO, LEFT_REAR_ANGLE)
@@ -110,6 +121,9 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
                 .build();
 
         this.backRightModule = new MkSwerveModuleBuilder()
+                .withLayout(shuffleboardTab.getLayout("Back Left Module", BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(4, 0))
                 .withGearRatio(SdsModuleConfigurations.MK4I_L2)
                 .withDriveMotor(MotorType.NEO, RIGHT_REAR_DRIVE)
                 .withSteerMotor(MotorType.NEO, RIGHT_REAR_ANGLE)
