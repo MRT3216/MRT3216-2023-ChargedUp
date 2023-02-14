@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj.Filesystem;
 public final class Constants {
     public static final class Drivetrain {
         // TODO: set these values
-        public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(6.15 + 180);
-        public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(77.95 + 180);
-        public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(18.45 + 180);
-        public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(-66.35 + 180);
+        public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(8.43); //rotating inverse of other wheels
+        public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(76.99);
+        public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(16.52);
+        public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(-67.15);
 
         // TODO: set these values
         public static final double WHEELBASE_METERS = 0.5461;
