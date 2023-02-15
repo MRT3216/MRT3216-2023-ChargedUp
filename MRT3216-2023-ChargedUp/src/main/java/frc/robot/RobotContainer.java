@@ -90,11 +90,7 @@ public class RobotContainer {
         }
 
         // Resets the Robots Odometry and Gyro values
-        // controller.Y.whenPressed(() ->
-        // RobotContainer.getInstance().getDriveSystem().resetGyroAndOdometry(true),
-        // driveSystem);
         controller.y().onTrue(runOnce(() -> this.driveSystem.resetGyroAndOdometry(true)));
-
     }
 
     public void disablePIDSubsystems() {
