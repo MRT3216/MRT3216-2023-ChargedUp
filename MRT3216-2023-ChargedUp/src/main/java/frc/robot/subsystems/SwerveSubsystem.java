@@ -157,6 +157,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
         }
 
         // Hockey-lock if stopped by setting rotation to realllly low number
+        /* 
         if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
                 this.chassisSpeeds.vyMetersPerSecond == 0 &&
                 Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
