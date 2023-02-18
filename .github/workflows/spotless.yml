@@ -23,4 +23,4 @@ jobs:
       - name: Run spotless
         run: ./gradlew spotlessApply
       - name: Run spotlessCheck
-        run: ./MRT3216-2023-ChargedUp/gradlew spotlessCheck
+        run: ./gradlew spotlessCheck
