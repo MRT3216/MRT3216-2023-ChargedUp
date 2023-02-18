@@ -65,7 +65,6 @@ public class RobotContainer {
     }
 
     public void initSubsystems() {
-        Timer.delay(1);
         this.driveSystem = SwerveSubsystem.getInstance();
         this.autoChooser = AutoChooser.getInstance();
     }
