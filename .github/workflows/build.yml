@@ -32,6 +32,10 @@ jobs:
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
       run: chmod +x ./MRT3216-2023-ChargedUp/gradlew
+      
+    # Spotless Run
+    - name: Runs Spotless
+      run: ./MRT3216-2023-ChargedUp/gradlew spotlessApply
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
