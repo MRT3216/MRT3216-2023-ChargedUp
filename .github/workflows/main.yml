@@ -29,8 +29,8 @@ jobs:
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x ./MRT3216-2023-ChargedUp/gradlew
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      run: ./gradlew build
+      run: ./MRT3216-2023-ChargedUp/gradlew build
