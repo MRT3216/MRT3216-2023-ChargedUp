@@ -21,6 +21,6 @@ jobs:
         run: chmod +x gradlew
       # Runs spotlessCheck
       - name: Run spotless
-        run: ./gradlew spotlessApply
+        run: ./MRT3216-2023-ChargedUp/gradlew spotlessApply
       - name: Run spotlessCheck
-        run: ./gradlew spotlessCheck
+        run: ./MRT3216-2023-ChargedUp/gradlew spotlessCheck
