@@ -84,13 +84,13 @@ public class RobotContainer {
           new TeleDrive(
               driveSystem,
               () ->
-                  OIUtils.modifyAxis(controller.getLeftY(), this.translationExpo)
+                  OIUtils.modifyAxis(-controller.getLeftY(), this.translationExpo)
                       * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
               () ->
-                  OIUtils.modifyAxis(controller.getLeftX(), this.translationExpo)
+                  OIUtils.modifyAxis(-controller.getLeftX(), this.translationExpo)
                       * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
               () ->
-                  OIUtils.modifyAxis(controller.getRightX(), this.rotationExpo)
+                  OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
                       * Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
               true));
     }
