@@ -18,7 +18,7 @@ jobs:
           java-version: 17
       # Grant execute permission for gradlew
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ./MRT3216-2023-ChargedUp/gradlew
       # Runs spotlessCheck
       - name: Run spotless
         run: ./MRT3216-2023-ChargedUp/gradlew spotlessApply
