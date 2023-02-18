@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.I2C;
 
 /** Add your docs here. */
 public final class RobotMap {
+<<<<<<< Updated upstream
   public static final class ROBOT {
     public static class DRIVETRAIN {
       // NEO
@@ -26,6 +27,38 @@ public final class RobotMap {
       public static final int RIGHT_REAR_DRIVE = 12;
       public static final int RIGHT_REAR_ANGLE = 13;
       public static final int RIGHT_REAR_CANCODER = 14;
+=======
+    public final static class ROBOT {
+        public static class DRIVETRAIN {
+            // NEO
+            public static final int LEFT_FRONT_DRIVE = 3;
+            public static final int LEFT_FRONT_ANGLE = 4;
+            public static final int LEFT_FRONT_CANCODER = 5;
+            public static final int RIGHT_FRONT_DRIVE = 6;
+            public static final int RIGHT_FRONT_ANGLE = 7;
+            public static final int RIGHT_FRONT_CANCODER = 8;
+            public static final int LEFT_REAR_DRIVE = 9;
+            public static final int LEFT_REAR_ANGLE = 10;
+            public static final int LEFT_REAR_CANCODER = 11;
+            public static final int RIGHT_REAR_DRIVE = 12;
+            public static final int RIGHT_REAR_ANGLE = 13;
+            public static final int RIGHT_REAR_CANCODER = 14;
+        }
+
+        public static class ARM {
+            //NEO
+            public static final int TOP_LEFT_MOTOR = 15;
+            public static final int MIDDLE_LEFT_MOTOR = 16;
+            public static final int BOTTOM_LEFT_MOTOR = 17;
+            public static final int TOP_RIGHT_MOTOR = 18;
+            public static final int MIDDLE_RIGHT_MOTOR = 19;
+            public static final int BOTTOM_RIGHT_MOTOR = 20;
+        }
+
+        public static class SENSORS {
+            public static final I2C.Port COLOR_SENSOR = I2C.Port.kMXP;
+        }
+>>>>>>> Stashed changes
     }
 
     public static class SENSORS {
