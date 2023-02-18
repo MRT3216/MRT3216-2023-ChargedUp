@@ -33,4 +33,4 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      run: ./MRT3216-2023-ChargedUp/gradlew build
+      run: ./gradlew build
