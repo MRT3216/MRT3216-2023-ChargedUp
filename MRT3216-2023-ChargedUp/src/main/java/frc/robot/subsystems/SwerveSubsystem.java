@@ -170,13 +170,13 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
     // Hockey-lock if stopped by setting rotation to realllly low number
     /*
-    if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
-            this.chassisSpeeds.vyMetersPerSecond == 0 &&
-            Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
-        this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
-    }
-
-    /*
+     * if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
+     * this.chassisSpeeds.vyMetersPerSecond == 0 &&
+     * Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
+     * this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
+     * }
+     *
+     * /*
      * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
      * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
      * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
@@ -318,16 +318,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
     return this.thetaGains;
   }
 
-  // @Config.ToggleButton(name = "ResetGyroAndOdometry", defaultValue = false,
-  // rowIndex = 3, columnIndex = 0, height = 1, width = 2)
-  public void resetGyroAndOdometry(boolean _input) {
-    if (_input) {
-      this.zeroGyroscope();
-      // TODO: zeroGyroscope() doesn't reset odometry anymore, figure out if we need it here.
-      _input = false;
-    }
-  }
-
   // #region Logging
 
   @Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
@@ -464,21 +454,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
   @Log.BooleanBox(name = "Gyro Int?", rowIndex = 0, columnIndex = 0)
   public boolean getGyroInterference() {
     return this.navx.isMagneticDisturbance();
-  }
-
-  @Config.ToggleButton(
-      name = "ResetPosition",
-      defaultValue = false,
-      rowIndex = 4,
-      columnIndex = 0,
-      height = 1,
-      width = 2)
-  public void resetPosition(boolean _input) {
-    if (_input) {
-      // Reset the odometry with new 0 heading and zero Position.
-      // TODO: Do we need this?
-      _input = false;
-    }
   }
 
   @Config.NumberSlider(
