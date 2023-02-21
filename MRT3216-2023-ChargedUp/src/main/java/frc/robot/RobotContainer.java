@@ -94,9 +94,6 @@ public class RobotContainer {
                       * Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
               true));
     }
-
-    // Resets the Robots Odometry and Gyro values
-    controller.y().onTrue(runOnce(() -> this.driveSystem.resetGyroAndOdometry(true)));
   }
 
   public void disablePIDSubsystems() {}
