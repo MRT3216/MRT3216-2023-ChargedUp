@@ -64,6 +64,42 @@ public final class Constants {
     public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
   }
 
+  public static final class LimeLight {
+    public static final String NTtable = "limelight";
+
+    // modes:
+    // 0 = use the LED Mode set in the current pipeline
+    // 1 = force off
+    // 2 = force blink
+    // 3 = force on
+    public enum LEDMode {
+      PIPELINE,
+      OFF,
+      BLINK,
+      ON
+    }
+
+    // modes:
+    // 0 = vision processor
+    // 1 = driver camera
+    public enum CameraMode {
+      VISION,
+      DRIVER
+    }
+
+    // Set stream:
+    // 0 = Standard - Side-by-side streams if a webcam is attached to Limelight
+    // 1 = PiP Main - The secondary camera stream is placed in the lower-right
+    // corner of the primary camera stream
+    // 2 = PiP Secondary - The primary camera stream is placed in the lower-right
+    // corner of the secondary camera stream
+    public enum CameraStream {
+      Standard,
+      PiPMain,
+      PiPSecondary
+    }
+  }
+
   public static final class Auto {
     // Proportional gain
     public static final double kPositionP = 0.001;
