@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2023.4.1"
-    id 'com.diffplug.spotless' version '5.0.0'
+    id 'com.diffplug.spotless' version '6.12.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -116,10 +116,9 @@ spotless {
             include '**/*.java'
             exclude '**/build/**', '**/build-*/**'
         }
-        //toggleOffOn()
-        googleJavaFormat.aosp()
+        toggleOffOn()
+        googleJavaFormat()
         indentWithTabs(2)
-        indentWithSpaces(4)
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()

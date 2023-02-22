@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
@@ -13,239 +12,239 @@ import frc.robot.settings.Constants.LimeLight.CameraStream;
 import frc.robot.settings.Constants.LimeLight.LEDMode;
 
 public class LimelightSubsystem extends SubsystemBase {
-  private static LimelightSubsystem instance;
-  private final NetworkTable limelightNT;
+	private static LimelightSubsystem instance;
+	private final NetworkTable limelightNT;
 
-  private LimelightSubsystem() {
-    NetworkTable table = NetworkTableInstance.getDefault().getTable(LimeLight.NTtable);
-    this.limelightNT = table;
-    // this.setLEDMode(LimeLight.LEDMode.OFF);
-    this.setStream(CameraStream.PiPMain);
-  }
+	private LimelightSubsystem() {
+		NetworkTable table = NetworkTableInstance.getDefault().getTable(LimeLight.NTtable);
+		this.limelightNT = table;
+		// this.setLEDMode(LimeLight.LEDMode.OFF);
+		this.setStream(CameraStream.PiPMain);
+	}
 
-  public Pose3d getPose3D() {
-    double[] poseArray = limelightNT.getEntry("botpose").getDoubleArray(new double[0]);
-    if (poseArray.length == 6) {
-      return new Pose3d(
-          poseArray[1],
-          poseArray[0],
-          poseArray[2],
-          new Rotation3d(
-              Units.degreesToRadians(poseArray[3]),
-              Units.degreesToRadians(poseArray[4]),
-              Units.degreesToRadians(poseArray[5])));
-    }
-    return null;
-  }
-  /*
-   * Returns the horizontal distance
-   *
-   */
-  public double getHorizontalGoalDistance() {
-    // The horizontal distance from the center of the camera to the April Tag.
-    double cameraXDist = getZOffset();
+	public Pose3d getPose3D() {
+		double[] poseArray = limelightNT.getEntry("botpose").getDoubleArray(new double[0]);
+		if (poseArray.length == 6) {
+			return new Pose3d(
+					poseArray[1],
+					poseArray[0],
+					poseArray[2],
+					new Rotation3d(
+							Units.degreesToRadians(poseArray[3]),
+							Units.degreesToRadians(poseArray[4]),
+							Units.degreesToRadians(poseArray[5])));
+		}
+		return null;
+	}
+	/*
+	 * Returns the horizontal distance
+	 *
+	 */
+	public double getHorizontalGoalDistance() {
+		// The horizontal distance from the center of the camera to the April Tag.
+		double cameraXDist = getZOffset();
 
-    // The horizontal distance from the front of the robot to the center of the
-    // goal.0
-    double robotXDistToGoal = cameraXDist;
+		// The horizontal distance from the front of the robot to the center of the
+		// goal.0
+		double robotXDistToGoal = cameraXDist;
 
-    // The horizontal distance from the shooter to the center of the goal.
-    return robotXDistToGoal;
-  }
-  /*
-   * Returns the horizontal distance to the center of the goal in meters.
-   */
-  /*
-  	public double getHorizontalGoalDistance() {
-  		double cameraAngle = Units.degreesToRadians(this.getVerticalOffset());
-  		// The horizontal distance from the center of the camera to the vision tape.
-  		double cameraXDist = Projectile.kTargetHeightFromCamera / Math.tan(Projectile.kCameraViewAngle + cameraAngle);
+		// The horizontal distance from the shooter to the center of the goal.
+		return robotXDistToGoal;
+	}
+	/*
+	 * Returns the horizontal distance to the center of the goal in meters.
+	 */
+	/*
+					public double getHorizontalGoalDistance() {
+									double cameraAngle = Units.degreesToRadians(this.getVerticalOffset());
+									// The horizontal distance from the center of the camera to the vision tape.
+									double cameraXDist = Projectile.kTargetHeightFromCamera / Math.tan(Projectile.kCameraViewAngle + cameraAngle);
 
-  		// The horizontal distance from the front of the robot to the center of the
-  		// goal.0
-  		double robotXDistToGoal = cameraXDist;
+									// The horizontal distance from the front of the robot to the center of the
+									// goal.0
+									double robotXDistToGoal = cameraXDist;
 
-  		// The horizontal distance from the shooter to the center of the goal.
-  		return robotXDistToGoal + Projectile.kShooterOffsetFromFrame + this.distanceAdjustmentInMeters;
-  	}
+									// The horizontal distance from the shooter to the center of the goal.
+									return robotXDistToGoal + Projectile.kShooterOffsetFromFrame + this.distanceAdjustmentInMeters;
+					}
 
-  	public double getInitHoriztonalVelocity() {
-  		double goalFeet = (Units.metersToFeet(getHorizontalGoalDistance()) * 3 / 4 + 1);
-  		return Units.feetToMeters(goalFeet);
-  	}
+					public double getInitHoriztonalVelocity() {
+									double goalFeet = (Units.metersToFeet(getHorizontalGoalDistance()) * 3 / 4 + 1);
+									return Units.feetToMeters(goalFeet);
+					}
 
-  	public double getInitVerticalVelocity() {
-  		double goalDistanceFeet = Units.metersToFeet(this.getHorizontalGoalDistance());
-  		double goalHeightFeet = 10 + goalDistanceFeet / 8;
-  		double goalHeightMeters = Units.feetToMeters(goalHeightFeet);
-  		double goalVelMeters = Math
-  				.sqrt(2 * Projectile.kAccelDueToGravity * (goalHeightMeters - Projectile.kShooterHeight));
-  		return goalVelMeters;
-  	}
+					public double getInitVerticalVelocity() {
+									double goalDistanceFeet = Units.metersToFeet(this.getHorizontalGoalDistance());
+									double goalHeightFeet = 10 + goalDistanceFeet / 8;
+									double goalHeightMeters = Units.feetToMeters(goalHeightFeet);
+									double goalVelMeters = Math
+																	.sqrt(2 * Projectile.kAccelDueToGravity * (goalHeightMeters - Projectile.kShooterHeight));
+									return goalVelMeters;
+					}
 
-  	public double getInitialRPM() {
-  		return 146 * getHorizontalGoalDistance() + 1944.9;
-  	}
-  */
-  // ---------- getters ----------
-  /**
-   * Returns whether the limelight has any valid targets (0 or 1)
-   *
-   * @return whether the limelight has any valid targets
-   */
-  public boolean hasTarget() {
-    return limelightNT.getEntry("tv").getDouble(0) == 1;
-  }
+					public double getInitialRPM() {
+									return 146 * getHorizontalGoalDistance() + 1944.9;
+					}
+	*/
+	// ---------- getters ----------
+	/**
+	 * Returns whether the limelight has any valid targets (0 or 1)
+	 *
+	 * @return whether the limelight has any valid targets
+	 */
+	public boolean hasTarget() {
+		return limelightNT.getEntry("tv").getDouble(0) == 1;
+	}
 
-  public double getLatency() {
-    return limelightNT.getEntry("tl").getDouble(0);
-  }
+	public double getLatency() {
+		return limelightNT.getEntry("tl").getDouble(0);
+	}
 
-  /**
-   * Returns the Z-axis offset/distance between the camera and the target
-   *
-   * @return Z-axis distance to target
-   */
-  public double getZOffset() {
-    return limelightNT.getEntry("tz").getDouble(0.0);
-  }
+	/**
+	 * Returns the Z-axis offset/distance between the camera and the target
+	 *
+	 * @return Z-axis distance to target
+	 */
+	public double getZOffset() {
+		return limelightNT.getEntry("tz").getDouble(0.0);
+	}
 
-  /**
-   * Returns Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-   *
-   * @return horizontal offset to target (-27 degrees to 27 degrees)
-   */
-  public double getHorizontalOffset() {
-    return limelightNT.getEntry("tx").getDouble(0.0);
-  }
+	/**
+	 * Returns Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
+	 *
+	 * @return horizontal offset to target (-27 degrees to 27 degrees)
+	 */
+	public double getHorizontalOffset() {
+		return limelightNT.getEntry("tx").getDouble(0.0);
+	}
 
-  /**
-   * Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-   *
-   * @return vertical offset to target (-20.5 degrees to 20.5 degrees)
-   */
-  public double getVerticalOffset() {
-    return limelightNT.getEntry("ty").getDouble(0.0);
-  }
+	/**
+	 * Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
+	 *
+	 * @return vertical offset to target (-20.5 degrees to 20.5 degrees)
+	 */
+	public double getVerticalOffset() {
+		return limelightNT.getEntry("ty").getDouble(0.0);
+	}
 
-  /**
-   * Returns Target Area (0% of image to 100% of image)
-   *
-   * @return target area (0% of image to 100% of image)
-   */
-  public double getTargetArea() {
-    return limelightNT.getEntry("ta").getDouble(0.0);
-  }
+	/**
+	 * Returns Target Area (0% of image to 100% of image)
+	 *
+	 * @return target area (0% of image to 100% of image)
+	 */
+	public double getTargetArea() {
+		return limelightNT.getEntry("ta").getDouble(0.0);
+	}
 
-  // ---------- setters ----------
+	// ---------- setters ----------
 
-  // modes:
-  // 0 = use the LED Mode set in the current pipeline
-  // 1 = force off
-  // 2 = force blink
-  // 3 = force on
-  public boolean setLEDMode(LEDMode mode) {
-    try {
-      limelightNT.getEntry("ledMode").setNumber(mode.ordinal());
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-  
-  	public void setLEDModeByInt(int mode) {
-  		LEDMode newMode = LEDMode.OFF;
+	// modes:
+	// 0 = use the LED Mode set in the current pipeline
+	// 1 = force off
+	// 2 = force blink
+	// 3 = force on
+	public boolean setLEDMode(LEDMode mode) {
+		try {
+			limelightNT.getEntry("ledMode").setNumber(mode.ordinal());
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
-  		switch (mode) {
-  			case 0:
-  				newMode = LEDMode.PIPELINE;
-  				break;
-  			case 1:
-  				newMode = LEDMode.OFF;
-  				break;
-  			case 2:
-  				newMode = LEDMode.BLINK;
-  				break;
-  			case 3:
-  				newMode = LEDMode.ON;
-  				break;
-  		}
+	public void setLEDModeByInt(int mode) {
+		LEDMode newMode = LEDMode.OFF;
 
-  		this.setLEDMode(newMode);
-  	}
-  
-  // modes:
-  // 0 = vision processor
-  // 1 = driver camera
-  public boolean setCamMode(CameraMode mode) {
-    try {
-      limelightNT.getEntry("camMode").setNumber(mode.ordinal());
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
+		switch (mode) {
+			case 0:
+				newMode = LEDMode.PIPELINE;
+				break;
+			case 1:
+				newMode = LEDMode.OFF;
+				break;
+			case 2:
+				newMode = LEDMode.BLINK;
+				break;
+			case 3:
+				newMode = LEDMode.ON;
+				break;
+		}
 
-  // pipeline: Select pipeline 0..9
-  public boolean setPipeline(int pipeline) {
-    try {
-      limelightNT.getEntry("pipeline").setNumber(pipeline);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
+		this.setLEDMode(newMode);
+	}
 
-  // Set stream:
-  // 0 = Standard - Side-by-side streams if a webcam is attached to Limelight
-  // 1 = PiP Main - The secondary camera stream is placed in the lower-right
-  // corner of the primary camera stream
-  // 2 = PiP Secondary - The primary camera stream is placed in the lower-right
-  // corner of the secondary camera stream
-  public boolean setStream(CameraStream stream) {
-    try {
-      limelightNT.getEntry("stream").setNumber(stream.ordinal());
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-  
-  	public void setStreamByInt(int mode) {
-  		CameraStream newMode = CameraStream.PiPMain;
+	// modes:
+	// 0 = vision processor
+	// 1 = driver camera
+	public boolean setCamMode(CameraMode mode) {
+		try {
+			limelightNT.getEntry("camMode").setNumber(mode.ordinal());
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
-  		switch (mode) {
-  			case 0:
-  				newMode = CameraStream.Standard;
-  				break;
-  			case 1:
-  				newMode = CameraStream.PiPMain;
-  				break;
-  			case 2:
-  				newMode = CameraStream.PiPSecondary;
-  				break;
-  		}
+	// pipeline: Select pipeline 0..9
+	public boolean setPipeline(int pipeline) {
+		try {
+			limelightNT.getEntry("pipeline").setNumber(pipeline);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
-  		this.setStream(newMode);
-  	}
-  
-  // Set snapshot:
-  // 0 = Stop taking snapshots
-  // 1 = Take two snapshots per second
-  public boolean setSnapshot(int snapshot) {
-    try {
-      limelightNT.getEntry("snapshot").setNumber(snapshot);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
+	// Set stream:
+	// 0 = Standard - Side-by-side streams if a webcam is attached to Limelight
+	// 1 = PiP Main - The secondary camera stream is placed in the lower-right
+	// corner of the primary camera stream
+	// 2 = PiP Secondary - The primary camera stream is placed in the lower-right
+	// corner of the secondary camera stream
+	public boolean setStream(CameraStream stream) {
+		try {
+			limelightNT.getEntry("stream").setNumber(stream.ordinal());
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
-  public static LimelightSubsystem getInstance() {
-    if (instance == null) {
-      // if instance is null, initialize
-      instance = new LimelightSubsystem();
-    }
-    return instance;
-  }
+	public void setStreamByInt(int mode) {
+		CameraStream newMode = CameraStream.PiPMain;
+
+		switch (mode) {
+			case 0:
+				newMode = CameraStream.Standard;
+				break;
+			case 1:
+				newMode = CameraStream.PiPMain;
+				break;
+			case 2:
+				newMode = CameraStream.PiPSecondary;
+				break;
+		}
+
+		this.setStream(newMode);
+	}
+
+	// Set snapshot:
+	// 0 = Stop taking snapshots
+	// 1 = Take two snapshots per second
+	public boolean setSnapshot(int snapshot) {
+		try {
+			limelightNT.getEntry("snapshot").setNumber(snapshot);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static LimelightSubsystem getInstance() {
+		if (instance == null) {
+			// if instance is null, initialize
+			instance = new LimelightSubsystem();
+		}
+		return instance;
+	}
 }

@@ -50,466 +50,467 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class SwerveSubsystem extends SubsystemBase implements Loggable {
-  private static SwerveSubsystem instance;
-  private final SwerveDriveKinematics kinematics =
-      new SwerveDriveKinematics(
-          // Front left
-          new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
-          // Front right
-          new Translation2d(TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0),
-          // Back left
-          new Translation2d(-TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
-          // Back right
-          new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0));
+	private static SwerveSubsystem instance;
+	private final SwerveDriveKinematics kinematics =
+			new SwerveDriveKinematics(
+					// Front left
+					new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
+					// Front right
+					new Translation2d(TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0),
+					// Back left
+					new Translation2d(-TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
+					// Back right
+					new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0));
 
-  // connected over USB
-  private final AHRS navx;
+	// connected over USB
+	private final AHRS navx;
 
-  // These are our modules. We initialize them in the constructor.
-  private final SwerveModule frontLeftModule;
-  private final SwerveModule frontRightModule;
-  private final SwerveModule backLeftModule;
-  private final SwerveModule backRightModule;
-  private final SwerveModule[] swerveModules;
+	// These are our modules. We initialize them in the constructor.
+	private final SwerveModule frontLeftModule;
+	private final SwerveModule frontRightModule;
+	private final SwerveModule backLeftModule;
+	private final SwerveModule backRightModule;
+	private final SwerveModule[] swerveModules;
 
-  public final SwerveDrivePoseEstimator poseEstimator;
+	public final SwerveDrivePoseEstimator poseEstimator;
 
-  private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
-  private Gains thetaGains;
+	private Gains thetaGains;
 
-  private SwerveSubsystem() {
-    navx = new AHRS(SerialPort.Port.kUSB1);
+	private SwerveSubsystem() {
+		navx = new AHRS(SerialPort.Port.kUSB1);
 
-    ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
-    MkModuleConfiguration moduleConfig = MkModuleConfiguration.getDefaultSteerNEO();
-    moduleConfig.setDriveCurrentLimit(40.0);
-    moduleConfig.setSteerCurrentLimit(30.0);
+		ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
+		MkModuleConfiguration moduleConfig = MkModuleConfiguration.getDefaultSteerNEO();
+		moduleConfig.setDriveCurrentLimit(40.0);
+		moduleConfig.setSteerCurrentLimit(30.0);
 
-    this.frontLeftModule =
-        new MkSwerveModuleBuilder(moduleConfig)
-            .withLayout(
-                shuffleboardTab
-                    .getLayout("Front Left Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(0, 0))
-            .withGearRatio(SdsModuleConfigurations.MK4I_L2)
-            .withDriveMotor(MotorType.NEO, LEFT_FRONT_DRIVE)
-            .withSteerMotor(MotorType.NEO, LEFT_FRONT_ANGLE)
-            .withSteerEncoderPort(LEFT_FRONT_CANCODER)
-            .withSteerOffset(LEFT_FRONT_STEER_OFFSET)
-            .build();
+		this.frontLeftModule =
+				new MkSwerveModuleBuilder(moduleConfig)
+						.withLayout(
+								shuffleboardTab
+										.getLayout("Front Left Module", BuiltInLayouts.kList)
+										.withSize(2, 4)
+										.withPosition(0, 0))
+						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+						.withDriveMotor(MotorType.NEO, LEFT_FRONT_DRIVE)
+						.withSteerMotor(MotorType.NEO, LEFT_FRONT_ANGLE)
+						.withSteerEncoderPort(LEFT_FRONT_CANCODER)
+						.withSteerOffset(LEFT_FRONT_STEER_OFFSET)
+						.build();
 
-    this.frontRightModule =
-        new MkSwerveModuleBuilder()
-            .withLayout(
-                shuffleboardTab
-                    .getLayout("Front Right Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(2, 0))
-            .withGearRatio(SdsModuleConfigurations.MK4I_L2)
-            .withDriveMotor(MotorType.NEO, RIGHT_FRONT_DRIVE)
-            .withSteerMotor(MotorType.NEO, RIGHT_FRONT_ANGLE)
-            .withSteerEncoderPort(RIGHT_FRONT_CANCODER)
-            .withSteerOffset(RIGHT_FRONT_STEER_OFFSET)
-            .build();
+		this.frontRightModule =
+				new MkSwerveModuleBuilder()
+						.withLayout(
+								shuffleboardTab
+										.getLayout("Front Right Module", BuiltInLayouts.kList)
+										.withSize(2, 4)
+										.withPosition(2, 0))
+						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+						.withDriveMotor(MotorType.NEO, RIGHT_FRONT_DRIVE)
+						.withSteerMotor(MotorType.NEO, RIGHT_FRONT_ANGLE)
+						.withSteerEncoderPort(RIGHT_FRONT_CANCODER)
+						.withSteerOffset(RIGHT_FRONT_STEER_OFFSET)
+						.build();
 
-    this.backLeftModule =
-        new MkSwerveModuleBuilder()
-            .withLayout(
-                shuffleboardTab
-                    .getLayout("Back Left Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(6, 0))
-            .withGearRatio(SdsModuleConfigurations.MK4I_L2)
-            .withDriveMotor(MotorType.NEO, LEFT_REAR_DRIVE)
-            .withSteerMotor(MotorType.NEO, LEFT_REAR_ANGLE)
-            .withSteerEncoderPort(LEFT_REAR_CANCODER)
-            .withSteerOffset(LEFT_REAR_STEER_OFFSET)
-            .build();
+		this.backLeftModule =
+				new MkSwerveModuleBuilder()
+						.withLayout(
+								shuffleboardTab
+										.getLayout("Back Left Module", BuiltInLayouts.kList)
+										.withSize(2, 4)
+										.withPosition(6, 0))
+						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+						.withDriveMotor(MotorType.NEO, LEFT_REAR_DRIVE)
+						.withSteerMotor(MotorType.NEO, LEFT_REAR_ANGLE)
+						.withSteerEncoderPort(LEFT_REAR_CANCODER)
+						.withSteerOffset(LEFT_REAR_STEER_OFFSET)
+						.build();
 
-    this.backRightModule =
-        new MkSwerveModuleBuilder()
-            .withLayout(
-                shuffleboardTab
-                    .getLayout("Back Right Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(4, 0))
-            .withGearRatio(SdsModuleConfigurations.MK4I_L2)
-            .withDriveMotor(MotorType.NEO, RIGHT_REAR_DRIVE)
-            .withSteerMotor(MotorType.NEO, RIGHT_REAR_ANGLE)
-            .withSteerEncoderPort(RIGHT_REAR_CANCODER)
-            .withSteerOffset(RIGHT_REAR_STEER_OFFSET)
-            .build();
+		this.backRightModule =
+				new MkSwerveModuleBuilder()
+						.withLayout(
+								shuffleboardTab
+										.getLayout("Back Right Module", BuiltInLayouts.kList)
+										.withSize(2, 4)
+										.withPosition(4, 0))
+						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+						.withDriveMotor(MotorType.NEO, RIGHT_REAR_DRIVE)
+						.withSteerMotor(MotorType.NEO, RIGHT_REAR_ANGLE)
+						.withSteerEncoderPort(RIGHT_REAR_CANCODER)
+						.withSteerOffset(RIGHT_REAR_STEER_OFFSET)
+						.build();
 
-    this.swerveModules =
-        new SwerveModule[] {
-          this.frontLeftModule, this.frontRightModule, this.backLeftModule, this.backRightModule
-        };
+		this.swerveModules =
+				new SwerveModule[] {
+					this.frontLeftModule, this.frontRightModule, this.backLeftModule, this.backRightModule
+				};
 
-    this.poseEstimator =
-        new SwerveDrivePoseEstimator(
-            kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
+		this.poseEstimator =
+				new SwerveDrivePoseEstimator(
+						kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
-    this.thetaGains = Auto.kAutoThetaGains;
-  }
+		this.thetaGains = Auto.kAutoThetaGains;
+	}
 
-  @Override
-  public void periodic() {
-    this.poseEstimator.update(getGyroscopeRotation(), getPositions());
+	@Override
+	public void periodic() {
+		this.poseEstimator.update(getGyroscopeRotation(), getPositions());
 
-    final double zeroDeadzone = 0.001;
+		final double zeroDeadzone = 0.001;
 
-    // Set deadzone on translation
-    if (Math.abs(this.chassisSpeeds.vxMetersPerSecond) < zeroDeadzone) {
-      this.chassisSpeeds.vxMetersPerSecond = 0;
-    }
-    if (Math.abs(this.chassisSpeeds.vyMetersPerSecond) < zeroDeadzone) {
-      this.chassisSpeeds.vyMetersPerSecond = 0;
-    }
+		// Set deadzone on translation
+		if (Math.abs(this.chassisSpeeds.vxMetersPerSecond) < zeroDeadzone) {
+			this.chassisSpeeds.vxMetersPerSecond = 0;
+		}
+		if (Math.abs(this.chassisSpeeds.vyMetersPerSecond) < zeroDeadzone) {
+			this.chassisSpeeds.vyMetersPerSecond = 0;
+		}
 
-    // Hockey-lock if stopped by setting rotation to realllly low number
-    /*
-     * if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
-     * this.chassisSpeeds.vyMetersPerSecond == 0 &&
-     * Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
-     * this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
-     * }
-     *
-     * /*
-     * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
-     * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
-     * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
-     */
+		// Hockey-lock if stopped by setting rotation to realllly low number
+		/*
+		 * if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
+		 * this.chassisSpeeds.vyMetersPerSecond == 0 &&
+		 * Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
+		 * this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
+		 * }
+		 *
+		 * /*
+		 * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
+		 * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
+		 * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
+		 */
 
-    SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
+		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
+		SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
 
-    SwerveModulePosition[] positions = getPositions();
-    for (int i = 0; i < states.length; i++) {
-      states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
-    }
+		SwerveModulePosition[] positions = getPositions();
+		for (int i = 0; i < states.length; i++) {
+			states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
+		}
 
-    double flVoltage = states[0].speedMetersPerSecond;
-    double frVoltage = states[1].speedMetersPerSecond;
-    double blVoltage = states[2].speedMetersPerSecond;
-    double brVoltage = states[3].speedMetersPerSecond;
+		double flVoltage = states[0].speedMetersPerSecond;
+		double frVoltage = states[1].speedMetersPerSecond;
+		double blVoltage = states[2].speedMetersPerSecond;
+		double brVoltage = states[3].speedMetersPerSecond;
 
-    flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-    frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-    blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-    brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
 
-    this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
-    this.frontRightModule.set(frVoltage, states[1].angle.getRadians());
-    this.backLeftModule.set(blVoltage, states[2].angle.getRadians());
-    this.backRightModule.set(brVoltage, states[3].angle.getRadians());
+		this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
+		this.frontRightModule.set(frVoltage, states[1].angle.getRadians());
+		this.backLeftModule.set(blVoltage, states[2].angle.getRadians());
+		this.backRightModule.set(brVoltage, states[3].angle.getRadians());
 
-    /*
-     * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-     * This is what we had before. Trying similar code from Team 5431 (uses
-     * democat's library)
-     * SwerveModuleState[] states =
-     * this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
-     * SwerveDriveKinematics.desaturateWheelSpeeds(states,
-     * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
-     *
-     * for (int i = 0; i < this.swerveModules.length; i++) {
-     * this.swerveModules[i].set(
-     * states[i].speedMetersPerSecond / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND *
-     * Drivetrain.MAX_VOLTAGE,
-     * states[i].angle.getRadians());
-     * }
-     *
-     * var gyroAngle = this.getGyroscopeRotation();
-     *
-     * // Update the pose
-     * this.odometry.update(gyroAngle, getPositions());
-     * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-     */
-  }
+		/*
+		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		 * This is what we had before. Trying similar code from Team 5431 (uses
+		 * democat's library)
+		 * SwerveModuleState[] states =
+		 * this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
+		 * SwerveDriveKinematics.desaturateWheelSpeeds(states,
+		 * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
+		 *
+		 * for (int i = 0; i < this.swerveModules.length; i++) {
+		 * this.swerveModules[i].set(
+		 * states[i].speedMetersPerSecond / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND *
+		 * Drivetrain.MAX_VOLTAGE,
+		 * states[i].angle.getRadians());
+		 * }
+		 *
+		 * var gyroAngle = this.getGyroscopeRotation();
+		 *
+		 * // Update the pose
+		 * this.odometry.update(gyroAngle, getPositions());
+		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		 */
+	}
 
-  /**
-   * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently
-   * facing to the 'forwards' direction.
-   */
-  public void zeroGyroscope() {
-    System.out.println("Zeroing Gyroscope");
-    this.navx.reset();
+	/**
+	 * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently
+	 * facing to the 'forwards' direction.
+	 */
+	public void zeroGyroscope() {
+		System.out.println("Zeroing Gyroscope");
+		this.navx.reset();
 
-    /*
-     * Lande - I can't remember why we had this last year, but I'm removing it for
-     * now
-     * // Reset the odometry with new 0 heading but same position.
-     * this.odometry.resetPosition(
-     * Rotation2d.fromDegrees(this.navx.getFusedHeading()),
-     * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
-     * this.frontRightModule.getPosition(),
-     * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
-     * new Pose2d(this.odometry.getPoseMeters().getTranslation(),
-     * Rotation2d.fromDegrees(0.0)));
-     */
-  }
+		/*
+		 * Lande - I can't remember why we had this last year, but I'm removing it for
+		 * now
+		 * // Reset the odometry with new 0 heading but same position.
+		 * this.odometry.resetPosition(
+		 * Rotation2d.fromDegrees(this.navx.getFusedHeading()),
+		 * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+		 * this.frontRightModule.getPosition(),
+		 * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+		 * new Pose2d(this.odometry.getPoseMeters().getTranslation(),
+		 * Rotation2d.fromDegrees(0.0)));
+		 */
+	}
 
-  /**
-   * Calibrates the gyroscope. This should only be called on robotinit because it takes some time to
-   * run.
-   */
-  public void calibrateGyroscope() {
-    this.navx.calibrate();
-  }
+	/**
+	 * Calibrates the gyroscope. This should only be called on robotinit because it takes some time to
+	 * run.
+	 */
+	public void calibrateGyroscope() {
+		this.navx.calibrate();
+	}
 
-  public Rotation2d getGyroscopeRotation() {
-    // // We have to invert the angle of the NavX so that rotating the robot
-    // counter-clockwise makes the angle increase.
-    return Rotation2d.fromDegrees(-this.navx.getYaw());
-  };
+	public Rotation2d getGyroscopeRotation() {
+		// // We have to invert the angle of the NavX so that rotating the robot
+		// counter-clockwise makes the angle increase.
+		return Rotation2d.fromDegrees(-this.navx.getYaw());
+	}
+	;
 
-  /*
-   * public Pose2d getCurrentRobotPose() {
-   * return this.odometry.getPoseMeters();
-   * }
-   *
-   *
-   * public void setCurrentRobotPose(Pose2d pose) {
-   * this.odometry
-   * .resetPosition(getGyroscopeRotation(),
-   * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
-   * this.frontRightModule.getPosition(),
-   * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
-   * pose);
-   * }
-   */
+	/*
+	 * public Pose2d getCurrentRobotPose() {
+	 * return this.odometry.getPoseMeters();
+	 * }
+	 *
+	 *
+	 * public void setCurrentRobotPose(Pose2d pose) {
+	 * this.odometry
+	 * .resetPosition(getGyroscopeRotation(),
+	 * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+	 * this.frontRightModule.getPosition(),
+	 * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+	 * pose);
+	 * }
+	 */
 
-  public void stop() {
-    for (SwerveModule swerveModule : this.swerveModules) {
-      swerveModule.set(0, swerveModule.getSteerAngle());
-    }
-  }
+	public void stop() {
+		for (SwerveModule swerveModule : this.swerveModules) {
+			swerveModule.set(0, swerveModule.getSteerAngle());
+		}
+	}
 
-  public SwerveModulePosition[] getPositions() {
-    return new SwerveModulePosition[] {
-      this.frontLeftModule.getPosition(),
-      this.frontRightModule.getPosition(),
-      this.backLeftModule.getPosition(),
-      this.backRightModule.getPosition()
-    };
-  }
+	public SwerveModulePosition[] getPositions() {
+		return new SwerveModulePosition[] {
+			this.frontLeftModule.getPosition(),
+			this.frontRightModule.getPosition(),
+			this.backLeftModule.getPosition(),
+			this.backRightModule.getPosition()
+		};
+	}
 
-  public void drive(ChassisSpeeds chassisSpeeds) {
-    this.chassisSpeeds = chassisSpeeds;
-  }
+	public void drive(ChassisSpeeds chassisSpeeds) {
+		this.chassisSpeeds = chassisSpeeds;
+	}
 
-  /**
-   * Returns the current state of the module.
-   *
-   * @return The current state of the module.
-   */
-  public SwerveModuleState getState(SwerveModule module) {
-    return new SwerveModuleState(module.getDriveVelocity(), new Rotation2d(module.getSteerAngle()));
-  }
+	/**
+	 * Returns the current state of the module.
+	 *
+	 * @return The current state of the module.
+	 */
+	public SwerveModuleState getState(SwerveModule module) {
+		return new SwerveModuleState(module.getDriveVelocity(), new Rotation2d(module.getSteerAngle()));
+	}
 
-  public boolean gyroConnected() {
-    return this.navx.isConnected();
-  }
+	public boolean gyroConnected() {
+		return this.navx.isConnected();
+	}
 
-  public Gains getThetaGains() {
-    return this.thetaGains;
-  }
+	public Gains getThetaGains() {
+		return this.thetaGains;
+	}
 
-  // #region Logging
+	// #region Logging
 
-  @Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
-  private AHRS getGyro() {
-    return this.navx;
-  }
+	@Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
+	private AHRS getGyro() {
+		return this.navx;
+	}
 
-  @Log.NumberBar(
-      name = "FL Velocity",
-      min = -5,
-      max = 5,
-      rowIndex = 0,
-      columnIndex = 2,
-      height = 1,
-      width = 1)
-  public double getFrontLeftSpeed() {
-    return this.frontLeftModule.getDriveVelocity();
-  }
+	@Log.NumberBar(
+			name = "FL Velocity",
+			min = -5,
+			max = 5,
+			rowIndex = 0,
+			columnIndex = 2,
+			height = 1,
+			width = 1)
+	public double getFrontLeftSpeed() {
+		return this.frontLeftModule.getDriveVelocity();
+	}
 
-  @Log.Dial(
-      name = "FL Angle",
-      min = -90,
-      max = 90,
-      rowIndex = 0,
-      columnIndex = 1,
-      height = 1,
-      width = 1)
-  public double getFrontLeftAngle() {
-    return Math.IEEEremainder(Math.toDegrees(this.frontLeftModule.getSteerAngle()), 180);
-  }
+	@Log.Dial(
+			name = "FL Angle",
+			min = -90,
+			max = 90,
+			rowIndex = 0,
+			columnIndex = 1,
+			height = 1,
+			width = 1)
+	public double getFrontLeftAngle() {
+		return Math.IEEEremainder(Math.toDegrees(this.frontLeftModule.getSteerAngle()), 180);
+	}
 
-  @Log.NumberBar(
-      name = "FR Velocity",
-      min = -5,
-      max = 5,
-      rowIndex = 0,
-      columnIndex = 5,
-      height = 1,
-      width = 1)
-  public double getFrontRightSpeed() {
-    return this.frontRightModule.getDriveVelocity();
-  }
+	@Log.NumberBar(
+			name = "FR Velocity",
+			min = -5,
+			max = 5,
+			rowIndex = 0,
+			columnIndex = 5,
+			height = 1,
+			width = 1)
+	public double getFrontRightSpeed() {
+		return this.frontRightModule.getDriveVelocity();
+	}
 
-  @Log.Dial(
-      name = "FR Angle",
-      min = -90,
-      max = 90,
-      rowIndex = 0,
-      columnIndex = 6,
-      height = 1,
-      width = 1)
-  public double getFrontRightAngle() {
-    return Math.IEEEremainder(Math.toDegrees(this.frontRightModule.getSteerAngle()), 180);
-  }
+	@Log.Dial(
+			name = "FR Angle",
+			min = -90,
+			max = 90,
+			rowIndex = 0,
+			columnIndex = 6,
+			height = 1,
+			width = 1)
+	public double getFrontRightAngle() {
+		return Math.IEEEremainder(Math.toDegrees(this.frontRightModule.getSteerAngle()), 180);
+	}
 
-  @Log.Dial(
-      name = "BL Angle",
-      min = -90,
-      max = 90,
-      rowIndex = 1,
-      columnIndex = 1,
-      height = 1,
-      width = 1)
-  public double getBackLeftAngle() {
-    return Math.IEEEremainder(Math.toDegrees(this.backLeftModule.getSteerAngle()), 180);
-  }
+	@Log.Dial(
+			name = "BL Angle",
+			min = -90,
+			max = 90,
+			rowIndex = 1,
+			columnIndex = 1,
+			height = 1,
+			width = 1)
+	public double getBackLeftAngle() {
+		return Math.IEEEremainder(Math.toDegrees(this.backLeftModule.getSteerAngle()), 180);
+	}
 
-  @Log.NumberBar(
-      name = "BL Velocity",
-      min = -5,
-      max = 5,
-      rowIndex = 1,
-      columnIndex = 2,
-      height = 1,
-      width = 1)
-  public double getBackLeftSpeed() {
-    return this.backLeftModule.getDriveVelocity();
-  }
+	@Log.NumberBar(
+			name = "BL Velocity",
+			min = -5,
+			max = 5,
+			rowIndex = 1,
+			columnIndex = 2,
+			height = 1,
+			width = 1)
+	public double getBackLeftSpeed() {
+		return this.backLeftModule.getDriveVelocity();
+	}
 
-  @Log.NumberBar(
-      name = "BR Velocity",
-      min = -5,
-      max = 5,
-      rowIndex = 1,
-      columnIndex = 5,
-      height = 1,
-      width = 1)
-  public double getBackRightSpeed() {
-    return this.backRightModule.getDriveVelocity();
-  }
+	@Log.NumberBar(
+			name = "BR Velocity",
+			min = -5,
+			max = 5,
+			rowIndex = 1,
+			columnIndex = 5,
+			height = 1,
+			width = 1)
+	public double getBackRightSpeed() {
+		return this.backRightModule.getDriveVelocity();
+	}
 
-  @Log.Dial(
-      name = "BR Angle",
-      min = -90,
-      max = 90,
-      rowIndex = 1,
-      columnIndex = 6,
-      height = 1,
-      width = 1)
-  public double getBackRightAngle() {
-    return Math.IEEEremainder(Math.toDegrees(this.backRightModule.getSteerAngle()), 180);
-  }
+	@Log.Dial(
+			name = "BR Angle",
+			min = -90,
+			max = 90,
+			rowIndex = 1,
+			columnIndex = 6,
+			height = 1,
+			width = 1)
+	public double getBackRightAngle() {
+		return Math.IEEEremainder(Math.toDegrees(this.backRightModule.getSteerAngle()), 180);
+	}
 
-  @Log(name = "x-Position", rowIndex = 2, columnIndex = 6, height = 1, width = 1)
-  public double getYPos() {
-    return this.poseEstimator.getEstimatedPosition().getY();
-  }
+	@Log(name = "x-Position", rowIndex = 2, columnIndex = 6, height = 1, width = 1)
+	public double getYPos() {
+		return this.poseEstimator.getEstimatedPosition().getY();
+	}
 
-  @Log(name = "y-Position", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
-  public double getXPos() {
-    return this.poseEstimator.getEstimatedPosition().getX();
-  }
+	@Log(name = "y-Position", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
+	public double getXPos() {
+		return this.poseEstimator.getEstimatedPosition().getX();
+	}
 
-  @Log(name = "theta-Position", rowIndex = 4, columnIndex = 6, height = 1, width = 1)
-  public double getThetaPos() {
-    return this.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
-  }
+	@Log(name = "theta-Position", rowIndex = 4, columnIndex = 6, height = 1, width = 1)
+	public double getThetaPos() {
+		return this.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+	}
 
-  @Log(name = "x-Velocity", rowIndex = 2, columnIndex = 7, height = 1, width = 1)
-  public double getRobotXVelocity() {
-    return this.chassisSpeeds.vxMetersPerSecond;
-  }
+	@Log(name = "x-Velocity", rowIndex = 2, columnIndex = 7, height = 1, width = 1)
+	public double getRobotXVelocity() {
+		return this.chassisSpeeds.vxMetersPerSecond;
+	}
 
-  @Log(name = "y-Velocity", rowIndex = 3, columnIndex = 7, height = 1, width = 1)
-  public double getRobotYVelocity() {
-    return this.chassisSpeeds.vyMetersPerSecond;
-  }
+	@Log(name = "y-Velocity", rowIndex = 3, columnIndex = 7, height = 1, width = 1)
+	public double getRobotYVelocity() {
+		return this.chassisSpeeds.vyMetersPerSecond;
+	}
 
-  @Log(name = "theta-Velocity", rowIndex = 4, columnIndex = 7, height = 1, width = 1)
-  public double getRobotThetaVelocity() {
-    return this.chassisSpeeds.omegaRadiansPerSecond;
-  }
+	@Log(name = "theta-Velocity", rowIndex = 4, columnIndex = 7, height = 1, width = 1)
+	public double getRobotThetaVelocity() {
+		return this.chassisSpeeds.omegaRadiansPerSecond;
+	}
 
-  @Log.BooleanBox(name = "Gyro Int?", rowIndex = 0, columnIndex = 0)
-  public boolean getGyroInterference() {
-    return this.navx.isMagneticDisturbance();
-  }
+	@Log.BooleanBox(name = "Gyro Int?", rowIndex = 0, columnIndex = 0)
+	public boolean getGyroInterference() {
+		return this.navx.isMagneticDisturbance();
+	}
 
-  @Config.NumberSlider(
-      name = "Theta P",
-      tabName = "Tuning",
-      defaultValue = Auto.kThetaP,
-      min = 0,
-      max = 20,
-      rowIndex = 5,
-      columnIndex = 0,
-      height = 1,
-      width = 1)
-  public void setThetaP(double thetaP) {
-    this.thetaGains.kP = thetaP;
-  }
+	@Config.NumberSlider(
+			name = "Theta P",
+			tabName = "Tuning",
+			defaultValue = Auto.kThetaP,
+			min = 0,
+			max = 20,
+			rowIndex = 5,
+			columnIndex = 0,
+			height = 1,
+			width = 1)
+	public void setThetaP(double thetaP) {
+		this.thetaGains.kP = thetaP;
+	}
 
-  @Config.NumberSlider(
-      name = "Theta I",
-      tabName = "Tuning",
-      defaultValue = Auto.kThetaI,
-      min = 0,
-      max = 1,
-      rowIndex = 5,
-      columnIndex = 1,
-      height = 1,
-      width = 1)
-  public void setThetaI(double thetaI) {
-    this.thetaGains.kI = thetaI;
-  }
+	@Config.NumberSlider(
+			name = "Theta I",
+			tabName = "Tuning",
+			defaultValue = Auto.kThetaI,
+			min = 0,
+			max = 1,
+			rowIndex = 5,
+			columnIndex = 1,
+			height = 1,
+			width = 1)
+	public void setThetaI(double thetaI) {
+		this.thetaGains.kI = thetaI;
+	}
 
-  @Config.NumberSlider(
-      name = "Theta D",
-      tabName = "Tuning",
-      defaultValue = Auto.kThetaD,
-      min = 0,
-      max = 1,
-      rowIndex = 5,
-      columnIndex = 2,
-      height = 1,
-      width = 1)
-  public void setThetaD(double thetaD) {
-    this.thetaGains.kD = thetaD;
-  }
+	@Config.NumberSlider(
+			name = "Theta D",
+			tabName = "Tuning",
+			defaultValue = Auto.kThetaD,
+			min = 0,
+			max = 1,
+			rowIndex = 5,
+			columnIndex = 2,
+			height = 1,
+			width = 1)
+	public void setThetaD(double thetaD) {
+		this.thetaGains.kD = thetaD;
+	}
 
-  @Log.Graph(name = "Gyro Angle", width = 4, height = 2, rowIndex = 2, columnIndex = 2)
-  public double getGyroDegrees() {
-    return this.getGyroscopeRotation().getDegrees();
-  }
+	@Log.Graph(name = "Gyro Angle", width = 4, height = 2, rowIndex = 2, columnIndex = 2)
+	public double getGyroDegrees() {
+		return this.getGyroscopeRotation().getDegrees();
+	}
 
-  // #endregion
+	// #endregion
 
-  public static SwerveSubsystem getInstance() {
-    if (instance == null) {
-      // if instance is null, initialize
-      instance = new SwerveSubsystem();
-    }
-    return instance;
-  }
+	public static SwerveSubsystem getInstance() {
+		if (instance == null) {
+			// if instance is null, initialize
+			instance = new SwerveSubsystem();
+		}
+		return instance;
+	}
 }
