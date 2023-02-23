@@ -168,19 +168,19 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 			this.chassisSpeeds.vyMetersPerSecond = 0;
 		}
 
-		// Hockey-lock if stopped by setting rotation to realllly low number
-		/*
-		 * if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
-		 * this.chassisSpeeds.vyMetersPerSecond == 0 &&
-		 * Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
-		 * this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
-		 * }
-		 *
-		 * /*
-		 * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
-		 * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
-		 * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
-		 */
+    // Hockey-lock if stopped by setting rotation to realllly low number
+    /*
+    if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
+            this.chassisSpeeds.vyMetersPerSecond == 0 &&
+            Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
+        this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
+    }
+
+    /*
+     * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
+     * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
+     * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
+     */
 
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
