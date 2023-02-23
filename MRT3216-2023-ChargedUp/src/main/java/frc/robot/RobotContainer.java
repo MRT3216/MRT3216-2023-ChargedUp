@@ -1,9 +1,5 @@
 package frc.robot;
 
-// region Imports
-
-import static edu.wpi.first.wpilibj2.command.Commands.*;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,9 +17,12 @@ import io.github.oblarg.oblog.annotations.Log;
 // endregion
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -31,13 +30,7 @@ public class RobotContainer {
 
 	private static RobotContainer instance;
 
-	@Log.BooleanBox(
-			name = "Gyro Con.",
-			methodName = "gyroConnected",
-			rowIndex = 1,
-			columnIndex = 3,
-			width = 1,
-			height = 1)
+	@Log.BooleanBox(name = "Gyro Con.", methodName = "gyroConnected", rowIndex = 1, columnIndex = 3, width = 1, height = 1)
 	private SwerveSubsystem driveSystem;
 
 	private AutoChooser autoChooser;
@@ -48,7 +41,9 @@ public class RobotContainer {
 
 	// #endregion
 
-	/** The container for the robot. Contains subsystems, OI devices, and commands. */
+	/**
+	 * The container for the robot. Contains subsystems, OI devices, and commands.
+	 */
 	private RobotContainer() {
 		this.controller = new CommandXboxController(0);
 		this.autoStartDelayTime = Constants.Auto.kStartDelayTime;
@@ -73,9 +68,11 @@ public class RobotContainer {
 	}
 
 	/**
-	 * Use this method to define your button->command mappings. Buttons can be created by
+	 * Use this method to define your button->command mappings. Buttons can be
+	 * created by
 	 * instantiating a {@link GenericHID} or one of its subclasses ({@link
-	 * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+	 * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+	 * it to a {@link
 	 * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
@@ -83,20 +80,18 @@ public class RobotContainer {
 			driveSystem.setDefaultCommand(
 					new TeleDrive(
 							driveSystem,
-							() ->
-									OIUtils.modifyAxis(-controller.getLeftY(), this.translationExpo)
-											* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-							() ->
-									OIUtils.modifyAxis(-controller.getLeftX(), this.translationExpo)
-											* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-							() ->
-									OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
-											* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+							() -> OIUtils.modifyAxis(-controller.getLeftY(), this.translationExpo)
+									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+							() -> OIUtils.modifyAxis(-controller.getLeftX(), this.translationExpo)
+									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+							() -> OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
+									* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}
 	}
 
-	public void disablePIDSubsystems() {}
+	public void disablePIDSubsystems() {
+	}
 
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -119,14 +114,8 @@ public class RobotContainer {
 		return driveSystem;
 	}
 
-	@Config(
-			name = "Auto Delay",
-			tabName = "Tuning",
-			methodName = "setStartDelayTime",
-			defaultValueNumeric = Auto.kStartDelayTime,
-			methodTypes = {double.class},
-			rowIndex = 1,
-			columnIndex = 1)
+	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = Auto.kStartDelayTime, methodTypes = {
+			double.class }, rowIndex = 1, columnIndex = 1)
 	public void setStartDelayTime(double startDelayTime) {
 		this.autoStartDelayTime = startDelayTime;
 	}
@@ -135,32 +124,12 @@ public class RobotContainer {
 		return this.autoStartDelayTime;
 	}
 
-	@Config.NumberSlider(
-			name = "Trans. Expo",
-			tabName = "Tuning",
-			defaultValue = Constants.OI.kTranslationExpo,
-			min = 0,
-			max = 100,
-			blockIncrement = 1,
-			rowIndex = 2,
-			columnIndex = 0,
-			height = 1,
-			width = 1)
+	@Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue = Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 2, columnIndex = 0, height = 1, width = 1)
 	public void setTranslationExpo(double expo) {
 		this.translationExpo = expo;
 	}
 
-	@Config.NumberSlider(
-			name = "Rotation Expo",
-			tabName = "Tuning",
-			defaultValue = Constants.OI.kRotationnExpo,
-			min = 0,
-			max = 100,
-			blockIncrement = 1,
-			rowIndex = 2,
-			columnIndex = 1,
-			height = 1,
-			width = 1)
+	@Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
 	public void setRotationExpo(double expo) {
 		this.rotationExpo = expo;
 	}

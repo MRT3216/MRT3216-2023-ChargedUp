@@ -36,6 +36,7 @@ public class LimelightSubsystem extends SubsystemBase {
 		}
 		return null;
 	}
+
 	/*
 	 * Returns the horizontal distance
 	 *
@@ -51,41 +52,47 @@ public class LimelightSubsystem extends SubsystemBase {
 		// The horizontal distance from the shooter to the center of the goal.
 		return robotXDistToGoal;
 	}
+
 	/*
 	 * Returns the horizontal distance to the center of the goal in meters.
 	 */
 	/*
-					public double getHorizontalGoalDistance() {
-									double cameraAngle = Units.degreesToRadians(this.getVerticalOffset());
-									// The horizontal distance from the center of the camera to the vision tape.
-									double cameraXDist = Projectile.kTargetHeightFromCamera / Math.tan(Projectile.kCameraViewAngle + cameraAngle);
-
-									// The horizontal distance from the front of the robot to the center of the
-									// goal.0
-									double robotXDistToGoal = cameraXDist;
-
-									// The horizontal distance from the shooter to the center of the goal.
-									return robotXDistToGoal + Projectile.kShooterOffsetFromFrame + this.distanceAdjustmentInMeters;
-					}
-
-					public double getInitHoriztonalVelocity() {
-									double goalFeet = (Units.metersToFeet(getHorizontalGoalDistance()) * 3 / 4 + 1);
-									return Units.feetToMeters(goalFeet);
-					}
-
-					public double getInitVerticalVelocity() {
-									double goalDistanceFeet = Units.metersToFeet(this.getHorizontalGoalDistance());
-									double goalHeightFeet = 10 + goalDistanceFeet / 8;
-									double goalHeightMeters = Units.feetToMeters(goalHeightFeet);
-									double goalVelMeters = Math
-																	.sqrt(2 * Projectile.kAccelDueToGravity * (goalHeightMeters - Projectile.kShooterHeight));
-									return goalVelMeters;
-					}
-
-					public double getInitialRPM() {
-									return 146 * getHorizontalGoalDistance() + 1944.9;
-					}
-	*/
+	 * public double getHorizontalGoalDistance() {
+	 * double cameraAngle = Units.degreesToRadians(this.getVerticalOffset());
+	 * // The horizontal distance from the center of the camera to the vision tape.
+	 * double cameraXDist = Projectile.kTargetHeightFromCamera /
+	 * Math.tan(Projectile.kCameraViewAngle + cameraAngle);
+	 * 
+	 * // The horizontal distance from the front of the robot to the center of the
+	 * // goal.0
+	 * double robotXDistToGoal = cameraXDist;
+	 * 
+	 * // The horizontal distance from the shooter to the center of the goal.
+	 * return robotXDistToGoal + Projectile.kShooterOffsetFromFrame +
+	 * this.distanceAdjustmentInMeters;
+	 * }
+	 * 
+	 * public double getInitHoriztonalVelocity() {
+	 * double goalFeet = (Units.metersToFeet(getHorizontalGoalDistance()) * 3 / 4 +
+	 * 1);
+	 * return Units.feetToMeters(goalFeet);
+	 * }
+	 * 
+	 * public double getInitVerticalVelocity() {
+	 * double goalDistanceFeet =
+	 * Units.metersToFeet(this.getHorizontalGoalDistance());
+	 * double goalHeightFeet = 10 + goalDistanceFeet / 8;
+	 * double goalHeightMeters = Units.feetToMeters(goalHeightFeet);
+	 * double goalVelMeters = Math
+	 * .sqrt(2 * Projectile.kAccelDueToGravity * (goalHeightMeters -
+	 * Projectile.kShooterHeight));
+	 * return goalVelMeters;
+	 * }
+	 * 
+	 * public double getInitialRPM() {
+	 * return 146 * getHorizontalGoalDistance() + 1944.9;
+	 * }
+	 */
 	// ---------- getters ----------
 	/**
 	 * Returns whether the limelight has any valid targets (0 or 1)
@@ -110,7 +117,8 @@ public class LimelightSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Returns Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
+	 * Returns Horizontal Offset From Crosshair To Target (-27 degrees to 27
+	 * degrees)
 	 *
 	 * @return horizontal offset to target (-27 degrees to 27 degrees)
 	 */

@@ -6,8 +6,10 @@ import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.DoubleSupplier;
 
 /**
- * A command to drive the robot with joystick input (passed in as {@link DoubleSupplier}s). Written
- * explicitly for pedagogical purposes - actual code should inline a command this simple with {@link
+ * A command to drive the robot with joystick input (passed in as
+ * {@link DoubleSupplier}s). Written
+ * explicitly for pedagogical purposes - actual code should inline a command
+ * this simple with {@link
  * edu.wpi.first.wpilibj2.command.RunCommand}.
  */
 public class TeleDrive extends CommandBase {
@@ -19,10 +21,10 @@ public class TeleDrive extends CommandBase {
 	/**
 	 * Creates a new DefaultDrive.
 	 *
-	 * @param subsystem The drive subsystem this command wil run on.
-	 * @param xSpeed The drive speed in the x direction
-	 * @param ySpeed The drive speed int the y direction
-	 * @param rot The rotation of the robot
+	 * @param subsystem     The drive subsystem this command wil run on.
+	 * @param xSpeed        The drive speed in the x direction
+	 * @param ySpeed        The drive speed int the y direction
+	 * @param rot           The rotation of the robot
 	 * @param fieldRelative Whether control is field relative
 	 */
 	public TeleDrive(

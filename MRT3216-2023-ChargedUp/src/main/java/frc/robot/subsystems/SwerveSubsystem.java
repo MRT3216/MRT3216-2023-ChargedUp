@@ -51,16 +51,15 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private static SwerveSubsystem instance;
-	private final SwerveDriveKinematics kinematics =
-			new SwerveDriveKinematics(
-					// Front left
-					new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
-					// Front right
-					new Translation2d(TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0),
-					// Back left
-					new Translation2d(-TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
-					// Back right
-					new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0));
+	private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+			// Front left
+			new Translation2d(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
+			// Front right
+			new Translation2d(TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0),
+			// Back left
+			new Translation2d(-TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0),
+			// Back right
+			new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0));
 
 	// connected over USB
 	private final AHRS navx;
@@ -86,70 +85,64 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		moduleConfig.setDriveCurrentLimit(40.0);
 		moduleConfig.setSteerCurrentLimit(30.0);
 
-		this.frontLeftModule =
-				new MkSwerveModuleBuilder(moduleConfig)
-						.withLayout(
-								shuffleboardTab
-										.getLayout("Front Left Module", BuiltInLayouts.kList)
-										.withSize(2, 4)
-										.withPosition(0, 0))
-						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
-						.withDriveMotor(MotorType.NEO, LEFT_FRONT_DRIVE)
-						.withSteerMotor(MotorType.NEO, LEFT_FRONT_ANGLE)
-						.withSteerEncoderPort(LEFT_FRONT_CANCODER)
-						.withSteerOffset(LEFT_FRONT_STEER_OFFSET)
-						.build();
+		this.frontLeftModule = new MkSwerveModuleBuilder(moduleConfig)
+				.withLayout(
+						shuffleboardTab
+								.getLayout("Front Left Module", BuiltInLayouts.kList)
+								.withSize(2, 4)
+								.withPosition(0, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.NEO, LEFT_FRONT_DRIVE)
+				.withSteerMotor(MotorType.NEO, LEFT_FRONT_ANGLE)
+				.withSteerEncoderPort(LEFT_FRONT_CANCODER)
+				.withSteerOffset(LEFT_FRONT_STEER_OFFSET)
+				.build();
 
-		this.frontRightModule =
-				new MkSwerveModuleBuilder()
-						.withLayout(
-								shuffleboardTab
-										.getLayout("Front Right Module", BuiltInLayouts.kList)
-										.withSize(2, 4)
-										.withPosition(2, 0))
-						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
-						.withDriveMotor(MotorType.NEO, RIGHT_FRONT_DRIVE)
-						.withSteerMotor(MotorType.NEO, RIGHT_FRONT_ANGLE)
-						.withSteerEncoderPort(RIGHT_FRONT_CANCODER)
-						.withSteerOffset(RIGHT_FRONT_STEER_OFFSET)
-						.build();
+		this.frontRightModule = new MkSwerveModuleBuilder()
+				.withLayout(
+						shuffleboardTab
+								.getLayout("Front Right Module", BuiltInLayouts.kList)
+								.withSize(2, 4)
+								.withPosition(2, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.NEO, RIGHT_FRONT_DRIVE)
+				.withSteerMotor(MotorType.NEO, RIGHT_FRONT_ANGLE)
+				.withSteerEncoderPort(RIGHT_FRONT_CANCODER)
+				.withSteerOffset(RIGHT_FRONT_STEER_OFFSET)
+				.build();
 
-		this.backLeftModule =
-				new MkSwerveModuleBuilder()
-						.withLayout(
-								shuffleboardTab
-										.getLayout("Back Left Module", BuiltInLayouts.kList)
-										.withSize(2, 4)
-										.withPosition(6, 0))
-						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
-						.withDriveMotor(MotorType.NEO, LEFT_REAR_DRIVE)
-						.withSteerMotor(MotorType.NEO, LEFT_REAR_ANGLE)
-						.withSteerEncoderPort(LEFT_REAR_CANCODER)
-						.withSteerOffset(LEFT_REAR_STEER_OFFSET)
-						.build();
+		this.backLeftModule = new MkSwerveModuleBuilder()
+				.withLayout(
+						shuffleboardTab
+								.getLayout("Back Left Module", BuiltInLayouts.kList)
+								.withSize(2, 4)
+								.withPosition(6, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.NEO, LEFT_REAR_DRIVE)
+				.withSteerMotor(MotorType.NEO, LEFT_REAR_ANGLE)
+				.withSteerEncoderPort(LEFT_REAR_CANCODER)
+				.withSteerOffset(LEFT_REAR_STEER_OFFSET)
+				.build();
 
-		this.backRightModule =
-				new MkSwerveModuleBuilder()
-						.withLayout(
-								shuffleboardTab
-										.getLayout("Back Right Module", BuiltInLayouts.kList)
-										.withSize(2, 4)
-										.withPosition(4, 0))
-						.withGearRatio(SdsModuleConfigurations.MK4I_L2)
-						.withDriveMotor(MotorType.NEO, RIGHT_REAR_DRIVE)
-						.withSteerMotor(MotorType.NEO, RIGHT_REAR_ANGLE)
-						.withSteerEncoderPort(RIGHT_REAR_CANCODER)
-						.withSteerOffset(RIGHT_REAR_STEER_OFFSET)
-						.build();
+		this.backRightModule = new MkSwerveModuleBuilder()
+				.withLayout(
+						shuffleboardTab
+								.getLayout("Back Right Module", BuiltInLayouts.kList)
+								.withSize(2, 4)
+								.withPosition(4, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.NEO, RIGHT_REAR_DRIVE)
+				.withSteerMotor(MotorType.NEO, RIGHT_REAR_ANGLE)
+				.withSteerEncoderPort(RIGHT_REAR_CANCODER)
+				.withSteerOffset(RIGHT_REAR_STEER_OFFSET)
+				.build();
 
-		this.swerveModules =
-				new SwerveModule[] {
-					this.frontLeftModule, this.frontRightModule, this.backLeftModule, this.backRightModule
-				};
+		this.swerveModules = new SwerveModule[] {
+				this.frontLeftModule, this.frontRightModule, this.backLeftModule, this.backRightModule
+		};
 
-		this.poseEstimator =
-				new SwerveDrivePoseEstimator(
-						kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
+		this.poseEstimator = new SwerveDrivePoseEstimator(
+				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
 		this.thetaGains = Auto.kAutoThetaGains;
 	}
@@ -168,19 +161,19 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 			this.chassisSpeeds.vyMetersPerSecond = 0;
 		}
 
-    // Hockey-lock if stopped by setting rotation to realllly low number
-    /*
-    if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
-            this.chassisSpeeds.vyMetersPerSecond == 0 &&
-            Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
-        this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
-    }
-
-    /*
-     * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
-     * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
-     * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
-     */
+		// Hockey-lock if stopped by setting rotation to realllly low number
+		/*
+		 * if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
+		 * this.chassisSpeeds.vyMetersPerSecond == 0 &&
+		 * Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
+		 * this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
+		 * }
+		 * 
+		 * /*
+		 * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
+		 * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
+		 * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
+		 */
 
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
@@ -231,7 +224,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	/**
-	 * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently
+	 * Sets the gyroscope angle to zero. This can be used to set the direction the
+	 * robot is currently
 	 * facing to the 'forwards' direction.
 	 */
 	public void zeroGyroscope() {
@@ -253,7 +247,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	/**
-	 * Calibrates the gyroscope. This should only be called on robotinit because it takes some time to
+	 * Calibrates the gyroscope. This should only be called on robotinit because it
+	 * takes some time to
 	 * run.
 	 */
 	public void calibrateGyroscope() {
@@ -264,8 +259,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		// // We have to invert the angle of the NavX so that rotating the robot
 		// counter-clockwise makes the angle increase.
 		return Rotation2d.fromDegrees(-this.navx.getYaw());
-	}
-	;
+	};
 
 	/*
 	 * public Pose2d getCurrentRobotPose() {
@@ -291,10 +285,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	public SwerveModulePosition[] getPositions() {
 		return new SwerveModulePosition[] {
-			this.frontLeftModule.getPosition(),
-			this.frontRightModule.getPosition(),
-			this.backLeftModule.getPosition(),
-			this.backRightModule.getPosition()
+				this.frontLeftModule.getPosition(),
+				this.frontRightModule.getPosition(),
+				this.backLeftModule.getPosition(),
+				this.backRightModule.getPosition()
 		};
 	}
 
@@ -326,98 +320,42 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.navx;
 	}
 
-	@Log.NumberBar(
-			name = "FL Velocity",
-			min = -5,
-			max = 5,
-			rowIndex = 0,
-			columnIndex = 2,
-			height = 1,
-			width = 1)
+	@Log.NumberBar(name = "FL Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
 	public double getFrontLeftSpeed() {
 		return this.frontLeftModule.getDriveVelocity();
 	}
 
-	@Log.Dial(
-			name = "FL Angle",
-			min = -90,
-			max = 90,
-			rowIndex = 0,
-			columnIndex = 1,
-			height = 1,
-			width = 1)
+	@Log.Dial(name = "FL Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
 	public double getFrontLeftAngle() {
 		return Math.IEEEremainder(Math.toDegrees(this.frontLeftModule.getSteerAngle()), 180);
 	}
 
-	@Log.NumberBar(
-			name = "FR Velocity",
-			min = -5,
-			max = 5,
-			rowIndex = 0,
-			columnIndex = 5,
-			height = 1,
-			width = 1)
+	@Log.NumberBar(name = "FR Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 5, height = 1, width = 1)
 	public double getFrontRightSpeed() {
 		return this.frontRightModule.getDriveVelocity();
 	}
 
-	@Log.Dial(
-			name = "FR Angle",
-			min = -90,
-			max = 90,
-			rowIndex = 0,
-			columnIndex = 6,
-			height = 1,
-			width = 1)
+	@Log.Dial(name = "FR Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
 	public double getFrontRightAngle() {
 		return Math.IEEEremainder(Math.toDegrees(this.frontRightModule.getSteerAngle()), 180);
 	}
 
-	@Log.Dial(
-			name = "BL Angle",
-			min = -90,
-			max = 90,
-			rowIndex = 1,
-			columnIndex = 1,
-			height = 1,
-			width = 1)
+	@Log.Dial(name = "BL Angle", min = -90, max = 90, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
 	public double getBackLeftAngle() {
 		return Math.IEEEremainder(Math.toDegrees(this.backLeftModule.getSteerAngle()), 180);
 	}
 
-	@Log.NumberBar(
-			name = "BL Velocity",
-			min = -5,
-			max = 5,
-			rowIndex = 1,
-			columnIndex = 2,
-			height = 1,
-			width = 1)
+	@Log.NumberBar(name = "BL Velocity", min = -5, max = 5, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
 	public double getBackLeftSpeed() {
 		return this.backLeftModule.getDriveVelocity();
 	}
 
-	@Log.NumberBar(
-			name = "BR Velocity",
-			min = -5,
-			max = 5,
-			rowIndex = 1,
-			columnIndex = 5,
-			height = 1,
-			width = 1)
+	@Log.NumberBar(name = "BR Velocity", min = -5, max = 5, rowIndex = 1, columnIndex = 5, height = 1, width = 1)
 	public double getBackRightSpeed() {
 		return this.backRightModule.getDriveVelocity();
 	}
 
-	@Log.Dial(
-			name = "BR Angle",
-			min = -90,
-			max = 90,
-			rowIndex = 1,
-			columnIndex = 6,
-			height = 1,
-			width = 1)
+	@Log.Dial(name = "BR Angle", min = -90, max = 90, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
 	public double getBackRightAngle() {
 		return Math.IEEEremainder(Math.toDegrees(this.backRightModule.getSteerAngle()), 180);
 	}
@@ -457,44 +395,17 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.navx.isMagneticDisturbance();
 	}
 
-	@Config.NumberSlider(
-			name = "Theta P",
-			tabName = "Tuning",
-			defaultValue = Auto.kThetaP,
-			min = 0,
-			max = 20,
-			rowIndex = 5,
-			columnIndex = 0,
-			height = 1,
-			width = 1)
+	@Config.NumberSlider(name = "Theta P", tabName = "Tuning", defaultValue = Auto.kThetaP, min = 0, max = 20, rowIndex = 5, columnIndex = 0, height = 1, width = 1)
 	public void setThetaP(double thetaP) {
 		this.thetaGains.kP = thetaP;
 	}
 
-	@Config.NumberSlider(
-			name = "Theta I",
-			tabName = "Tuning",
-			defaultValue = Auto.kThetaI,
-			min = 0,
-			max = 1,
-			rowIndex = 5,
-			columnIndex = 1,
-			height = 1,
-			width = 1)
+	@Config.NumberSlider(name = "Theta I", tabName = "Tuning", defaultValue = Auto.kThetaI, min = 0, max = 1, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
 	public void setThetaI(double thetaI) {
 		this.thetaGains.kI = thetaI;
 	}
 
-	@Config.NumberSlider(
-			name = "Theta D",
-			tabName = "Tuning",
-			defaultValue = Auto.kThetaD,
-			min = 0,
-			max = 1,
-			rowIndex = 5,
-			columnIndex = 2,
-			height = 1,
-			width = 1)
+	@Config.NumberSlider(name = "Theta D", tabName = "Tuning", defaultValue = Auto.kThetaD, min = 0, max = 1, rowIndex = 5, columnIndex = 2, height = 1, width = 1)
 	public void setThetaD(double thetaD) {
 		this.thetaGains.kD = thetaD;
 	}

@@ -13,8 +13,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 public final class Constants {
 	public static final class Drivetrain {
 		// TODO: set these values
-		public static final double LEFT_FRONT_STEER_OFFSET =
-				-Math.toRadians(206.54); // rotating inverse of other
+		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54); // rotating inverse of other
 		// wheels
 		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
 		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.13);
@@ -27,7 +26,9 @@ public final class Constants {
 		/**
 		 * The maximum voltage that will be delivered to the drive motors.
 		 *
-		 * <p>This can be reduced to cap the robot's maximum speed. Typically, this is useful during
+		 * <p>
+		 * This can be reduced to cap the robot's maximum speed. Typically, this is
+		 * useful during
 		 * initial testing of the robot.%
 		 */
 		public static final double MAX_VOLTAGE = 12.0;
@@ -42,25 +43,26 @@ public final class Constants {
 		/**
 		 * The maximum velocity of the robot in meters per second.
 		 *
-		 * <p>This is a measure of how fast the robot should be able to drive in a straight line.
+		 * <p>
+		 * This is a measure of how fast the robot should be able to drive in a straight
+		 * line.
 		 */
-		public static final double MAX_VELOCITY_METERS_PER_SECOND =
-				6380.0
-						/ 60.0
-						* SdsModuleConfigurations.MK4I_L2.getDriveReduction()
-						* SdsModuleConfigurations.MK4I_L2.getWheelDiameter()
-						* Math.PI;
+		public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0
+				/ 60.0
+				* SdsModuleConfigurations.MK4I_L2.getDriveReduction()
+				* SdsModuleConfigurations.MK4I_L2.getWheelDiameter()
+				* Math.PI;
 
 		/**
 		 * The maximum angular velocity of the robot in radians per second.
 		 *
-		 * <p>This is a measure of how fast the robot can rotate in place.
+		 * <p>
+		 * This is a measure of how fast the robot can rotate in place.
 		 */
 		// Here we calculate the theoretical maximum angular velocity. You can also
 		// replace this with a measured amount.
-		public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND =
-				MAX_VELOCITY_METERS_PER_SECOND
-						/ Math.hypot(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0);
+		public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND
+				/ Math.hypot(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0);
 
 		public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
 	}
