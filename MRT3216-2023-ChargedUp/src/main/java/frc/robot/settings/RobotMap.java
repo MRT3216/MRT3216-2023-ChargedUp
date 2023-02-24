@@ -28,15 +28,14 @@ public final class RobotMap {
 			public static final int RIGHT_REAR_CANCODER = 14;
 		}
 
-		public static class ARM {
-			// NEO
-			public static final int TOP_LEFT_MOTOR = 15;
-			public static final int MIDDLE_LEFT_MOTOR = 16;
-			public static final int BOTTOM_LEFT_MOTOR = 17;
-			public static final int TOP_RIGHT_MOTOR = 18;
-			public static final int MIDDLE_RIGHT_MOTOR = 19;
-			public static final int BOTTOM_RIGHT_MOTOR = 20;
-		}
+        public static class ARM {
+            public static final int LEFT_TOP = 15;
+            public static final int LEFT_MIDDLE = 16;
+            public static final int LEFT_BOTTOM = 17;
+            public static final int RIGHT_TOP = 18;
+            public static final int RIGHT_MIDDLE = 19;
+            public static final int RIGHT_BOTTOM = 20;
+        }
 
 		public static class SENSORS {
 			public static final I2C.Port COLOR_SENSOR = I2C.Port.kMXP;

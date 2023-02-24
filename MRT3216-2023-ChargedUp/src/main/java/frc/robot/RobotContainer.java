@@ -3,12 +3,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
@@ -38,6 +40,7 @@ public class RobotContainer {
 	private double translationExpo;
 	private double rotationExpo;
 	private CommandXboxController controller;
+	private ArmSubsystem armSystem;
 
 	// #endregion
 
@@ -65,6 +68,7 @@ public class RobotContainer {
 	public void initSubsystems() {
 		this.driveSystem = SwerveSubsystem.getInstance();
 		this.autoChooser = AutoChooser.getInstance();
+		this.armSystem = ArmSubsystem.getInstance();
 	}
 
 	/**
@@ -88,9 +92,30 @@ public class RobotContainer {
 									* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}
+
+		controller.leftTrigger().whileTrue(
+				Commands.run(() -> this.armSystem.runMotors(-controller.getLeftTriggerAxis() / 10), armSystem)
+						.finallyDo(
+								(end) -> {
+									this.armSystem.stop();
+									this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
+								}));
+
+		controller.rightTrigger().whileTrue(
+				Commands.run(() -> this.armSystem.runMotors(controller.getRightTriggerAxis() / 10), armSystem)
+						.finallyDo((end) -> {
+							this.armSystem.stop();
+							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
+						}));
+
+		controller.a().onTrue(armSystem.getGotoCommand(10));
+		controller.b().onTrue(armSystem.getGotoCommand(45));
+		controller.x().onTrue(armSystem.getGotoCommand(80));
+		controller.y().onTrue(armSystem.getGotoCommand(115));
 	}
 
 	public void disablePIDSubsystems() {
+		armSystem.disable();
 	}
 
 	/**

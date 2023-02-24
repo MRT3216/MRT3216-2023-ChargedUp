@@ -9,6 +9,7 @@ package frc.robot.settings;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.subsystems.ArmSubsystem;
 
 public final class Constants {
 	public static final class Drivetrain {
@@ -101,6 +102,42 @@ public final class Constants {
 			PiPMain,
 			PiPSecondary
 		}
+	}
+
+	public static final class ARM {
+		public static final boolean kLeftMotorsInverted = true;
+		public static final boolean kRightMotorsInverted = false;
+		public static final float kReverseLimit = .02f;
+		public static final float kForwardLimit = .73f;
+		public static final double kReverseLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
+		public static final double kForwardLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
+		public static final int kMotorCurrentLimit = 20;
+		public static final double kZeroOffset = .02f;
+		public static final double kScaleFactor = 193;
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * PID Constants
+		 */
+		public static final double kArmKp = .2;
+		public static final double kArmKi = 0;
+		public static final double kArmKd = 0;
+		public static final double kArmPositionTolerance = 2;
+		public static final double kArmVelocityTolerance = 20;
+
+		public static final double kWristKp = 0.75;
+		public static final double kWristKi = 0;
+		public static final double kWristKd = 0;
+		public static final double kWristPositionTolerance = 10;
+		public static final double kWristVelocityTolerance = 20;
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * Constraint Constants
+		 */
+		public static final double kArmMaxVelocity = 150; // degrees/s
+		public static final double kArmMaxAcceleration = 60; // degrees/s^2
+		public static final double kArmStartingPos = 80; // 60 degrees wrt hortizontal
 	}
 
 	public static final class Auto {
