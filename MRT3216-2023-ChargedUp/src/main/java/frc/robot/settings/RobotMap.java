@@ -37,6 +37,11 @@ public final class RobotMap {
             public static final int RIGHT_BOTTOM = 20;
         }
 
+        public static class Manipulator {
+            public static final int MANIPULATOR_ANGLE = 21;
+            public static final int MANIPULATOR_INTAKE = 22;
+        }
+
 		public static class SENSORS {
 			public static final I2C.Port COLOR_SENSOR = I2C.Port.kMXP;
 		}

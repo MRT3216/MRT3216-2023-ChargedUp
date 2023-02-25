@@ -41,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         rightMiddleMotor = new CANSparkMax(ROBOT.ARM.RIGHT_MIDDLE, MotorType.kBrushless);
         rightBottomMotor = new CANSparkMax(ROBOT.ARM.RIGHT_BOTTOM, MotorType.kBrushless);
 
-        leadMotor = rightBottomMotor;
+        leadMotor = rightMiddleMotor;
         leadMotor.restoreFactoryDefaults();
         leadMotor.clearFaults();
 
@@ -49,8 +49,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         leftMiddleMotor.follow(leadMotor, ARM.kLeftMotorsInverted);
         leftBottomMotor.follow(leadMotor, ARM.kLeftMotorsInverted);
         rightTopMotor.follow(leadMotor, ARM.kRightMotorsInverted);
-        rightMiddleMotor.follow(leadMotor, ARM.kRightMotorsInverted);
-        rightBottomMotor.setInverted(ARM.kRightMotorsInverted);
+        rightMiddleMotor.setInverted(ARM.kRightMotorsInverted);
+        rightBottomMotor.follow(leadMotor, ARM.kRightMotorsInverted);
 
         encoder = leadMotor.getAbsoluteEncoder(Type.kDutyCycle);
         leadMotor.getPIDController().setFeedbackDevice(encoder);
