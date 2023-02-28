@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.ARM;
+import frc.robot.settings.Constants.WRIST;
 import frc.robot.settings.RobotMap.ROBOT;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -28,6 +30,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax rightMiddleMotor;
     private CANSparkMax rightBottomMotor;
     private CANSparkMax leadMotor;
+    private CANSparkMax wristMotor;
     private SparkMaxAbsoluteEncoder encoder;
 
     public ArmSubsystem() {
@@ -46,11 +49,17 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         leadMotor.clearFaults();
 
         leftTopMotor.follow(leadMotor, ARM.kLeftMotorsInverted);
+        leftTopMotor.setIdleMode(IdleMode.kBrake);
         leftMiddleMotor.follow(leadMotor, ARM.kLeftMotorsInverted);
+        leftMiddleMotor.setIdleMode(IdleMode.kBrake);
         leftBottomMotor.follow(leadMotor, ARM.kLeftMotorsInverted);
+        leftBottomMotor.setIdleMode(IdleMode.kBrake);
         rightTopMotor.follow(leadMotor, ARM.kRightMotorsInverted);
+        rightTopMotor.setIdleMode(IdleMode.kBrake);
         rightMiddleMotor.setInverted(ARM.kRightMotorsInverted);
+        rightMiddleMotor.setIdleMode(IdleMode.kBrake);
         rightBottomMotor.follow(leadMotor, ARM.kRightMotorsInverted);
+        rightBottomMotor.setIdleMode(IdleMode.kBrake);
 
         encoder = leadMotor.getAbsoluteEncoder(Type.kDutyCycle);
         leadMotor.getPIDController().setFeedbackDevice(encoder);
@@ -62,6 +71,13 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         leadMotor.setSmartCurrentLimit(ARM.kMotorCurrentLimit);
 
         leadMotor.burnFlash();
+
+        wristMotor = new CANSparkMax(ROBOT.WRIST.MOTOR, MotorType.kBrushless);
+        wristMotor.restoreFactoryDefaults();
+        wristMotor.clearFaults();
+        wristMotor.setInverted(WRIST.kMotorInverted);
+        wristMotor.setIdleMode(IdleMode.kBrake);
+        wristMotor.burnFlash();
 
         // The arm ProfiledPIDController
         armPidController = new ProfiledPIDController(
@@ -94,7 +110,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
-    public Command getGotoCommand(double armDegrees) {
+    public Command getArmGotoCommand(double armDegrees) {
         return Commands.print("Setting goal")
                 .andThen(Commands.runOnce(() -> {
                     setArmGoal(armDegrees);
@@ -111,6 +127,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public static double calculateArmDegrees(double nativeUnits) {
         return (nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
+    }
+
+    public static double calculateWristDegreesWrtArm(double nativeUnits) {
+        return (nativeUnits - WRIST.kZeroOffset) * WRIST.kScaleFactor;
     }
 
     public void setArmGoal(double degrees) {

@@ -125,7 +125,7 @@ public final class Constants {
 		public static final double kArmPositionTolerance = 2;
 		public static final double kArmVelocityTolerance = 20;
 
-		/*  
+		/*
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
@@ -134,41 +134,48 @@ public final class Constants {
 		public static final double kArmStartingPos = 80; // 60 degrees wrt hortizontal
 	}
 
-	public static final class MANIPULATOR {
+	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
-		public static final float kForwardLimit = 0f;
+		public static final float kForwardLimit = 1;
 		public static final float kReverseLimit = 0;
 
 		public static final int kMotorCurrentLimit = 20;
 
+		public static final boolean kMotorInverted = true;
 
-		public static final boolean kLeftMotorsInverted = true;
-		public static final boolean kRightMotorsInverted = false;
+		public static final double kReverseLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kReverseLimit);
+		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit);
 
-		public static final double kReverseLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
-		public static final double kForwardLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
-
-		public static final double kZeroOffset = .02f;
-		public static final double kScaleFactor = 193;
+		public static final double kZeroOffset = 0;
+		public static final double kScaleFactor = 360;
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * PID Constants
 		 */
 
-		public static final double kManipulatorKp = 0.75;
-		public static final double kManipulatorKi = 0;
-		public static final double kManipulatorKd = 0;
-		public static final double kManipulatorPositionTolerance = 10;
-		public static final double kManipulatorVelocityTolerance = 20;
+		public static final double kWristKp = 0.75;
+		public static final double kWristKi = 0;
+		public static final double kWristKd = 0;
+		public static final double kWristPositionTolerance = 10;
+		public static final double kWristVelocityTolerance = 20;
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kManipulatorMaxVelocity = 150; // degrees/s
-		public static final double kManipulatorMaxAcceleration = 60; // degrees/s^2
-		public static final double kManipulatorStartingPos = 80; // 60 degrees wrt hortizontal
+		public static final double kWristMaxVelocity = 150; // degrees/s
+		public static final double kWristMaxAcceleration = 60; // degrees/s^2
+		public static final double kWristStartingPos = 80; // 60 degrees wrt arm
+	}
+
+	public static final class INTAKE {
+		public static final boolean kMotorInverted = true;
+		public static final int kMotorCurrentLimit = 10;
+		public static final double kConeIntakeSpeed = -0.5;
+		public static final double kConeOuttakeSpeed = 0.5;
+		public static final double kCubeIntakeSpeed = 0.5;
+		public static final double kCubeOuttakeSpeed = -0.5;
 	}
 
 	public static final class Auto {

@@ -108,10 +108,10 @@ public class RobotContainer {
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
-		controller.a().onTrue(armSystem.getGotoCommand(10));
-		controller.b().onTrue(armSystem.getGotoCommand(45));
-		controller.x().onTrue(armSystem.getGotoCommand(80));
-		controller.y().onTrue(armSystem.getGotoCommand(115));
+		controller.a().onTrue(armSystem.getArmGotoCommand(10));
+		controller.b().onTrue(armSystem.getArmGotoCommand(45));
+		controller.x().onTrue(armSystem.getArmGotoCommand(80));
+		controller.y().onTrue(armSystem.getArmGotoCommand(115));
 	}
 
 	public void disablePIDSubsystems() {

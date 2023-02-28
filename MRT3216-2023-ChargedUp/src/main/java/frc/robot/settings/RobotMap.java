@@ -28,19 +28,22 @@ public final class RobotMap {
 			public static final int RIGHT_REAR_CANCODER = 14;
 		}
 
-        public static class ARM {
-            public static final int LEFT_TOP = 15;
-            public static final int LEFT_MIDDLE = 16;
-            public static final int LEFT_BOTTOM = 17;
-            public static final int RIGHT_TOP = 18;
-            public static final int RIGHT_MIDDLE = 19;
-            public static final int RIGHT_BOTTOM = 20;
-        }
+		public static class ARM {
+			public static final int LEFT_TOP = 15;
+			public static final int LEFT_MIDDLE = 16;
+			public static final int LEFT_BOTTOM = 17;
+			public static final int RIGHT_TOP = 18;
+			public static final int RIGHT_MIDDLE = 19;
+			public static final int RIGHT_BOTTOM = 20;
+		}
 
-        public static class Manipulator {
-            public static final int MANIPULATOR_ANGLE = 21;
-            public static final int MANIPULATOR_INTAKE = 22;
-        }
+		public static class WRIST {
+			public static final int MOTOR = 21;
+		}
+
+		public static class INTAKE {
+			public static final int MOTOR = 22;
+		}
 
 		public static class SENSORS {
 			public static final I2C.Port COLOR_SENSOR = I2C.Port.kMXP;
