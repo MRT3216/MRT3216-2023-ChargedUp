@@ -36,6 +36,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private ArmSubsystem() {
         this.enabled = false;
 
+        // region Arm Motor Initialization
         leftTopMotor = new CANSparkMax(ROBOT.ARM.LEFT_TOP, MotorType.kBrushless);
         leftMiddleMotor = new CANSparkMax(ROBOT.ARM.LEFT_MIDDLE, MotorType.kBrushless);
         leftBottomMotor = new CANSparkMax(ROBOT.ARM.LEFT_BOTTOM, MotorType.kBrushless);
@@ -72,13 +73,18 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
         leadMotor.burnFlash();
 
+        // endregion
+
+        // region Wrist Motor Initialization
         wristMotor = new CANSparkMax(ROBOT.WRIST.MOTOR, MotorType.kBrushless);
         wristMotor.restoreFactoryDefaults();
         wristMotor.clearFaults();
         wristMotor.setInverted(WRIST.kMotorInverted);
         wristMotor.setIdleMode(IdleMode.kBrake);
         wristMotor.burnFlash();
+        // endregion
 
+        // region Arm PID
         // The arm ProfiledPIDController
         armPidController = new ProfiledPIDController(
                 ARM.kArmKp,
@@ -96,6 +102,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         armPidController.reset(getArmDegrees());
         System.out.println("Setpoint after reset:" + armPidController.getSetpoint().position);
         System.out.println("Initial Goal: " + armPidController.getGoal().position);
+        // endregion
+
+        // region Wrist PID
+
+        // endregion
     }
 
     @Override
@@ -144,12 +155,20 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 .abs(getArmDegrees() - armPidController.getGoal().position);
     }
 
-    public void runMotors(double speed) {
+    public void runArmMotors(double speed) {
         leadMotor.set(speed);
     }
 
-    public void stop() {
+    public void runWristMotor(double speed) {
+        wristMotor.set(speed);
+    }
+
+    public void stopArmMotors() {
         leadMotor.stopMotor();
+    }
+
+    public void stopWristMotors() {
+        wristMotor.stopMotor();
     }
 
     @Log.NumberBar(name = "Arm Encoder", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
@@ -183,7 +202,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.enabled = false;
         // This wasn't in ProfiledPIDSubsystem, but seems reasonable
         armPidController.setGoal(getArmDegrees());
-        runMotors(0);
+        runArmMotors(0);
     }
 
     /**

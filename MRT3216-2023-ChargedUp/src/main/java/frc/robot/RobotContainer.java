@@ -97,19 +97,25 @@ public class RobotContainer {
 		}
 
 		controller.leftTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runMotors(-controller.getLeftTriggerAxis() / 10), armSystem)
+				Commands.run(() -> this.armSystem.runArmMotors(-controller.getLeftTriggerAxis() / 10), armSystem)
 						.finallyDo(
 								(end) -> {
-									this.armSystem.stop();
+									this.armSystem.stopArmMotors();
 									this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 								}));
-
+		/*
 		controller.rightTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runMotors(controller.getRightTriggerAxis() / 10), armSystem)
+				Commands.run(() -> this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 10), armSystem)
 						.finallyDo((end) -> {
-							this.armSystem.stop();
+							this.armSystem.stopArmMotors();
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
+ 		*/
+		 controller.rightTrigger().whileTrue(
+			Commands.run(() -> this.armSystem.runWristMotor(controller.getRightTriggerAxis() / 10), armSystem)
+					.finallyDo((end) -> {
+						this.armSystem.stopArmMotors();
+					}));
 
 		controller.a().onTrue(armSystem.getArmGotoCommand(10));
 		controller.b().onTrue(armSystem.getArmGotoCommand(45));

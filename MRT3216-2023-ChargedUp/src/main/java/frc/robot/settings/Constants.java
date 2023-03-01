@@ -174,8 +174,8 @@ public final class Constants {
 		public static final int kMotorCurrentLimit = 30;
 		public static final double kConeIntakeSpeed = 0.7;
 		public static final double kConeOuttakeSpeed = -0.5;
-		public static final double kCubeIntakeSpeed = 0.5;
-		public static final double kCubeOuttakeSpeed = -0.5;
+		public static final double kCubeIntakeSpeed = -0.5;
+		public static final double kCubeOuttakeSpeed = 0.5;
 	}
 
 	public static final class Auto {
