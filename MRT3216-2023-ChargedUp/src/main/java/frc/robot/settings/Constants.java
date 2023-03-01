@@ -171,9 +171,9 @@ public final class Constants {
 
 	public static final class INTAKE {
 		public static final boolean kMotorInverted = true;
-		public static final int kMotorCurrentLimit = 10;
-		public static final double kConeIntakeSpeed = -0.5;
-		public static final double kConeOuttakeSpeed = 0.5;
+		public static final int kMotorCurrentLimit = 30;
+		public static final double kConeIntakeSpeed = 0.7;
+		public static final double kConeOuttakeSpeed = -0.5;
 		public static final double kCubeIntakeSpeed = 0.5;
 		public static final double kCubeOuttakeSpeed = -0.5;
 	}

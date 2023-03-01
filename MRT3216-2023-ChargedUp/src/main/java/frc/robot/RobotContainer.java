@@ -11,6 +11,7 @@ import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
@@ -41,6 +42,7 @@ public class RobotContainer {
 	private double rotationExpo;
 	private CommandXboxController controller;
 	private ArmSubsystem armSystem;
+	private IntakeSubsystem intakeSystem;
 
 	// #endregion
 
@@ -69,6 +71,7 @@ public class RobotContainer {
 		this.driveSystem = SwerveSubsystem.getInstance();
 		this.autoChooser = AutoChooser.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
+		this.intakeSystem = IntakeSubsystem.getInstance();
 	}
 
 	/**
@@ -110,8 +113,11 @@ public class RobotContainer {
 
 		controller.a().onTrue(armSystem.getArmGotoCommand(10));
 		controller.b().onTrue(armSystem.getArmGotoCommand(45));
-		controller.x().onTrue(armSystem.getArmGotoCommand(80));
+		controller.x().onTrue(armSystem.getArmGotoCommand(60));
 		controller.y().onTrue(armSystem.getArmGotoCommand(115));
+
+		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(true));
+		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(false));
 	}
 
 	public void disablePIDSubsystems() {
