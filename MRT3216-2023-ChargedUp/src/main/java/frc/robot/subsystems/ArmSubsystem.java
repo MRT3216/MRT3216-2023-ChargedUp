@@ -33,7 +33,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax wristMotor;
     private SparkMaxAbsoluteEncoder encoder;
 
-    public ArmSubsystem() {
+    private ArmSubsystem() {
         this.enabled = false;
 
         leftTopMotor = new CANSparkMax(ROBOT.ARM.LEFT_TOP, MotorType.kBrushless);

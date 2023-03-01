@@ -22,7 +22,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax motor;
 
     /** Creates a new IntakeSubsystem. */
-    public IntakeSubsystem() {
+    private IntakeSubsystem() {
         motor = new CANSparkMax(RobotMap.ROBOT.INTAKE.MOTOR, MotorType.kBrushless);
 
         motor.restoreFactoryDefaults();
