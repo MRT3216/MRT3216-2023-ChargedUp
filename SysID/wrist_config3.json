@@ -2,7 +2,7 @@
   "canivore names": [
     "rio"
   ],
-  "counts per rotation": 8192.0,
+  "counts per rotation": 1.0,
   "encoder canivore name": "rio",
   "encoder type": "Data Port",
   "encoding": false,
@@ -38,5 +38,5 @@
   "secondary motors inverted": [
     false
   ],
-  "velocity measurement period": 5
+  "velocity measurement period": 8
 }
