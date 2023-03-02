@@ -81,6 +81,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristMotor.clearFaults();
         wristMotor.setInverted(WRIST.kMotorInverted);
         wristMotor.setIdleMode(IdleMode.kBrake);
+        leadMotor.setSmartCurrentLimit(WRIST.kMotorCurrentLimit);
         wristMotor.burnFlash();
         // endregion
 

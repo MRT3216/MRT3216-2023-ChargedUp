@@ -139,7 +139,7 @@ public final class Constants {
 		public static final float kForwardLimit = 1;
 		public static final float kReverseLimit = 0;
 
-		public static final int kMotorCurrentLimit = 20;
+		public static final int kMotorCurrentLimit = 40;
 
 		public static final boolean kMotorInverted = true;
 
