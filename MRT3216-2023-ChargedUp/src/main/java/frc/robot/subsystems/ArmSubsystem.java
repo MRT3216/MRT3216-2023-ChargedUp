@@ -19,6 +19,8 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ArmSubsystem extends SubsystemBase implements Loggable {
+    // #region Fields
+
     private static ArmSubsystem instance;
     private ProfiledPIDController armPidController;
     protected boolean enabled;
@@ -33,10 +35,14 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax wristMotor;
     private SparkMaxAbsoluteEncoder encoder;
 
+    // #endregion
+
+    // #region ArmSubsystem
+
     private ArmSubsystem() {
         this.enabled = false;
 
-        // region Arm Motor Initialization
+        // #region Arm Motor Initialization
         leftTopMotor = new CANSparkMax(ROBOT.ARM.LEFT_TOP, MotorType.kBrushless);
         leftMiddleMotor = new CANSparkMax(ROBOT.ARM.LEFT_MIDDLE, MotorType.kBrushless);
         leftBottomMotor = new CANSparkMax(ROBOT.ARM.LEFT_BOTTOM, MotorType.kBrushless);
@@ -75,7 +81,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
         // endregion
 
-        // region Wrist Motor Initialization
+        // #region Wrist Motor Initialization
         wristMotor = new CANSparkMax(ROBOT.WRIST.MOTOR, MotorType.kBrushless);
         wristMotor.restoreFactoryDefaults();
         wristMotor.clearFaults();
@@ -85,7 +91,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristMotor.burnFlash();
         // endregion
 
-        // region Arm PID
+        // #region Arm PID
         // The arm ProfiledPIDController
         armPidController = new ProfiledPIDController(
                 ARM.kArmKp,
@@ -105,7 +111,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         System.out.println("Initial Goal: " + armPidController.getGoal().position);
         // endregion
 
-        // region Wrist PID
+        // #region Wrist PID
 
         // endregion
     }
@@ -120,76 +126,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 this.setArmGoal(armPidController.getGoal().position);
             }
         }
-    }
-
-    public Command getArmGotoCommand(double armDegrees) {
-        return Commands.print("Setting goal")
-                .andThen(Commands.runOnce(() -> {
-                    setArmGoal(armDegrees);
-                    this.enable();
-                }, this))
-                .andThen(Commands.waitUntil(() -> armAtGoal()))
-                .andThen(Commands.print("Arm at goal"));
-    }
-
-    @Log.NumberBar(name = "Arm Degrees", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
-    public double getArmDegrees() {
-        return calculateArmDegrees(encoder.getPosition());
-    }
-
-    public static double calculateArmDegrees(double nativeUnits) {
-        return (nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
-    }
-
-    public static double calculateWristDegreesWrtArm(double nativeUnits) {
-        return (nativeUnits - WRIST.kZeroOffset) * WRIST.kScaleFactor;
-    }
-
-    public void setArmGoal(double degrees) {
-        degrees = Math.min(ARM.kForwardLimitDegrees, Math.max(degrees, ARM.kReverseLimitDegrees));
-        System.out.println("Goal Degrees: " + degrees);
-        armPidController.setGoal(degrees);
-    }
-
-    public boolean armAtGoal() {
-        return armPidController.getPositionTolerance() >= Math
-                .abs(getArmDegrees() - armPidController.getGoal().position);
-    }
-
-    public void runArmMotors(double speed) {
-        leadMotor.set(speed);
-    }
-
-    public void runWristMotor(double speed) {
-        wristMotor.set(speed);
-    }
-
-    public void stopArmMotors() {
-        leadMotor.stopMotor();
-    }
-
-    public void stopWristMotors() {
-        wristMotor.stopMotor();
-    }
-
-    @Log.NumberBar(name = "Arm Encoder", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
-    public double getEncoderPosition() {
-        return this.encoder.getPosition();
-    }
-
-    @Log.NumberBar(name = "Lead Current", rowIndex = 0, columnIndex = 2, height = 1, width = 1)
-    public double getCurrent() {
-        return this.leadMotor.getOutputCurrent();
-    }
-
-    @Log.NumberBar(name = "Goal", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
-    public double getGoal() {
-        return armPidController.getGoal().position;
-    }
-
-    @Log.NumberBar(name = "Setpoint", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
-    public double getSetpoint() {
-        return armPidController.getSetpoint().position;
     }
 
     /** Enables the PID control. Resets the controller. */
@@ -222,4 +158,92 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         }
         return instance;
     }
+
+    // #endregion
+
+    // #region Arm
+
+    public void setArmGoal(double degrees) {
+        degrees = Math.min(ARM.kForwardLimitDegrees, Math.max(degrees, ARM.kReverseLimitDegrees));
+        System.out.println("Goal Degrees: " + degrees);
+        armPidController.setGoal(degrees);
+    }
+
+    public boolean armAtGoal() {
+        return armPidController.getPositionTolerance() >= Math
+                .abs(getArmDegrees() - armPidController.getGoal().position);
+    }
+
+    public void runArmMotors(double speed) {
+        leadMotor.set(speed);
+    }
+
+    public static double calculateArmDegrees(double nativeUnits) {
+        return (nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
+    }
+
+    public void stopArmMotors() {
+        leadMotor.stopMotor();
+    }
+
+    // #endregion
+
+    // #region Wrist
+
+    public static double calculateWristDegreesWrtArm(double nativeUnits) {
+        return (nativeUnits - WRIST.kZeroOffset) * WRIST.kScaleFactor;
+    }
+
+    public void runWristMotor(double speed) {
+        wristMotor.set(speed);
+    }
+
+    public void stopWristMotors() {
+        wristMotor.stopMotor();
+    }
+
+    // #endregion
+
+    // #region Command Factories
+
+    public Command getArmGotoCommand(double armDegrees) {
+        return Commands.print("Setting goal")
+                .andThen(Commands.runOnce(() -> {
+                    setArmGoal(armDegrees);
+                    this.enable();
+                }, this))
+                .andThen(Commands.waitUntil(() -> armAtGoal()))
+                .andThen(Commands.print("Arm at goal"));
+    }
+
+    // #endregion
+
+    // #region Logging
+
+    @Log.NumberBar(name = "Arm Encoder", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
+    public double getEncoderPosition() {
+        return this.encoder.getPosition();
+    }
+
+    @Log.NumberBar(name = "Arm Degrees", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
+    public double getArmDegrees() {
+        return calculateArmDegrees(encoder.getPosition());
+    }
+
+    @Log.NumberBar(name = "Lead Current", rowIndex = 0, columnIndex = 2, height = 1, width = 1)
+    public double getCurrent() {
+        return this.leadMotor.getOutputCurrent();
+    }
+
+    @Log.NumberBar(name = "Goal", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
+    public double getGoal() {
+        return armPidController.getGoal().position;
+    }
+
+    @Log.NumberBar(name = "Setpoint", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
+    public double getSetpoint() {
+        return armPidController.getSetpoint().position;
+    }
+
+    // #endregion
 }
