@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,12 +17,14 @@ import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.WRIST;
 import frc.robot.settings.RobotMap.ROBOT;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Fields
 
     private static ArmSubsystem instance;
+    @Config
     private ProfiledPIDController armPidController;
     protected boolean enabled;
 
@@ -35,6 +38,84 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax wristMotor;
     private SparkMaxAbsoluteEncoder encoder;
 
+    private final ArmFeedforward wristFeedforward;
+
+    // #region Arm PID
+
+    @Config
+    private double armKp = ARM.kArmKp;
+    @Config
+    private double armKi = ARM.kArmKi;
+    @Config
+    private double armKd = ARM.kArmKd;
+
+    // #endregion
+
+    // #region Wrist PID
+
+    @Config
+    private double wristKp = WRIST.kWristKp;
+    @Config
+    private double wristKi = WRIST.kWristKi;
+    @Config
+    private double wristKd = WRIST.kWristKd;
+
+    // #endregion
+
+    // #region Arm Positions
+
+    @Config
+    private int aHCone = ARM.kHighConeScoringDegrees;
+    @Config
+    private int aHCube = ARM.kHighCubeScoringDegrees;
+    @Config
+    private int aMCone = ARM.kMidConeScoringDegrees;
+    @Config
+    private int aMCube = ARM.kMidCubeScoringDegrees;
+    @Config
+    private int aHybrid = ARM.kHybridScoringDegrees;
+    @Config
+    private int aGUprightCone = ARM.kGroundIntakeUprightConeDegrees;
+    @Config
+    private int aGTippedCone = ARM.kGroundIntakeTippedConeDegrees;
+    @Config
+    private int aGCube = ARM.kGroundIntakeUprightCubeDegrees;
+    @Config
+    private int aSCone = ARM.kSubstationIntakeConeDegrees;
+    @Config
+    private int aSCube = ARM.kSubstationIntakeCubeDegrees;
+    @Config
+    private int aStowed = ARM.kStowedDegrees;
+
+    // #endregion
+
+    // #region Wrist Positions
+
+    @Config
+    private int wHCone = WRIST.kHighConeScoringDegrees;
+    @Config
+    private int wHCube = WRIST.kHighCubeScoringDegrees;
+    @Config
+    private int wMCone = WRIST.kMidConeScoringDegrees;
+    @Config
+    private int wMCube = WRIST.kMidCubeScoringDegrees;
+    @Config
+    private int wHybrid = WRIST.kHybridScoringDegrees;
+    @Config
+    private int wGUprightCone = WRIST.kGroundIntakeUprightConeDegrees;
+    @Config
+    private int wGTippedCone = WRIST.kGroundIntakeTippedConeDegrees;
+    @Config
+    private int wGCube = WRIST.kGroundIntakeUprightCubeDegrees;
+    @Config
+    private int wSCone = WRIST.kSubstationIntakeConeDegrees;
+    @Config
+    private int wSCube = WRIST.kSubstationIntakeCubeDegrees;
+    @Config
+    private int wStowed = WRIST.kStowedDegrees;
+
+    // #endregion
+
     // #endregion
 
     // #region ArmSubsystem
@@ -43,6 +124,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.enabled = false;
 
         // #region Arm Motor Initialization
+
         leftTopMotor = new CANSparkMax(ROBOT.ARM.LEFT_TOP, MotorType.kBrushless);
         leftMiddleMotor = new CANSparkMax(ROBOT.ARM.LEFT_MIDDLE, MotorType.kBrushless);
         leftBottomMotor = new CANSparkMax(ROBOT.ARM.LEFT_BOTTOM, MotorType.kBrushless);
@@ -82,6 +164,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         // endregion
 
         // #region Wrist Motor Initialization
+
         wristMotor = new CANSparkMax(ROBOT.WRIST.MOTOR, MotorType.kBrushless);
         wristMotor.restoreFactoryDefaults();
         wristMotor.clearFaults();
@@ -89,14 +172,18 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristMotor.setIdleMode(IdleMode.kBrake);
         leadMotor.setSmartCurrentLimit(WRIST.kMotorCurrentLimit);
         wristMotor.burnFlash();
+
+        wristFeedforward = new ArmFeedforward(
+                WRIST.kWristKs, WRIST.kWristKg, WRIST.kWristKv, WRIST.kWristKa);
+
         // endregion
 
         // #region Arm PID
         // The arm ProfiledPIDController
         armPidController = new ProfiledPIDController(
-                ARM.kArmKp,
-                ARM.kArmKi,
-                ARM.kArmKd,
+                this.armKp,
+                this.armKi,
+                this.armKd,
                 // The motion profile constraints
                 new TrapezoidProfile.Constraints(ARM.kArmMaxVelocity,
                         ARM.kArmMaxAcceleration));
@@ -125,6 +212,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             } else {
                 this.setArmGoal(armPidController.getGoal().position);
             }
+
+            // double ff = wristFeedforward.calculate(,);
         }
     }
 

@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		// Starts recording to data log
+		// TODO: Decide if this should be removed
 		DataLogManager.start();
 
 		// Instantiate our RobotContainer. This will perform all our button bindings,
