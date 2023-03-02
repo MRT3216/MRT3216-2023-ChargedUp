@@ -137,7 +137,17 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		
+		public static final int kHighConeScoringDegrees = 100;
+		public static final int kHighCubeScoringDegrees = 90;
+		public static final int kMidConeScoringDegrees = 80;
+		public static final int kMidCubeScoringDegrees = 70;
+		public static final int kHybridScoringDegrees = 30;
+		public static final int kGroundIntakeUprightConeDegrees = 20;
+		public static final int kGroundIntakeTippedConeDegrees = 15;
+		public static final int kGroundIntakeUprightCubeDegrees = 10;
+		public static final int kSubstationIntakeConeDegrees = 50;
+		public static final int kSubstationIntakeCubeDegrees = 40;
+		public static final int kStowedDegrees = 60;
 
 	}
 
@@ -172,7 +182,6 @@ public final class Constants {
 		public static final double kWristKa = 0.0032297;
 		public static final double kWristKg = 0.52135;
 
-
 		public static final double kVVoltSecondPerRad = 0.5;
 
 		/*
@@ -187,6 +196,18 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
+		public static final int kHighConeScoringDegrees = 100;
+		public static final int kHighCubeScoringDegrees = 90;
+		public static final int kMidConeScoringDegrees = 80;
+		public static final int kMidCubeScoringDegrees = 70;
+		public static final int kHybridScoringDegrees = 30;
+		public static final int kGroundIntakeUprightConeDegrees = 20;
+		public static final int kGroundIntakeTippedConeDegrees = 15;
+		public static final int kGroundIntakeUprightCubeDegrees = 10;
+		public static final int kSubstationIntakeConeDegrees = 50;
+		public static final int kSubstationIntakeCubeDegrees = 40;
+		public static final int kStowedDegrees = 60;
+
 	}
 
 	public static final class INTAKE {
