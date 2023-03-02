@@ -24,7 +24,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Fields
 
     private static ArmSubsystem instance;
-    @Config
     private ProfiledPIDController armPidController;
     protected boolean enabled;
 
@@ -42,76 +41,76 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #region Arm PID
 
-    @Config
+    @Config.NumberSlider(name = "Arm P", defaultValue = ARM.kArmKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 3)
     private double armKp = ARM.kArmKp;
-    @Config
+    //// @Config
     private double armKi = ARM.kArmKi;
-    @Config
+    //// @Config
     private double armKd = ARM.kArmKd;
 
     // #endregion
 
     // #region Wrist PID
 
-    @Config
+    // @Config
     private double wristKp = WRIST.kWristKp;
-    @Config
+    // @Config
     private double wristKi = WRIST.kWristKi;
-    @Config
+    // @Config
     private double wristKd = WRIST.kWristKd;
 
     // #endregion
 
     // #region Arm Positions
 
-    @Config
+    // @Config
     private int aHCone = ARM.kHighConeScoringDegrees;
-    @Config
+    // @Config
     private int aHCube = ARM.kHighCubeScoringDegrees;
-    @Config
+    // @Config
     private int aMCone = ARM.kMidConeScoringDegrees;
-    @Config
+    // @Config
     private int aMCube = ARM.kMidCubeScoringDegrees;
-    @Config
+    // @Config
     private int aHybrid = ARM.kHybridScoringDegrees;
-    @Config
+    // @Config
     private int aGUprightCone = ARM.kGroundIntakeUprightConeDegrees;
-    @Config
+    // @Config
     private int aGTippedCone = ARM.kGroundIntakeTippedConeDegrees;
-    @Config
+    // @Config
     private int aGCube = ARM.kGroundIntakeUprightCubeDegrees;
-    @Config
+    // @Config
     private int aSCone = ARM.kSubstationIntakeConeDegrees;
-    @Config
+    // @Config
     private int aSCube = ARM.kSubstationIntakeCubeDegrees;
-    @Config
+    // @Config
     private int aStowed = ARM.kStowedDegrees;
 
     // #endregion
 
     // #region Wrist Positions
 
-    @Config
+    // @Config
     private int wHCone = WRIST.kHighConeScoringDegrees;
-    @Config
+    // @Config
     private int wHCube = WRIST.kHighCubeScoringDegrees;
-    @Config
+    // @Config
     private int wMCone = WRIST.kMidConeScoringDegrees;
-    @Config
+    // @Config
     private int wMCube = WRIST.kMidCubeScoringDegrees;
-    @Config
+    // @Config
     private int wHybrid = WRIST.kHybridScoringDegrees;
-    @Config
+    // @Config
     private int wGUprightCone = WRIST.kGroundIntakeUprightConeDegrees;
-    @Config
+    // @Config
     private int wGTippedCone = WRIST.kGroundIntakeTippedConeDegrees;
-    @Config
+    // @Config
     private int wGCube = WRIST.kGroundIntakeUprightCubeDegrees;
-    @Config
+    // @Config
     private int wSCone = WRIST.kSubstationIntakeConeDegrees;
-    @Config
+    // @Config
     private int wSCube = WRIST.kSubstationIntakeCubeDegrees;
-    @Config
+    // @Config
     private int wStowed = WRIST.kStowedDegrees;
 
     // #endregion

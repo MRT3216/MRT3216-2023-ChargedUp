@@ -127,10 +127,12 @@ public class RobotContainer {
 							this.armSystem.stopWristMotors();
 						}));
 
+		/*
 		controller.a().onTrue(armSystem.getArmGotoCommand(10));
 		controller.b().onTrue(armSystem.getArmGotoCommand(45));
 		controller.x().onTrue(armSystem.getArmGotoCommand(60));
 		controller.y().onTrue(armSystem.getArmGotoCommand(115));
+ 		*/
 
 		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(true));
 		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(false));
