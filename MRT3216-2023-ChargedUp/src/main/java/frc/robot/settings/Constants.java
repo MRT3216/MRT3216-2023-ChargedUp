@@ -137,18 +137,28 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kHighConeScoringDegrees = 100;
-		public static final int kHighCubeScoringDegrees = 90;
-		public static final int kMidConeScoringDegrees = 80;
-		public static final int kMidCubeScoringDegrees = 70;
-		public static final int kHybridScoringDegrees = 30;
+		public static final int kScoringHighConeDegrees = 100;
+		public static final int kScoringHighCubeDegrees = 90;
+		public static final int kScoringMidConeDegrees = 80;
+		public static final int kScoringMidCubeDegrees = 70;
+		public static final int kScoringHybridDegrees = 30;
 		public static final int kGroundIntakeUprightConeDegrees = 20;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeUprightCubeDegrees = 10;
+		public static final int kGroundIntakeCubeDegrees = 10;
 		public static final int kSubstationIntakeConeDegrees = 50;
 		public static final int kSubstationIntakeCubeDegrees = 40;
 		public static final int kStowedDegrees = 60;
 
+		// Positions
+		public enum Positions {
+			HighConeScoring,
+			HighCubeScoring,
+			MidConeScoring,
+			MidCubeScoring,
+			HybridScoring,
+			GroundIntakeUprightCone,
+			GroundIntakeTippedCone
+		}
 	}
 
 	public static final class WRIST {
@@ -196,14 +206,14 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kHighConeScoringDegrees = 100;
-		public static final int kHighCubeScoringDegrees = 90;
-		public static final int kMidConeScoringDegrees = 80;
-		public static final int kMidCubeScoringDegrees = 70;
-		public static final int kHybridScoringDegrees = 30;
+		public static final int kScoringHighConeDegrees = 100;
+		public static final int kScoringHighCubeDegrees = 90;
+		public static final int kScoringMidConeDegrees = 80;
+		public static final int kScoringMidCubeDegrees = 70;
+		public static final int kScoringHybridDegrees = 30;
 		public static final int kGroundIntakeUprightConeDegrees = 20;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeUprightCubeDegrees = 10;
+		public static final int kGroundIntakeCubeDegrees = 10;
 		public static final int kSubstationIntakeConeDegrees = 50;
 		public static final int kSubstationIntakeCubeDegrees = 40;
 		public static final int kStowedDegrees = 60;
