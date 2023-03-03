@@ -191,12 +191,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 new TrapezoidProfile.Constraints(WRIST.kWristMaxVelocity,
                         WRIST.kWristMaxAcceleration));
 
-        wristPidController.setGoal(getArmDegrees());
+        wristPidController.setGoal(getWristDegrees());
 
         wristPidController.setTolerance(WRIST.kWristPositionTolerance);
         System.out.println("Wrist Setpoint before reset:" + wristPidController.getSetpoint().position);
-        System.out.println("Wrist Resetting PIDController; current degrees: " + getArmDegrees());
-        armPidController.reset(getArmDegrees());
+        System.out.println("Wrist Resetting PIDController; current degrees: " + getWristDegrees());
+        wristPidController.reset(getWristDegrees());
         System.out.println("Wrist Setpoint after reset:" + wristPidController.getSetpoint().position);
         System.out.println("Wrist Initial Goal: " + wristPidController.getGoal().position);
 
@@ -268,7 +268,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm
 
     public void setArmGoal(double degrees) {
-        degrees = Math.min(ARM.kForwardLimitDegrees, Math.max(degrees, ARM.kReverseLimitDegrees));
+        degrees = Math.min(ARM.kMaxLimitDegrees, Math.max(degrees, ARM.kMinLimitDegrees));
         System.out.println("Goal Degrees: " + degrees);
         armPidController.setGoal(degrees);
     }
@@ -283,7 +283,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public static double calculateArmDegrees(double nativeUnits) {
-        return (nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
+        return (ARM.kForwardLimit - nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
     }
 
     public void stopArmMotors() {
@@ -488,12 +488,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm Pickup Positions Column 6
     // Column 6, Rows 0-5
 
-    @Config.NumberSlider(name = "A Ground Up Cone", defaultValue = ARM.kGroundIntakeUprightConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A G Up Cone", defaultValue = ARM.kGroundIntakeUprightConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
     public void setAGUprightCone(int aGUprightCone) {
         this.aGUprightCone = aGUprightCone;
     }
 
-    @Config.NumberSlider(name = "A Ground Down Cone", defaultValue = ARM.kGroundIntakeTippedConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A G Down Cone", defaultValue = ARM.kGroundIntakeTippedConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
     public void setAGTippedCone(int aGTippedCone) {
         this.aGTippedCone = aGTippedCone;
     }
@@ -518,12 +518,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist Pickup Positions Column 7
     // Column 7, Rows
 
-    @Config.NumberSlider(name = "W Ground Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 0, columnIndex = 7, height = 1, width = 1)
+    @Config.NumberSlider(name = "W G Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 0, columnIndex = 7, height = 1, width = 1)
     public void setWGUprightCone(int wGUprightCone) {
         this.wGUprightCone = wGUprightCone;
     }
 
-    @Config.NumberSlider(name = "W Ground Down Cone", defaultValue = WRIST.kGroundIntakeTippedConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 1, columnIndex = 7, height = 1, width = 1)
+    @Config.NumberSlider(name = "W G Down Cone", defaultValue = WRIST.kGroundIntakeTippedConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 1, columnIndex = 7, height = 1, width = 1)
     public void setWGTippedCone(int wGTippedCone) {
         this.wGTippedCone = wGTippedCone;
     }

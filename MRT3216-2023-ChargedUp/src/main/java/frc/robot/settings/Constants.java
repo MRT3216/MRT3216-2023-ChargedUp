@@ -109,8 +109,8 @@ public final class Constants {
 		public static final boolean kRightMotorsInverted = false;
 		public static final float kReverseLimit = .02f;
 		public static final float kForwardLimit = .73f;
-		public static final double kReverseLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
-		public static final double kForwardLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
+		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
+		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final int kMotorCurrentLimit = 20;
 		public static final double kZeroOffset = .02f;
 		public static final double kScaleFactor = 193;
@@ -151,13 +151,16 @@ public final class Constants {
 
 		// Positions
 		public enum Positions {
-			HighConeScoring,
-			HighCubeScoring,
-			MidConeScoring,
-			MidCubeScoring,
-			HybridScoring,
+			ScoringHighCone,
+			ScoringHighCube,
+			ScoringMidCone,
+			ScoringMidCube,
+			ScoringHybrid,
 			GroundIntakeUprightCone,
-			GroundIntakeTippedCone
+			GroundIntakeTippedCone,
+			SubstationIntakeCone,
+			SubstationIntakeCube,
+			Stowed
 		}
 	}
 
