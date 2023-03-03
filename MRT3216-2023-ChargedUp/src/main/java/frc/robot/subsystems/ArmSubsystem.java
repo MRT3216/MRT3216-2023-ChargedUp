@@ -41,76 +41,48 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #region Arm PID
 
-    @Config.NumberSlider(name = "Arm P", defaultValue = ARM.kArmKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 3)
     private double armKp = ARM.kArmKp;
-    //// @Config
     private double armKi = ARM.kArmKi;
-    //// @Config
     private double armKd = ARM.kArmKd;
 
     // #endregion
 
     // #region Wrist PID
 
-    // @Config
     private double wristKp = WRIST.kWristKp;
-    // @Config
     private double wristKi = WRIST.kWristKi;
-    // @Config
     private double wristKd = WRIST.kWristKd;
 
     // #endregion
 
     // #region Arm Positions
 
-    // @Config
     private int aHCone = ARM.kHighConeScoringDegrees;
-    // @Config
     private int aHCube = ARM.kHighCubeScoringDegrees;
-    // @Config
     private int aMCone = ARM.kMidConeScoringDegrees;
-    // @Config
     private int aMCube = ARM.kMidCubeScoringDegrees;
-    // @Config
     private int aHybrid = ARM.kHybridScoringDegrees;
-    // @Config
     private int aGUprightCone = ARM.kGroundIntakeUprightConeDegrees;
-    // @Config
     private int aGTippedCone = ARM.kGroundIntakeTippedConeDegrees;
-    // @Config
     private int aGCube = ARM.kGroundIntakeUprightCubeDegrees;
-    // @Config
     private int aSCone = ARM.kSubstationIntakeConeDegrees;
-    // @Config
     private int aSCube = ARM.kSubstationIntakeCubeDegrees;
-    // @Config
     private int aStowed = ARM.kStowedDegrees;
 
     // #endregion
 
     // #region Wrist Positions
 
-    // @Config
     private int wHCone = WRIST.kHighConeScoringDegrees;
-    // @Config
     private int wHCube = WRIST.kHighCubeScoringDegrees;
-    // @Config
     private int wMCone = WRIST.kMidConeScoringDegrees;
-    // @Config
     private int wMCube = WRIST.kMidCubeScoringDegrees;
-    // @Config
     private int wHybrid = WRIST.kHybridScoringDegrees;
-    // @Config
     private int wGUprightCone = WRIST.kGroundIntakeUprightConeDegrees;
-    // @Config
     private int wGTippedCone = WRIST.kGroundIntakeTippedConeDegrees;
-    // @Config
     private int wGCube = WRIST.kGroundIntakeUprightCubeDegrees;
-    // @Config
     private int wSCone = WRIST.kSubstationIntakeConeDegrees;
-    // @Config
     private int wSCube = WRIST.kSubstationIntakeCubeDegrees;
-    // @Config
     private int wStowed = WRIST.kStowedDegrees;
 
     // #endregion
@@ -313,25 +285,137 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return this.encoder.getPosition();
     }
 
-    @Log.NumberBar(name = "Arm Degrees", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
+    @Log.NumberBar(name = "Arm Degrees", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
     public double getArmDegrees() {
         return calculateArmDegrees(encoder.getPosition());
     }
 
-    @Log.NumberBar(name = "Lead Current", rowIndex = 0, columnIndex = 2, height = 1, width = 1)
-    public double getCurrent() {
-        return this.leadMotor.getOutputCurrent();
-    }
-
-    @Log.NumberBar(name = "Goal", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Goal", rowIndex = 3, columnIndex = 0, height = 1, width = 1)
     public double getGoal() {
         return armPidController.getGoal().position;
     }
 
-    @Log.NumberBar(name = "Setpoint", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
+    @Log.NumberBar(name = "Setpoint", rowIndex = 2, columnIndex = 0, height = 1, width = 1)
     public double getSetpoint() {
         return armPidController.getSetpoint().position;
     }
+
+    // #region Setters
+
+    @Config.NumberSlider(name = "Arm P", defaultValue = ARM.kArmKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
+    public void setArmKp(double armKp) {
+        this.armKp = armKp;
+    }
+
+    public void setArmKi(double armKi) {
+        this.armKi = armKi;
+    }
+
+    public void setArmKd(double armKd) {
+        this.armKd = armKd;
+    }
+
+    public void setWristKp(double wristKp) {
+        this.wristKp = wristKp;
+    }
+
+    public void setWristKi(double wristKi) {
+        this.wristKi = wristKi;
+    }
+
+    public void setWristKd(double wristKd) {
+        this.wristKd = wristKd;
+    }
+
+    public void setAHCone(int aHCone) {
+        this.aHCone = aHCone;
+    }
+
+    public void setAHCube(int aHCube) {
+        this.aHCube = aHCube;
+    }
+
+    public void setAMCone(int aMCone) {
+        this.aMCone = aMCone;
+    }
+
+    public void setAMCube(int aMCube) {
+        this.aMCube = aMCube;
+    }
+
+    public void setAHybrid(int aHybrid) {
+        this.aHybrid = aHybrid;
+    }
+
+    public void setAGUprightCone(int aGUprightCone) {
+        this.aGUprightCone = aGUprightCone;
+    }
+
+    public void setAGTippedCone(int aGTippedCone) {
+        this.aGTippedCone = aGTippedCone;
+    }
+
+    public void setAGCube(int aGCube) {
+        this.aGCube = aGCube;
+    }
+
+    public void setASCone(int aSCone) {
+        this.aSCone = aSCone;
+    }
+
+    public void setASCube(int aSCube) {
+        this.aSCube = aSCube;
+    }
+
+    public void setAStowed(int aStowed) {
+        this.aStowed = aStowed;
+    }
+
+    public void setWHCone(int wHCone) {
+        this.wHCone = wHCone;
+    }
+
+    public void setWHCube(int wHCube) {
+        this.wHCube = wHCube;
+    }
+
+    public void setWMCone(int wMCone) {
+        this.wMCone = wMCone;
+    }
+
+    public void setWMCube(int wMCube) {
+        this.wMCube = wMCube;
+    }
+
+    public void setWHybrid(int wHybrid) {
+        this.wHybrid = wHybrid;
+    }
+
+    public void setWGUprightCone(int wGUprightCone) {
+        this.wGUprightCone = wGUprightCone;
+    }
+
+    public void setWGTippedCone(int wGTippedCone) {
+        this.wGTippedCone = wGTippedCone;
+    }
+
+    public void setWGCube(int wGCube) {
+        this.wGCube = wGCube;
+    }
+
+    public void setWSCone(int wSCone) {
+        this.wSCone = wSCone;
+    }
+
+    public void setWSCube(int wSCube) {
+        this.wSCube = wSCube;
+    }
+
+    public void setWStowed(int wStowed) {
+        this.wStowed = wStowed;
+    }
+
+    // #endregion
 
     // #endregion
 }
