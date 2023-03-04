@@ -1,9 +1,5 @@
 package frc.robot;
 
-import java.util.function.IntSupplier;
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
-import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.ArmSubsystem;
@@ -48,7 +43,6 @@ public class RobotContainer {
 	private CommandXboxController controller;
 	private ArmSubsystem armSystem;
 	private IntakeSubsystem intakeSystem;
-
 
 	// #endregion
 
@@ -127,19 +121,24 @@ public class RobotContainer {
 						.finallyDo((end) -> {
 							this.armSystem.stopWristMotors();
 						}));
+
 		controller.rightTrigger().whileTrue(
 				Commands.run(() -> this.armSystem.runWristMotor(controller.getRightTriggerAxis() / 5), armSystem)
 						.finallyDo((end) -> {
 							this.armSystem.stopWristMotors();
 						}));
 
-		controller.a().onTrue(armSystem.getGroundTippedConeIntakeCommand());
+		controller.a().onTrue(armSystem.getGroundIntakeCommand());
 		controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());
 		controller.x().onTrue(armSystem.getScoringCommand());
-		controller.y().onTrue(armSystem.getGroundTippedConeIntakeCommand());
+		controller.y().onTrue(armSystem.getSubstationIntakeCommand());
 
-		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(true));
-		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(false));
+		controller.leftStick().onTrue(armSystem.getStowedCommand());
+
+		// Place piece
+		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));
+		// Intake
+		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(true));
 	}
 
 	public void disablePIDSubsystems() {

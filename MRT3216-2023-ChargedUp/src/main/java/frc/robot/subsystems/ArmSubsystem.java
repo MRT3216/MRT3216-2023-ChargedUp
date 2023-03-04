@@ -419,6 +419,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Substation));
     }
 
+    public Command getStowedCommand() {
+        return getCommand(ARM.Position.Stowed);
+    }
+
     private Command getCommand(ARM.Position position) {
         return Commands.parallel(getArmGotoCommand(getArmDegreesByPosition(position)),
                 getWristGotoCommand(getWristDegreesByPosition(position)));
