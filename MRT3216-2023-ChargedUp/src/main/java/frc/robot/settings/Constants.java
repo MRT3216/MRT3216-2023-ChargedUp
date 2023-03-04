@@ -7,7 +7,11 @@
 
 package frc.robot.settings;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -147,19 +151,123 @@ public final class Constants {
 		public static final int kSubstationIntakeCubeDegrees = 40;
 		public static final int kStowedDegrees = 60;
 
-		// Positions
-		public enum Positions {
-			ScoringHighCone,
-			ScoringHighCube,
-			ScoringMidCone,
-			ScoringMidCube,
-			ScoringHybrid,
-			GroundIntakeUprightCone,
-			GroundIntakeTippedCone,
-			SubstationIntakeCone,
-			SubstationIntakeCube,
-			Stowed
+		// #region Enums
+
+		public enum Position {
+			ScoringHighCone(0),
+			ScoringHighCube(1),
+			ScoringMidCone(2),
+			ScoringMidCube(3),
+			ScoringHybrid(4),
+			GroundIntakeUprightCone(5),
+			GroundIntakeTippedCone(6),
+			GroundIntakeCube(7),
+			SubstationIntakeCone(8),
+			SubstationIntakeCube(9),
+			Stowed(10);
+
+			private int value;
+			private static Map map = new HashMap<>();
+
+			private Position(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (Position position : Position.values()) {
+					map.put(position.value, position);
+				}
+			}
+
+			public static Position valueOf(int position) {
+				return (Position) map.get(position);
+			}
+
+			public int getValue() {
+				return value;
+			}
 		}
+
+		public enum GamePiece {
+			Cone(0),
+			Cube(1);
+
+			private int value;
+			private static Map map = new HashMap<>();
+
+			private GamePiece(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (GamePiece gamePiece : GamePiece.values()) {
+					map.put(gamePiece.value, gamePiece);
+				}
+			}
+
+			public static GamePiece valueOf(int gamePiece) {
+				return (GamePiece) map.get(gamePiece);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+
+		public enum ScoringHeight {
+			High(0),
+			Mid(1),
+			Hybrid(2);
+
+			private int value;
+			private static Map map = new HashMap<>();
+
+			private ScoringHeight(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (ScoringHeight scoringPiece : ScoringHeight.values()) {
+					map.put(scoringPiece.value, scoringPiece);
+				}
+			}
+
+			public static ScoringHeight valueOf(int scoringPiece) {
+				return (ScoringHeight) map.get(scoringPiece);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+
+		public enum IntakePosition {
+			Ground(0),
+			Substation(1);
+
+			private int value;
+			private static Map map = new HashMap<>();
+
+			private IntakePosition(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (IntakePosition position : IntakePosition.values()) {
+					map.put(position.value, position);
+				}
+			}
+
+			public static IntakePosition valueOf(int position) {
+				return (IntakePosition) map.get(position);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+		
+		// #endregion
 	}
 
 	public static final class WRIST {

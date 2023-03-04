@@ -10,10 +10,13 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.WRIST;
 import frc.robot.settings.RobotMap.ROBOT;
@@ -26,6 +29,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private static ArmSubsystem instance;
     protected boolean enabled;
+    private NetworkTable streamDeckNT;
 
     // #region Arm Motors
 
@@ -106,6 +110,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private ArmSubsystem() {
         this.enabled = false;
+        NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
+        this.streamDeckNT = table;
 
         // #region Arm Motor Initialization
 
@@ -306,6 +312,50 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         leadMotor.stopMotor();
     }
 
+    public double getArmDegreesByPosition(ARM.Position position) {
+        switch (position.ordinal()) {
+            // ARM.Positions.ScoringHighCone
+            case 0:
+                return this.aHCone;
+
+            // ARM.Positions.ScoringHighCube
+            case 1:
+                return this.aHCube;
+
+            // ARM.Positions.ScoringMidCone
+            case 2:
+                return this.aMCone;
+
+            // ARM.Positions.ScoringMidCube
+            case 3:
+                return this.aMCube;
+
+            // ARM.Positions.ScoringHybrid;
+            case 4:
+                return this.aHybrid;
+
+            // ARM.Positions.GroundIntakeUprightCone
+            case 5:
+                return this.aGUprightCone;
+
+            // ARM.Positions.GroundIntakeTippedCone
+            case 6:
+                return this.aGTippedCone;
+            // ARM.Positions.GroundIntakeCube
+            case 7:
+                return this.aGCube;
+            // ARM.Positions.SubstationIntakeCone
+            case 8:
+                return this.aSCone;
+            // ARM.Positions.SubstationIntakeCube
+            case 9:
+                return this.aSCube;
+            // ARM.Positions.Stowed
+            default:
+                return this.aStowed;
+        }
+    }
+
     // #endregion
 
     // #region Wrist
@@ -333,18 +383,138 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristMotor.stopMotor();
     }
 
+    public double getWristDegreesByPosition(ARM.Position position) {
+        switch (position.ordinal()) {
+            // ARM.Positions.ScoringHighCone
+            case 0:
+                return this.wHCone;
+
+            // ARM.Positions.ScoringHighCube
+            case 1:
+                return this.wHCube;
+
+            // ARM.Positions.ScoringMidCone
+            case 2:
+                return this.wMCone;
+
+            // ARM.Positions.ScoringMidCube
+            case 3:
+                return this.wMCube;
+
+            // ARM.Positions.ScoringHybrid;
+            case 4:
+                return this.wHybrid;
+
+            // ARM.Positions.GroundIntakeUprightCone
+            case 5:
+                return this.wGUprightCone;
+
+            // ARM.Positions.GroundIntakeTippedCone
+            case 6:
+                return this.wGTippedCone;
+            // ARM.Positions.GroundIntakeCube
+            case 7:
+                return this.wGCube;
+            // ARM.Positions.SubstationIntakeCone
+            case 8:
+                return this.wSCone;
+            // ARM.Positions.SubstationIntakeCube
+            case 9:
+                return this.wSCube;
+            // ARM.Positions.Stowed
+            default:
+                return this.wStowed;
+        }
+    }
+
     // #endregion
 
     // #region Command Factories
 
-    public Command getArmGotoCommand(double armDegrees) {
-        return Commands.print("Setting goal")
+    // Score piece - needs piece and height
+    public Command getScoringCommand() {
+        return this.getCommand(getArmAndWristScoringPosition());
+    }
+
+    // Ground intake - needs piece
+    public Command getGroundIntakeCommand() {
+        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground));
+    }
+
+    // Ground tipped cone intake - needs nothing
+    public Command getGroundTippedConeIntakeCommand() {
+        return Commands.parallel(getArmGotoCommand(this.aGTippedCone), getWristGotoCommand(this.wGTippedCone));
+    }
+
+    // Substation pickup -- needs piece
+    public Command getSubstationIntakeCommand() {
+        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Substation));
+    }
+
+    private Command getCommand(ARM.Position position) {
+        return Commands.parallel(getArmGotoCommand(getArmDegreesByPosition(position)),
+                getWristGotoCommand(getWristDegreesByPosition(position)));
+    }
+
+    private Command getArmGotoCommand(double armDegrees) {
+        return Commands.print("Setting arm goal")
                 .andThen(Commands.runOnce(() -> {
                     setArmGoal(armDegrees);
                     this.enable();
                 }, this))
                 .andThen(Commands.waitUntil(() -> armAtGoal()))
                 .andThen(Commands.print("Arm at goal"));
+    }
+
+    private Command getWristGotoCommand(double wristDegrees) {
+        return Commands.print("Setting wrist goal")
+                .andThen(Commands.runOnce(() -> {
+                    setWristGoal(wristDegrees);
+                    this.enable();
+                }, this))
+                .andThen(Commands.waitUntil(() -> wristAtGoal()))
+                .andThen(Commands.print("Wrist at goal"));
+    }
+
+    // #endregion
+
+    // #region Determining Arm and Wrist Positions
+
+    private ARM.Position getArmAndWristScoringPosition() {
+        ARM.ScoringHeight sH = this.getScoringHeight();
+        ARM.GamePiece gP = this.getScoringGamePiece();
+
+        if (sH == ARM.ScoringHeight.High) {
+            return gP == ARM.GamePiece.Cone ? ARM.Position.ScoringHighCone : ARM.Position.ScoringHighCube;
+        } else if (sH == ARM.ScoringHeight.Mid) {
+            return gP == ARM.GamePiece.Cone ? ARM.Position.ScoringMidCone : ARM.Position.ScoringMidCube;
+        } else if (sH == ARM.ScoringHeight.Hybrid) {
+            return ARM.Position.ScoringHybrid;
+        }
+
+        return ARM.Position.Stowed;
+    }
+
+    private ARM.Position getArmAndWristIntakePosition(ARM.IntakePosition iP) {
+        ARM.GamePiece gP = this.getScoringGamePiece();
+
+        if (iP == ARM.IntakePosition.Ground) {
+            return gP == ARM.GamePiece.Cone ? ARM.Position.GroundIntakeUprightCone : ARM.Position.ScoringHighCube;
+        } else if (iP == ARM.IntakePosition.Substation) {
+            return gP == ARM.GamePiece.Cone ? ARM.Position.SubstationIntakeCone : ARM.Position.SubstationIntakeCone;
+        }
+
+        return ARM.Position.Stowed;
+    }
+
+    public ARM.ScoringHeight getScoringHeight() {
+        return ARM.ScoringHeight.valueOf((int) streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight)
+                .getInteger(Constants.ARM.kStowedDegrees));
+    }
+
+    public ARM.GamePiece getScoringGamePiece() {
+        return ARM.GamePiece.valueOf((int) streamDeckNT.getEntry(Constants.StreamDeck.gamePiece)
+                .getInteger(Constants.ARM.kStowedDegrees));
     }
 
     // #endregion
@@ -564,14 +734,24 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Stowed Positions Column 8
     // Column 8, Rows 0-1
 
-    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 5, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 0, columnIndex = 8, height = 1, width = 1)
     public void setAStowed(int aStowed) {
         this.aStowed = aStowed;
     }
 
-    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 3, columnIndex = 5, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 1, columnIndex = 8, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
+    }
+
+    @Config.ToggleButton(name = "Cone?", rowIndex = 2, columnIndex = 8, height = 1, width = 1)
+    public void setGamePiece(boolean isCone) {
+
+    }
+
+    @Config.NumberSlider(name = "Scoring Height", rowIndex = 3, columnIndex = 8, height = 1, width = 1)
+    public void setScoringHeight(int scoringHeight) {
+
     }
 
     // #endregion

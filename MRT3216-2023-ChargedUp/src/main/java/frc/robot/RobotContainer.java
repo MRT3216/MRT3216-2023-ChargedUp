@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
+import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.ArmSubsystem;
@@ -47,7 +48,7 @@ public class RobotContainer {
 	private CommandXboxController controller;
 	private ArmSubsystem armSystem;
 	private IntakeSubsystem intakeSystem;
-	private NetworkTable streamDeckNT;
+
 
 	// #endregion
 
@@ -77,9 +78,6 @@ public class RobotContainer {
 		this.autoChooser = AutoChooser.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
 		this.intakeSystem = IntakeSubsystem.getInstance();
-
-		NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
-		this.streamDeckNT = table;
 	}
 
 	/**
@@ -135,14 +133,10 @@ public class RobotContainer {
 							this.armSystem.stopWristMotors();
 						}));
 
-		//controller.a().on
-
-		/*
-		 * controller.a().onTrue(armSystem.getArmGotoCommand(10));
-		 * controller.b().onTrue(armSystem.getArmGotoCommand(45));
-		 * controller.x().onTrue(armSystem.getArmGotoCommand(60));
-		 * controller.y().onTrue(armSystem.getArmGotoCommand(115));
-		 */
+		controller.a().onTrue(armSystem.getGroundTippedConeIntakeCommand());
+		controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());
+		controller.x().onTrue(armSystem.getScoringCommand());
+		controller.y().onTrue(armSystem.getGroundTippedConeIntakeCommand());
 
 		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(true));
 		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(false));
@@ -171,11 +165,6 @@ public class RobotContainer {
 
 	public SwerveSubsystem getDriveSystem() {
 		return driveSystem;
-	}
-
-	public IntSupplier getScoringHeight() {
-		return () -> (int) streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight)
-				.getInteger(Constants.ARM.kStowedDegrees);
 	}
 
 	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = Auto.kStartDelayTime, methodTypes = {
