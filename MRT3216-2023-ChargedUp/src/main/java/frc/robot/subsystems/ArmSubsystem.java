@@ -41,7 +41,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax rightMiddleMotor;
     private CANSparkMax rightBottomMotor;
     private CANSparkMax leadMotor;
-    private CANSparkMax wristMotor;
     private SparkMaxAbsoluteEncoder armEncoder;
 
     // #endregion
@@ -50,6 +49,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private ProfiledPIDController wristPidController;
     private final ArmFeedforward wristFeedforward;
+    private CANSparkMax wristMotor;
     private SparkMaxAbsoluteEncoder wristEncoder;
 
     // #endregion
@@ -160,8 +160,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristMotor.clearFaults();
         wristMotor.setInverted(WRIST.kMotorInverted);
         wristMotor.setIdleMode(IdleMode.kBrake);
-        leadMotor.setSmartCurrentLimit(WRIST.kMotorCurrentLimit);
+        wristMotor.setSmartCurrentLimit(WRIST.kMotorCurrentLimit);
         wristMotor.burnFlash();
+
+        wristEncoder = wristMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        wristMotor.getPIDController().setFeedbackDevice(wristEncoder);
 
         wristFeedforward = new ArmFeedforward(
                 WRIST.kWristKs, WRIST.kWristKg, WRIST.kWristKv, WRIST.kWristKa);
