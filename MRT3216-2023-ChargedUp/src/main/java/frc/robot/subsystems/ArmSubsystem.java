@@ -369,41 +369,25 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public double getWristDegreesByPosition(ARM.Position position) {
         switch (position) {
-            // ARM.Positions.ScoringHighCone
-            case 0:
+            case ScoringHighCone:
                 return this.wHCone;
-
-            // ARM.Positions.ScoringHighCube
-            case 1:
+            case ScoringHighCube:
                 return this.wHCube;
-
-            // ARM.Positions.ScoringMidCone
-            case 2:
+            case ScoringMidCone:
                 return this.wMCone;
-
-            // ARM.Positions.ScoringMidCube
-            case 3:
+            case ScoringMidCube:
                 return this.wMCube;
-
-            // ARM.Positions.ScoringHybrid;
-            case 4:
+            case ScoringHybrid:
                 return this.wHybrid;
-
-            // ARM.Positions.GroundIntakeUprightCone
-            case 5:
+            case GroundIntakeUprightCone:
                 return this.wGUprightCone;
-
-            // ARM.Positions.GroundIntakeTippedCone
-            case 6:
+            case GroundIntakeTippedCone:
                 return this.wGTippedCone;
-            // ARM.Positions.GroundIntakeCube
-            case 7:
+            case GroundIntakeCube:
                 return this.wGCube;
-            // ARM.Positions.SubstationIntakeCone
-            case 8:
+            case SubstationIntakeCone:
                 return this.wSCone;
-            // ARM.Positions.SubstationIntakeCube
-            case 9:
+            case SubstationIntakeCube:
                 return this.wSCube;
             // ARM.Positions.Stowed
             default:
