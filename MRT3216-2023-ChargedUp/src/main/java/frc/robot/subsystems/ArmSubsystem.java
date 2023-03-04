@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -62,6 +63,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private double wristKp = WRIST.kWristKp;
     private double wristKi = WRIST.kWristKi;
     private double wristKd = WRIST.kWristKd;
+    private double lastSpeed = 0;
+    private double lastTime = Timer.getFPGATimestamp();
 
     // #endregion
 
@@ -191,12 +194,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 new TrapezoidProfile.Constraints(WRIST.kWristMaxVelocity,
                         WRIST.kWristMaxAcceleration));
 
-        wristPidController.setGoal(getWristDegrees());
+        wristPidController.setGoal(getWristDegreesWrtArm());
 
         wristPidController.setTolerance(WRIST.kWristPositionTolerance);
         System.out.println("Wrist Setpoint before reset:" + wristPidController.getSetpoint().position);
-        System.out.println("Wrist Resetting PIDController; current degrees: " + getWristDegrees());
-        wristPidController.reset(getWristDegrees());
+        System.out.println("Wrist Resetting PIDController; current degrees: " + getWristDegreesWrtArm());
+        wristPidController.reset(getWristDegreesWrtArm());
         System.out.println("Wrist Setpoint after reset:" + wristPidController.getSetpoint().position);
         System.out.println("Wrist Initial Goal: " + wristPidController.getGoal().position);
 
@@ -213,8 +216,23 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 this.setArmGoal(armPidController.getGoal().position);
             }
 
-            // TODO: Finish this
-            // double ff = wristFeedforward.calculate(,);
+            if (Math.abs(wristPidController.getSetpoint().position - getArmDegrees()) < 20) {
+                double wristPidVoltage = wristPidController.calculate(getArmDegrees());
+                // TODO: Finish this
+                // Calculate the acceleration based on the speed at the last time stamp
+                double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
+                        / (Timer.getFPGATimestamp() - lastTime);
+                // Calculate the feedforward based on the current velocity and acceleration
+                double ff = wristFeedforward.calculate(wristPidController.getSetpoint().velocity, acceleration);
+                wristMotor.setVoltage(wristPidVoltage + ff);
+
+                // Save the current speed and time for the next loop
+                lastSpeed = wristPidController.getSetpoint().velocity;
+                lastTime = Timer.getFPGATimestamp();
+            } else {
+                this.setWristGoal(wristPidController.getGoal().position);
+            }
+
         }
     }
 
@@ -222,8 +240,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     public void enable() {
         enabled = true;
         armPidController.reset(getArmDegrees());
-        // TODO: Check this
-        wristPidController.reset(getWristDegrees());
+        wristPidController.reset(getWristDegreesWrtArm());
     }
 
     /** Disables the PID control. Sets output to zero. */
@@ -231,8 +248,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.enabled = false;
         // This wasn't in ProfiledPIDSubsystem, but seems reasonable
         armPidController.setGoal(getArmDegrees());
-        // TODO: Check this
-        wristPidController.setGoal(getWristDegrees());
+        wristPidController.setGoal(getWristDegreesWrtArm());
         runArmMotors(0);
         runWristMotor(0);
     }
@@ -302,7 +318,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public boolean wristAtGoal() {
         return wristPidController.getPositionTolerance() >= Math
-                .abs(getWristDegrees() - wristPidController.getGoal().position);
+                .abs(getWristDegreesWrtArm() - wristPidController.getGoal().position);
     }
 
     public void runWristMotor(double speed) {
@@ -369,7 +385,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log.NumberBar(name = "Wrist Degrees", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
-    public double getWristDegrees() {
+    public double getWristDegreesWrtArm() {
         return calculateWristDegreesWrtArm(wristEncoder.getPosition());
     }
 
