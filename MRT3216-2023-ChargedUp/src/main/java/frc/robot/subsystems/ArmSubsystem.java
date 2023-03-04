@@ -285,7 +285,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public void setArmGoal(double degrees) {
         degrees = Math.min(ARM.kMaxLimitDegrees, Math.max(degrees, ARM.kMinLimitDegrees));
-        System.out.println("Goal Degrees: " + degrees);
+        System.out.println("Arm Goal Degrees: " + degrees);
         armPidController.setGoal(degrees);
     }
 
@@ -312,7 +312,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public void setWristGoal(double degrees) {
         degrees = Math.min(WRIST.kForwardLimitDegrees, Math.max(degrees, WRIST.kReverseLimitDegrees));
-        System.out.println("Goal Degrees: " + degrees);
+        System.out.println("Wrist Goal Degrees: " + degrees);
         wristPidController.setGoal(degrees);
     }
 

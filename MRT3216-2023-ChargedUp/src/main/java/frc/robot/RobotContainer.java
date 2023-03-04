@@ -1,5 +1,9 @@
 package frc.robot;
 
+import java.util.function.IntSupplier;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,6 +47,7 @@ public class RobotContainer {
 	private CommandXboxController controller;
 	private ArmSubsystem armSystem;
 	private IntakeSubsystem intakeSystem;
+	private NetworkTable streamDeckNT;
 
 	// #endregion
 
@@ -72,6 +77,9 @@ public class RobotContainer {
 		this.autoChooser = AutoChooser.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
 		this.intakeSystem = IntakeSubsystem.getInstance();
+
+		NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
+		this.streamDeckNT = table;
 	}
 
 	/**
@@ -127,12 +135,14 @@ public class RobotContainer {
 							this.armSystem.stopWristMotors();
 						}));
 
+		//controller.a().on
+
 		/*
-		controller.a().onTrue(armSystem.getArmGotoCommand(10));
-		controller.b().onTrue(armSystem.getArmGotoCommand(45));
-		controller.x().onTrue(armSystem.getArmGotoCommand(60));
-		controller.y().onTrue(armSystem.getArmGotoCommand(115));
- 		*/
+		 * controller.a().onTrue(armSystem.getArmGotoCommand(10));
+		 * controller.b().onTrue(armSystem.getArmGotoCommand(45));
+		 * controller.x().onTrue(armSystem.getArmGotoCommand(60));
+		 * controller.y().onTrue(armSystem.getArmGotoCommand(115));
+		 */
 
 		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(true));
 		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(false));
@@ -161,6 +171,11 @@ public class RobotContainer {
 
 	public SwerveSubsystem getDriveSystem() {
 		return driveSystem;
+	}
+
+	public IntSupplier getScoringHeight() {
+		return () -> (int) streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight)
+				.getInteger(Constants.ARM.kStowedDegrees);
 	}
 
 	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = Auto.kStartDelayTime, methodTypes = {

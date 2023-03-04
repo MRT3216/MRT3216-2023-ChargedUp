@@ -267,6 +267,12 @@ public final class Constants {
 		public static final double kRotationnExpo = 75;
 	}
 
+	public static final class StreamDeck {
+		public static final String NTtable = "StreamDeck";
+		public static final String scoringHeight = "scoringHeight";
+		public static final String gamePiece = "gamePiece";
+	}
+
 	public static final class Directories {
 		public static final String deployDirectory = Filesystem.getDeployDirectory().getAbsolutePath();
 		public static final String pathsDirectory = deployDirectory + "/paths/";
