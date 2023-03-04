@@ -313,44 +313,28 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public double getArmDegreesByPosition(ARM.Position position) {
-        switch (position.ordinal()) {
-            // ARM.Positions.ScoringHighCone
-            case 0:
+        switch (position) {
+            case ScoringHighCone:
                 return this.aHCone;
-
-            // ARM.Positions.ScoringHighCube
-            case 1:
+            case ScoringHighCube:
                 return this.aHCube;
-
-            // ARM.Positions.ScoringMidCone
-            case 2:
+            case ScoringMidCone:
                 return this.aMCone;
-
-            // ARM.Positions.ScoringMidCube
-            case 3:
+            case ScoringMidCube:
                 return this.aMCube;
-
-            // ARM.Positions.ScoringHybrid;
-            case 4:
+            case ScoringHybrid:
                 return this.aHybrid;
-
-            // ARM.Positions.GroundIntakeUprightCone
-            case 5:
+            case GroundIntakeUprightCone:
                 return this.aGUprightCone;
-
-            // ARM.Positions.GroundIntakeTippedCone
-            case 6:
+            case GroundIntakeTippedCone:
                 return this.aGTippedCone;
-            // ARM.Positions.GroundIntakeCube
-            case 7:
+            case GroundIntakeCube:
                 return this.aGCube;
-            // ARM.Positions.SubstationIntakeCone
-            case 8:
+            case SubstationIntakeCone:
                 return this.aSCone;
-            // ARM.Positions.SubstationIntakeCube
-            case 9:
+            case SubstationIntakeCube:
                 return this.aSCube;
-            // ARM.Positions.Stowed
+            // Stowed
             default:
                 return this.aStowed;
         }
@@ -384,7 +368,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public double getWristDegreesByPosition(ARM.Position position) {
-        switch (position.ordinal()) {
+        switch (position) {
             // ARM.Positions.ScoringHighCone
             case 0:
                 return this.wHCone;
