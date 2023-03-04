@@ -414,7 +414,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Ground tipped cone intake - needs nothing
     public Command getGroundTippedConeIntakeCommand() {
-        return Commands.parallel(getArmGotoCommand(this.aGTippedCone), getWristGotoCommand(this.wGTippedCone));
+        return Commands.sequence(getArmGotoCommand(this.aGTippedCone), getWristGotoCommand(this.wGTippedCone));
     }
 
     // Substation pickup -- needs piece
@@ -427,7 +427,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     private Command getCommand(ARM.Position position) {
-        return Commands.parallel(getArmGotoCommand(getArmDegreesByPosition(position)),
+        return Commands.sequence(getArmGotoCommand(getArmDegreesByPosition(position)),
                 getWristGotoCommand(getWristDegreesByPosition(position)));
     }
 
@@ -669,7 +669,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.aSCone = aSCone;
     }
 
-    @Config.NumberSlider(name = "A Sub Cone", defaultValue = ARM.kSubstationIntakeCubeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A Sub Cube", defaultValue = ARM.kSubstationIntakeCubeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 6, height = 1, width = 1)
     public void setASCube(int aSCube) {
         this.aSCube = aSCube;
     }
