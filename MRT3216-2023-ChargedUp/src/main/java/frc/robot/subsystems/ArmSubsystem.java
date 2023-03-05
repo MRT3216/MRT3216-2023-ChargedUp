@@ -142,6 +142,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         rightBottomMotor.setIdleMode(IdleMode.kBrake);
 
         armEncoder = leadMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        armEncoder.setInverted(true);
         leadMotor.getPIDController().setFeedbackDevice(armEncoder);
 
         leadMotor.setSoftLimit(SoftLimitDirection.kReverse, ARM.kReverseLimit);
@@ -230,15 +231,16 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 this.setArmGoal(armPidController.getGoal().position);
             }
 
-            if (Math.abs(wristPidController.getSetpoint().position - getArmDegrees()) < 20) {
-                double wristPidVoltage = wristPidController.calculate(getArmDegrees());
+            if (Math.abs(wristPidController.getSetpoint().position - getWristDegreesWrtArm()) < 20) {
+                double wristPidVoltage = -wristPidController.calculate(getWristDegreesWrtArm());
                 // TODO: Finish this
                 // Calculate the acceleration based on the speed at the last time stamp
                 double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
                         / (Timer.getFPGATimestamp() - lastTime);
                 // Calculate the feedforward based on the current velocity and acceleration
-                double ff = wristFeedforward.calculate(wristPidController.getSetpoint().velocity, acceleration);
-                wristMotor.setVoltage(wristPidVoltage + ff);
+                //double ff = wristFeedforward.calculate(wristPidController.getSetpoint().velocity, acceleration);
+                wristMotor.setVoltage(wristPidVoltage);
+                System.out.println(wristPidVoltage);
 
                 // Save the current speed and time for the next loop
                 lastSpeed = wristPidController.getSetpoint().velocity;
@@ -313,7 +315,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public static double calculateArmDegrees(double nativeUnits) {
-        return (ARM.kForwardLimit - nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
+        return (nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
+    }
+
+    public static double calculateWristDegreesWrtGround(double armDegrees, double wristDegrees) {
+        return -armDegrees - wristDegrees + 180;
     }
 
     public void stopArmMotors() {
@@ -446,7 +452,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 .andThen(Commands.print("Arm at goal"));
     }
 
-    private Command getWristGotoCommand(double wristDegrees) {
+    public Command getWristGotoCommand(double wristDegrees) {
         return Commands.print("Setting wrist goal")
                 .andThen(Commands.runOnce(() -> {
                     setWristGoal(wristDegrees);
@@ -534,9 +540,14 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return this.wristEncoder.getPosition();
     }
 
-    @Log.NumberBar(name = "Wrist Degrees", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Degrees Wrt A", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public double getWristDegreesWrtArm() {
         return calculateWristDegreesWrtArm(wristEncoder.getPosition());
+    }
+
+    @Log.NumberBar(name = "Wrist Degrees Wrt G", rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    public double getWristDegreesWrtGround() {
+        return calculateWristDegreesWrtGround(getArmDegrees(), getWristDegreesWrtArm());
     }
 
     @Log.NumberBar(name = "Wrist Goal", rowIndex = 2, columnIndex = 1, height = 1, width = 1)

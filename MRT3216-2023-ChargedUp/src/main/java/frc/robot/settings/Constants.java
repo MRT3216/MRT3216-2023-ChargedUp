@@ -115,7 +115,7 @@ public final class Constants {
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final int kMotorCurrentLimit = 20;
 		public static final double kZeroOffset = .0f;
-		public static final double kScaleFactor = 192;
+		public static final double kScaleFactor = 192.86;
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -279,27 +279,27 @@ public final class Constants {
 
 		public static final boolean kMotorInverted = false;
 
-		public static final double kReverseLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kReverseLimit);
-		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit);
+		public static final double kReverseLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
+		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
 
 		public static final double kZeroOffset = 0;
-		public static final double kScaleFactor = 190;
+		public static final double kScaleFactor = 180;
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * PID Constants
 		 */
-		public static final double kWristKp = 2;
+		public static final double kWristKp = .1;
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
-		public static final double kWristPositionTolerance = 10;
+		public static final double kWristPositionTolerance = 2;
 		public static final double kWristVelocityTolerance = 20;
 
 		// Feed-Forward from SysID
 		public static final double kWristKs = 0.29522;
 		public static final double kWristKv = 0.0095926;
 		public static final double kWristKa = 0.0032297;
-		public static final double kWristKg = 5;
+		public static final double kWristKg = 0.52135;
 
 		public static final double kVVoltSecondPerRad = 0.5;
 
@@ -307,8 +307,8 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kWristMaxVelocity = 30; // degrees/s
-		public static final double kWristMaxAcceleration = 10; // degrees/s^2
+		public static final double kWristMaxVelocity = 60; // degrees/s
+		public static final double kWristMaxAcceleration = 30; // degrees/s^2
 		public static final double kWristStartingPos = 0; // 60 degrees wrt arm
 
 		/*
