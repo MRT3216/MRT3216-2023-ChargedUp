@@ -91,43 +91,37 @@ public class RobotContainer {
 									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
 							() -> OIUtils.modifyAxis(-controller.getLeftX(), this.translationExpo)
 									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-							() -> OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
+							() -> OIUtils.modifyAxis(controller.getRightX(), this.rotationExpo)
 									* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}
 
-		// controller.leftTrigger().whileTrue(
-		// Commands.run(() ->
-		// this.armSystem.runArmMotors(-controller.getLeftTriggerAxis() / 10),
-		// armSystem)
-		// .finallyDo(
-		// (end) -> {
-		// this.armSystem.stopArmMotors();
-		// this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
-		// }));
-
-		// controller.rightTrigger().whileTrue(
-		// Commands.run(() ->
-		// this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 10),
-		// armSystem)
-		// .finallyDo((end) -> {
-		// this.armSystem.stopArmMotors();
-		// this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
-		// }));
-
 		controller.leftTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runWristMotor(-controller.getLeftTriggerAxis() / 5),
+				Commands.run(() -> this.armSystem.runArmMotors(-controller.getLeftTriggerAxis() / 10),
 						armSystem)
-						.finallyDo((end) -> {
-							this.armSystem.stopWristMotors();
-						}));
+						.finallyDo(
+								(end) -> {
+									this.armSystem.stopArmMotors();
+									this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
+								}));
 
 		controller.rightTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runWristMotor(controller.getRightTriggerAxis() / 5),
+				Commands.run(() -> this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 10),
 						armSystem)
 						.finallyDo((end) -> {
-							this.armSystem.stopWristMotors();
+							this.armSystem.stopArmMotors();
+							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
+
+		controller.leftBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
+			this.armSystem.stopWristMotors();
+			//this.armSystem.setWristGoal(this.armSystem.getArmDegrees());
+		}));
+
+		controller.rightBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
+			this.armSystem.stopWristMotors();
+			//this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArmDegrees());
+		}));
 
 		controller.a().onTrue(armSystem.getGroundIntakeCommand());
 		controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());

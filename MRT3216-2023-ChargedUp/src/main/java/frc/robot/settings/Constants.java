@@ -144,11 +144,11 @@ public final class Constants {
 		public static final int kScoringMidConeDegrees = 80;
 		public static final int kScoringMidCubeDegrees = 70;
 		public static final int kScoringHybridDegrees = 30;
-		public static final int kGroundIntakeUprightConeDegrees = 20;
+		public static final int kGroundIntakeUprightConeDegrees = 20;//
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 10;
-		public static final int kSubstationIntakeConeDegrees = 50;
-		public static final int kSubstationIntakeCubeDegrees = 40;
+		public static final int kGroundIntakeCubeDegrees = 10;//
+		public static final int kSubstationIntakeConeDegrees = 124;//
+		public static final int kSubstationIntakeCubeDegrees = 133;//
 		public static final int kStowedDegrees = 60;
 
 		// #region Enums
@@ -277,7 +277,7 @@ public final class Constants {
 
 		public static final int kMotorCurrentLimit = 40;
 
-		public static final boolean kMotorInverted = true;
+		public static final boolean kMotorInverted = false;
 
 		public static final double kReverseLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kReverseLimit);
 		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit);
@@ -289,7 +289,7 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * PID Constants
 		 */
-		public static final double kWristKp = 0;
+		public static final double kWristKp = 2;
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
 		public static final double kWristPositionTolerance = 10;
@@ -320,11 +320,11 @@ public final class Constants {
 		public static final int kScoringMidConeDegrees = 80;
 		public static final int kScoringMidCubeDegrees = 70;
 		public static final int kScoringHybridDegrees = 30;
-		public static final int kGroundIntakeUprightConeDegrees = 20;
+		public static final int kGroundIntakeUprightConeDegrees = 189;//
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 10;
-		public static final int kSubstationIntakeConeDegrees = 50;
-		public static final int kSubstationIntakeCubeDegrees = 40;
+		public static final int kGroundIntakeCubeDegrees = 189;//
+		public static final int kSubstationIntakeConeDegrees = 25;//
+		public static final int kSubstationIntakeCubeDegrees = 9;//
 		public static final int kStowedDegrees = 60;
 
 	}
