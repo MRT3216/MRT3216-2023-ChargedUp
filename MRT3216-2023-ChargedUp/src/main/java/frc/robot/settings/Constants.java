@@ -110,12 +110,12 @@ public final class Constants {
 		public static final boolean kLeftMotorsInverted = true;
 		public static final boolean kRightMotorsInverted = false;
 		public static final float kReverseLimit = .02f;
-		public static final float kForwardLimit = .73f;
+		public static final float kForwardLimit = .74f;
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final int kMotorCurrentLimit = 20;
-		public static final double kZeroOffset = .02f;
-		public static final double kScaleFactor = 193;
+		public static final double kZeroOffset = .0f;
+		public static final double kScaleFactor = 192;
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -272,10 +272,10 @@ public final class Constants {
 
 	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
-		public static final float kForwardLimit = 1;
-		public static final float kReverseLimit = 0;
+		public static final float kForwardLimit = .99f;
+		public static final float kReverseLimit = 0.01f;
 
-		public static final int kMotorCurrentLimit = 20;
+		public static final int kMotorCurrentLimit = 40;
 
 		public static final boolean kMotorInverted = true;
 
@@ -283,7 +283,7 @@ public final class Constants {
 		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit);
 
 		public static final double kZeroOffset = 0;
-		public static final double kScaleFactor = 360;
+		public static final double kScaleFactor = 190;
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -299,7 +299,7 @@ public final class Constants {
 		public static final double kWristKs = 0.29522;
 		public static final double kWristKv = 0.0095926;
 		public static final double kWristKa = 0.0032297;
-		public static final double kWristKg = 0.52135;
+		public static final double kWristKg = 5;
 
 		public static final double kVVoltSecondPerRad = 0.5;
 

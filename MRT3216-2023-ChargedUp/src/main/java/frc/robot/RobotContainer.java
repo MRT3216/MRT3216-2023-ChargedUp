@@ -95,35 +95,36 @@ public class RobotContainer {
 									* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}
-		/*
-		 * controller.leftTrigger().whileTrue(
-		 * Commands.run(() ->
-		 * this.armSystem.runArmMotors(-controller.getLeftTriggerAxis() / 10),
-		 * armSystem)
-		 * .finallyDo(
-		 * (end) -> {
-		 * this.armSystem.stopArmMotors();
-		 * this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
-		 * }));
-		 * 
-		 * controller.rightTrigger().whileTrue(
-		 * Commands.run(() ->
-		 * this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 10),
-		 * armSystem)
-		 * .finallyDo((end) -> {
-		 * this.armSystem.stopArmMotors();
-		 * this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
-		 * }));
-		 */
+
+		// controller.leftTrigger().whileTrue(
+		// Commands.run(() ->
+		// this.armSystem.runArmMotors(-controller.getLeftTriggerAxis() / 10),
+		// armSystem)
+		// .finallyDo(
+		// (end) -> {
+		// this.armSystem.stopArmMotors();
+		// this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
+		// }));
+
+		// controller.rightTrigger().whileTrue(
+		// Commands.run(() ->
+		// this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 10),
+		// armSystem)
+		// .finallyDo((end) -> {
+		// this.armSystem.stopArmMotors();
+		// this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
+		// }));
 
 		controller.leftTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runWristMotor(-controller.getLeftTriggerAxis() / 5), armSystem)
+				Commands.run(() -> this.armSystem.runWristMotor(-controller.getLeftTriggerAxis() / 5),
+						armSystem)
 						.finallyDo((end) -> {
 							this.armSystem.stopWristMotors();
 						}));
 
 		controller.rightTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runWristMotor(controller.getRightTriggerAxis() / 5), armSystem)
+				Commands.run(() -> this.armSystem.runWristMotor(controller.getRightTriggerAxis() / 5),
+						armSystem)
 						.finallyDo((end) -> {
 							this.armSystem.stopWristMotors();
 						}));

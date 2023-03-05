@@ -48,7 +48,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist Motors
 
     private ProfiledPIDController wristPidController;
-    private final ArmFeedforward wristFeedforward;
+    private ArmFeedforward wristFeedforward;
     private CANSparkMax wristMotor;
     private SparkMaxAbsoluteEncoder wristEncoder;
 
@@ -67,6 +67,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private double wristKp = WRIST.kWristKp;
     private double wristKi = WRIST.kWristKi;
     private double wristKd = WRIST.kWristKd;
+    private double wristKg = WRIST.kWristKg;
     private double lastSpeed = 0;
     private double lastTime = Timer.getFPGATimestamp();
 
@@ -161,13 +162,17 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristMotor.setInverted(WRIST.kMotorInverted);
         wristMotor.setIdleMode(IdleMode.kBrake);
         wristMotor.setSmartCurrentLimit(WRIST.kMotorCurrentLimit);
-        wristMotor.burnFlash();
 
         wristEncoder = wristMotor.getAbsoluteEncoder(Type.kDutyCycle);
         wristMotor.getPIDController().setFeedbackDevice(wristEncoder);
 
+        wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
+        wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
+        wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        wristMotor.burnFlash();
         wristFeedforward = new ArmFeedforward(
-                WRIST.kWristKs, WRIST.kWristKg, WRIST.kWristKv, WRIST.kWristKa);
+                WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
 
         // endregion
 
@@ -524,22 +529,22 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist Position PID Controller Column 1
     // Column 1, Rows 0-3
 
-    @Log.NumberBar(name = "Wrist Encoder", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Encoder", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public double getEncoderPosition() {
         return this.wristEncoder.getPosition();
     }
 
-    @Log.NumberBar(name = "Wrist Degrees", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Degrees", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public double getWristDegreesWrtArm() {
         return calculateWristDegreesWrtArm(wristEncoder.getPosition());
     }
 
-    @Log.NumberBar(name = "Wrist Goal", rowIndex = 2, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Goal", rowIndex = 2, columnIndex = 1, height = 1, width = 1)
     public double getWristGoal() {
         return wristPidController.getGoal().position;
     }
 
-    @Log.NumberBar(name = "Wrist Setpoint", rowIndex = 3, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Setpoint", rowIndex = 3, columnIndex = 1, height = 1, width = 1)
     public double getWristSetpoint() {
         return wristPidController.getSetpoint().position;
     }
@@ -572,6 +577,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Wrist P", defaultValue = WRIST.kWristKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setWristKp(double wristKp) {
         this.wristKp = wristKp;
+        this.wristPidController.setPID(wristKp, wristKi, wristKd);
+        System.out.println("Changing wrist kp to " + wristKp);
     }
 
     @Config.NumberSlider(name = "Wrist I", defaultValue = WRIST.kWristKi, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
@@ -582,6 +589,13 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Wrist D", defaultValue = WRIST.kWristKd, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 2, columnIndex = 3, height = 1, width = 1)
     public void setWristKd(double wristKd) {
         this.wristKd = wristKd;
+    }
+
+    @Config.NumberSlider(name = "Wrist G", defaultValue = WRIST.kWristKg, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
+    public void setWristKg(double wristKg) {
+        this.wristKg = wristKg;
+        this.wristFeedforward = new ArmFeedforward(
+                WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
     }
 
     // #endregion
