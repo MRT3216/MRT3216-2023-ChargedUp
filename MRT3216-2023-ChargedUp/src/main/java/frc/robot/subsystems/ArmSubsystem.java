@@ -235,18 +235,19 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 double wristPidVoltage = -wristPidController.calculate(getWristDegreesWrtArm());
                 // TODO: Finish this
                 // Calculate the acceleration based on the speed at the last time stamp
-               // double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
-                //        / (Timer.getFPGATimestamp() - lastTime);
+                // double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
+                // / (Timer.getFPGATimestamp() - lastTime);
                 // Calculate the feedforward based on the current velocity and acceleration
-                double setpoint = calculateWristDegreesWrtGround(getArmDegrees(), wristPidController.getSetpoint().position);
+                double setpoint = calculateWristDegreesWrtGround(getArmDegrees(),
+                        wristPidController.getSetpoint().position);
                 double ff = -wristFeedforward.calculate(setpoint, wristPidController.getSetpoint().velocity);
                 wristMotor.setVoltage(wristPidVoltage);
                 System.out.println("Wrist: " + wristPidVoltage);
-                System.out.println("FF: "+ ff);
+                System.out.println("FF: " + ff);
 
                 // Save the current speed and time for the next loop
-                //lastSpeed = wristPidController.getSetpoint().velocity;
-                //lastTime = Timer.getFPGATimestamp();
+                // lastSpeed = wristPidController.getSetpoint().velocity;
+                // lastTime = Timer.getFPGATimestamp();
             } else {
                 this.setWristGoal(wristPidController.getGoal().position);
             }
@@ -427,7 +428,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Ground tipped cone intake - needs nothing
     public Command getGroundTippedConeIntakeCommand() {
-        return Commands.sequence(getArmGotoCommand(this.aGTippedCone), getWristGotoCommand(this.wGTippedCone));
+        return getArmAndWristGotoCommand(this.aGTippedCone, this.wGTippedCone);
     }
 
     // Substation pickup -- needs piece
@@ -440,23 +441,23 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     // TODO: Finish getting the wrist position WrtArm to wristpositionWrtGround
-    public Command getWristHorizontalCommand(double degrees){
+    public Command getWristHorizontalCommand(double degrees) {
         return getWristGotoCommand(calculateWristDegreesWrtGround(degrees, degrees));
     }
 
     private Command getCommand(ARM.Position position) {
-        return Commands.sequence(getArmGotoCommand(getArmDegreesByPosition(position)),
-                getWristGotoCommand(getWristDegreesByPosition(position)));
+        return getArmAndWristGotoCommand(getArmDegreesByPosition(position), getWristDegreesByPosition(position));
     }
 
-    private Command getArmGotoCommand(double armDegrees) {
+    private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees) {
         return Commands.print("Setting arm goal")
                 .andThen(Commands.runOnce(() -> {
                     setArmGoal(armDegrees);
+                    setWristGoal(wristDegrees);
                     this.enable();
                 }, this))
-                .andThen(Commands.waitUntil(() -> armAtGoal()))
-                .andThen(Commands.print("Arm at goal"));
+                .andThen(Commands.waitUntil(() -> armAtGoal() && wristAtGoal()))
+                .andThen(Commands.print("Arm and wrist at goal"));
     }
 
     public Command getWristGotoCommand(double wristDegrees) {
