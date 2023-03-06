@@ -235,16 +235,18 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 double wristPidVoltage = -wristPidController.calculate(getWristDegreesWrtArm());
                 // TODO: Finish this
                 // Calculate the acceleration based on the speed at the last time stamp
-                double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
-                        / (Timer.getFPGATimestamp() - lastTime);
+               // double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
+                //        / (Timer.getFPGATimestamp() - lastTime);
                 // Calculate the feedforward based on the current velocity and acceleration
-                //double ff = wristFeedforward.calculate(wristPidController.getSetpoint().velocity, acceleration);
-                wristMotor.setVoltage(wristPidVoltage);
-                System.out.println(wristPidVoltage);
+                double setpoint = calculateWristDegreesWrtGround(getArmDegrees(), wristPidController.getSetpoint().position);
+                double ff = -wristFeedforward.calculate(setpoint, wristPidController.getSetpoint().velocity);
+                wristMotor.setVoltage(wristPidVoltage + ff);
+                System.out.println("Wrist: " + wristPidVoltage);
+                System.out.println("FF: "+ ff);
 
                 // Save the current speed and time for the next loop
-                lastSpeed = wristPidController.getSetpoint().velocity;
-                lastTime = Timer.getFPGATimestamp();
+                //lastSpeed = wristPidController.getSetpoint().velocity;
+                //lastTime = Timer.getFPGATimestamp();
             } else {
                 this.setWristGoal(wristPidController.getGoal().position);
             }
@@ -319,7 +321,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public static double calculateWristDegreesWrtGround(double armDegrees, double wristDegrees) {
-        return -armDegrees - wristDegrees + 180;
+        return -armDegrees - wristDegrees + 170;
     }
 
     public void stopArmMotors() {

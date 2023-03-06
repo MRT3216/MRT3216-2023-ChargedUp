@@ -289,7 +289,7 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * PID Constants
 		 */
-		public static final double kWristKp = .1;
+		public static final double kWristKp = .02;
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
 		public static final double kWristPositionTolerance = 2;
@@ -299,7 +299,7 @@ public final class Constants {
 		public static final double kWristKs = 0.29522;
 		public static final double kWristKv = 0.0095926;
 		public static final double kWristKa = 0.0032297;
-		public static final double kWristKg = 0.52135;
+		public static final double kWristKg = 0.52135 * 2;
 
 		public static final double kVVoltSecondPerRad = 0.5;
 
