@@ -240,7 +240,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 // Calculate the feedforward based on the current velocity and acceleration
                 double setpoint = calculateWristDegreesWrtGround(getArmDegrees(), wristPidController.getSetpoint().position);
                 double ff = -wristFeedforward.calculate(setpoint, wristPidController.getSetpoint().velocity);
-                wristMotor.setVoltage(wristPidVoltage + ff);
+                wristMotor.setVoltage(wristPidVoltage);
                 System.out.println("Wrist: " + wristPidVoltage);
                 System.out.println("FF: "+ ff);
 
@@ -439,6 +439,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return getCommand(ARM.Position.Stowed);
     }
 
+    // TODO: Finish getting the wrist position WrtArm to wristpositionWrtGround
+    public Command getWristHorizontalCommand(double degrees){
+        return getWristGotoCommand(calculateWristDegreesWrtGround(degrees, degrees));
+    }
+
     private Command getCommand(ARM.Position position) {
         return Commands.sequence(getArmGotoCommand(getArmDegreesByPosition(position)),
                 getWristGotoCommand(getWristDegreesByPosition(position)));
@@ -454,7 +459,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 .andThen(Commands.print("Arm at goal"));
     }
 
-    public Command getWristGotoCommand(double wristDegrees) {
+    private Command getWristGotoCommand(double wristDegrees) {
         return Commands.print("Setting wrist goal")
                 .andThen(Commands.runOnce(() -> {
                     setWristGoal(wristDegrees);
