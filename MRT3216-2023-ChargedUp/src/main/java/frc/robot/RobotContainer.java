@@ -123,13 +123,13 @@ public class RobotContainer {
 			//this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArmDegrees());
 		}));
 
-		controller.a().onTrue(this.armSystem.getWristHorizontalCommand(0));
+		controller.a().onTrue(this.armSystem.getWristGotoCommand(108));
 		//controller.a().onTrue(armSystem.getGroundIntakeCommand());
 		//controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());
 		//controller.x().onTrue(armSystem.getScoringCommand());
 		//controller.y().onTrue(armSystem.getSubstationIntakeCommand());
 
-		//controller.leftStick().onTrue(armSystem.getStowedCommand());
+		controller.rightStick().onTrue(armSystem.getStowedCommand());
 
 		// Place piece
 		//controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));

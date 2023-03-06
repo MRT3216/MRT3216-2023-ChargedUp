@@ -459,7 +459,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 .andThen(Commands.print("Arm at goal"));
     }
 
-    private Command getWristGotoCommand(double wristDegrees) {
+    public Command getWristGotoCommand(double wristDegrees) {
         return Commands.print("Setting wrist goal")
                 .andThen(Commands.runOnce(() -> {
                     setWristGoal(wristDegrees);
