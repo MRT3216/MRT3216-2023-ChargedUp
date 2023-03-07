@@ -37,7 +37,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -312,6 +314,63 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public Gains getThetaGains() {
 		return this.thetaGains;
 	}
+	//AutoBuilder methods
+	Trajectory currentAutoTrajectory;
+    private double autoStartTime;
+    volatile Rotation2d autoTargetHeading;
+
+    public enum DriveState {
+        TELEOP, TURN, HOLD, DONE, AUTONOMOUS, STOP
+    }
+    DriveState driveState;
+
+    public void setAutoPath(Trajectory trajectory) {
+        autoStartTime = Timer.getFPGATimestamp();
+        currentAutoTrajectory = trajectory;
+        System.out.println(currentAutoTrajectory);
+    }
+
+    public void setAutoRotation(Rotation2d rotation) {
+        autoTargetHeading = rotation;
+        System.out.println("new rotation " + rotation.getDegrees());
+    }
+
+    public boolean isFinished() {
+        return (driveState == DriveState.TELEOP || driveState == DriveState.DONE || driveState == DriveState.STOP);
+    }
+
+    public double getAutoElapsedTime() {
+        return (Timer.getFPGATimestamp() - autoStartTime);
+    }
+
+    public void resetPosition(Pose2d pose) {
+        try {
+            setCurrentRobotPose(m_odometry.getEstimatedPosition());
+        }catch (Exception e){
+            setCurrentRobotPose(pose);
+        }
+    }
+
+    public DriveState getDriveState() {
+        return driveState;
+    }
+
+    public void setDriveState(DriveState driveState){
+        this.driveState = driveState;
+    }
+    //if (swerveAutoController.atReference() && (Timer.getFPGATimestamp() - autoStartTime) >= currentAutoTrajectory.getTotalTimeSeconds()) 
+    
+
+    public void autoUpdate() {
+        Trajectory.State goal = currentAutoTrajectory.sample(Timer.getFPGATimestamp() - autoStartTime);
+        System.out.println(goal);
+        if (getCurrentRobotPose() == goal.poseMeters && getAutoElapsedTime() >= currentAutoTrajectory.getTotalTimeSeconds()) {
+            setDriveState(DriveState.DONE);
+            stop();
+        }
+    }
+
+	//AutoBuilder methods end
 
 	// #region Logging
 
