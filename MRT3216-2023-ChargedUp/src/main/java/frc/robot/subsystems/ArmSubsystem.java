@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.IntSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -421,12 +423,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Score piece - needs piece and height
     public Command getScoringCommand() {
-        return this.getCommand(getArmAndWristScoringPosition());
+        return this.getCommand(() -> getArmAndWristScoringPosition().getValue());
     }
 
     // Ground intake - needs piece
     public Command getGroundIntakeCommand() {
-        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground));
+        return this.getCommand(() -> getArmAndWristIntakePosition(ARM.IntakePosition.Ground).getValue());
     }
 
     // Ground tipped cone intake - needs nothing
@@ -436,11 +438,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Substation pickup -- needs piece
     public Command getSubstationIntakeCommand() {
-        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Substation));
+        return this.getCommand(() -> getArmAndWristIntakePosition(ARM.IntakePosition.Substation).getValue());
     }
 
     public Command getStowedCommand() {
-        return getCommand(ARM.Position.Stowed);
+        return getCommand(() -> ARM.Position.Stowed.getValue());
     }
 
     // TODO: Finish getting the wrist position WrtArm to wristpositionWrtGround
@@ -448,7 +450,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return getWristGotoCommand(calculateWristDegreesWrtGround(degrees, degrees));
     }
 
-    private Command getCommand(ARM.Position position) {
+    public Command getCommand(IntSupplier supplier) {
+        ARM.Position position = ARM.Position.valueOf(supplier.getAsInt());
         return getArmAndWristGotoCommand(getArmDegreesByPosition(position), getWristDegreesByPosition(position));
     }
 
@@ -479,7 +482,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private ARM.Position getArmAndWristScoringPosition() {
         ARM.ScoringHeight sH = this.getScoringHeight();
-        ARM.GamePiece gP = this.getScoringGamePiece();
+        ARM.GamePiece gP = this.getGamePiece();
 
         if (sH == ARM.ScoringHeight.High) {
             return gP == ARM.GamePiece.Cone ? ARM.Position.ScoringHighCone : ARM.Position.ScoringHighCube;
@@ -492,8 +495,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return ARM.Position.Stowed;
     }
 
-    private ARM.Position getArmAndWristIntakePosition(ARM.IntakePosition iP) {
-        ARM.GamePiece gP = this.getScoringGamePiece();
+    public ARM.Position getArmAndWristIntakePosition(ARM.IntakePosition iP) {
+        ARM.GamePiece gP = this.getGamePiece();
 
         if (iP == ARM.IntakePosition.Ground) {
             return gP == ARM.GamePiece.Cone ? ARM.Position.GroundIntakeUprightCone : ARM.Position.ScoringHighCube;
@@ -509,7 +512,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 .getInteger(Constants.ARM.kStowedDegrees));
     }
 
-    public ARM.GamePiece getScoringGamePiece() {
+    public ARM.GamePiece getGamePiece() {
         return ARM.GamePiece.valueOf((int) streamDeckNT.getEntry(Constants.StreamDeck.gamePiece)
                 .getInteger(Constants.ARM.kStowedDegrees));
     }
