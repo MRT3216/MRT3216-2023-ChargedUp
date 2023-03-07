@@ -113,7 +113,7 @@ public final class Constants {
 		public static final float kForwardLimit = .74f;
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
-		public static final int kMotorCurrentLimit = 20;
+		public static final int kMotorCurrentLimit = 40;
 		public static final double kZeroOffset = .0f;
 		public static final double kScaleFactor = 192.86;
 
