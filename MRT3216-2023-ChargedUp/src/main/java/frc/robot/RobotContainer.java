@@ -115,12 +115,12 @@ public class RobotContainer {
 
 		controller.leftBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
 			this.armSystem.stopWristMotorAndResetPID();
-			//this.armSystem.setWristGoal(this.armSystem.getArmDegrees());
+			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
 		}));
 
 		controller.rightBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
 			this.armSystem.stopWristMotorAndResetPID();
-			//this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArmDegrees());
+			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
 		}));
 
 		controller.a().onTrue(this.armSystem.getWristGotoCommand(108));
