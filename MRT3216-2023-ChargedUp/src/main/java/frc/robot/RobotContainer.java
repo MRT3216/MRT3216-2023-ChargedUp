@@ -101,7 +101,7 @@ public class RobotContainer {
 						armSystem)
 						.finallyDo(
 								(end) -> {
-									this.armSystem.stopArmMotors();
+									this.armSystem.stopArmMotorsAndResetPID();
 									this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 								}));
 
@@ -109,17 +109,17 @@ public class RobotContainer {
 				Commands.run(() -> this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 10),
 						armSystem)
 						.finallyDo((end) -> {
-							this.armSystem.stopArmMotors();
+							this.armSystem.stopArmMotorsAndResetPID();
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
 		controller.leftBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
-			this.armSystem.stopWristMotors();
+			this.armSystem.stopWristMotorAndResetPID();
 			//this.armSystem.setWristGoal(this.armSystem.getArmDegrees());
 		}));
 
 		controller.rightBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
-			this.armSystem.stopWristMotors();
+			this.armSystem.stopWristMotorAndResetPID();
 			//this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArmDegrees());
 		}));
 

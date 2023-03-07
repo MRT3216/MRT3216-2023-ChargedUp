@@ -325,7 +325,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return -armDegrees - wristDegrees + 170;
     }
 
-    public void stopArmMotors() {
+    public void stopArmMotorsAndResetPID() {
+        armPidController.reset(getArmDegrees());
         leadMotor.stopMotor();
     }
 
@@ -380,8 +381,9 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return (nativeUnits - WRIST.kZeroOffset) * WRIST.kScaleFactor;
     }
 
-    public void stopWristMotors() {
+    public void stopWristMotorAndResetPID() {
         wristMotor.stopMotor();
+        wristPidController.reset(getWristDegreesWrtArm());
     }
 
     public double getWristDegreesByPosition(ARM.Position position) {
@@ -450,7 +452,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees) {
-        return Commands.print("Setting arm goal")
+        return Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
                 .andThen(Commands.runOnce(() -> {
                     setArmGoal(armDegrees);
                     setWristGoal(wristDegrees);
