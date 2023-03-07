@@ -115,23 +115,19 @@ public class RobotContainer {
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
-		// controller.leftBumper().whileTrue(Commands.run(() ->
-		// this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
-		// this.armSystem.enable();
-		// this.armSystem.stopWristMotorAndResetPID();
-		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		// }));
+		controller.leftBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
+			this.armSystem.enable();
+			this.armSystem.stopWristMotorAndResetPID();
+			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
+		}));
 
-		// controller.rightBumper().whileTrue(Commands.run(() ->
-		// this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
-		// this.armSystem.enable();
-		// this.armSystem.stopWristMotorAndResetPID();
-		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		// }));
+		controller.rightBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
+			this.armSystem.enable();
+			this.armSystem.stopWristMotorAndResetPID();
+			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
+		}));
 
-		controller.leftBumper().whileTrue(Commands.run(() -> this.intakeSystem.getConeCommand(false)));
-		controller.rightBumper().whileTrue(Commands.run(() -> this.intakeSystem.getConeCommand(true)));
-
+		//controller.a().onTrue(this.armSystem.getWristGotoCommand(108));
 		controller.a().onTrue(armSystem.getGroundIntakeCommand());
 		controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());
 		controller.x().onTrue(armSystem.getScoringCommand());
