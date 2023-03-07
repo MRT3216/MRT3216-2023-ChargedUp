@@ -101,6 +101,7 @@ public class RobotContainer {
 						armSystem)
 						.finallyDo(
 								(end) -> {
+									this.armSystem.enable();
 									this.armSystem.stopArmMotorsAndResetPID();
 									this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 								}));
@@ -109,32 +110,35 @@ public class RobotContainer {
 				Commands.run(() -> this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 7),
 						armSystem)
 						.finallyDo((end) -> {
+							this.armSystem.enable();
 							this.armSystem.stopArmMotorsAndResetPID();
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
 		controller.leftBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
+			this.armSystem.enable();
 			this.armSystem.stopWristMotorAndResetPID();
 			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
 		}));
 
 		controller.rightBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
+			this.armSystem.enable();
 			this.armSystem.stopWristMotorAndResetPID();
 			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
 		}));
 
 		controller.a().onTrue(this.armSystem.getWristGotoCommand(108));
-		//controller.a().onTrue(armSystem.getGroundIntakeCommand());
-		//controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());
-		//controller.x().onTrue(armSystem.getScoringCommand());
-		//controller.y().onTrue(armSystem.getSubstationIntakeCommand());
+		// controller.a().onTrue(armSystem.getGroundIntakeCommand());
+		// controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());
+		// controller.x().onTrue(armSystem.getScoringCommand());
+		// controller.y().onTrue(armSystem.getSubstationIntakeCommand());
 
 		controller.rightStick().onTrue(armSystem.getStowedCommand());
 
 		// Place piece
-		//controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));
+		// controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));
 		// Intake
-		//controller.rightBumper().whileTrue(intakeSystem.getConeCommand(true));
+		// controller.rightBumper().whileTrue(intakeSystem.getConeCommand(true));
 	}
 
 	public void disablePIDSubsystems() {
