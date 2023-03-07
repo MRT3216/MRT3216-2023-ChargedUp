@@ -622,27 +622,27 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm Scoring Positions Column 4
     // Column 4, Rows 0-4
 
-    @Config.NumberSlider(name = "Arm High Cone", defaultValue = ARM.kScoringHighConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm High Cone", defaultValue = ARM.kScoringHighConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
     public void setAHCone(int aHCone) {
         this.aHCone = aHCone;
     }
 
-    @Config.NumberSlider(name = "Arm High Cube", defaultValue = ARM.kScoringHighCubeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 4, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm High Cube", defaultValue = ARM.kScoringHighCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 4, height = 1, width = 1)
     public void setAHCube(int aHCube) {
         this.aHCube = aHCube;
     }
 
-    @Config.NumberSlider(name = "Arm Mid Cone", defaultValue = ARM.kScoringMidConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 2, columnIndex = 4, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Mid Cone", defaultValue = ARM.kScoringMidConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 2, columnIndex = 4, height = 1, width = 1)
     public void setAMCone(int aMCone) {
         this.aMCone = aMCone;
     }
 
-    @Config.NumberSlider(name = "Arm Mid Cube", defaultValue = ARM.kScoringMidCubeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 4, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Mid Cube", defaultValue = ARM.kScoringMidCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 4, height = 1, width = 1)
     public void setAMCube(int aMCube) {
         this.aMCube = aMCube;
     }
 
-    @Config.NumberSlider(name = "Arm Hybrid", defaultValue = ARM.kScoringHybridDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 4, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Hybrid", defaultValue = ARM.kScoringHybridDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 4, height = 1, width = 1)
     public void setAHybrid(int aHybrid) {
         this.aHybrid = aHybrid;
     }
@@ -652,27 +652,27 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist Scoring Positions Column 5
     // Column 5, Rows 0-4
 
-    @Config.NumberSlider(name = "Wrist High Cone", defaultValue = WRIST.kScoringHighConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 0, columnIndex = 5, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist High Cone", defaultValue = WRIST.kScoringHighConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 5, height = 1, width = 1)
     public void setWHCone(int wHCone) {
         this.wHCone = wHCone;
     }
 
-    @Config.NumberSlider(name = "Wrist High Cube", defaultValue = WRIST.kScoringHighCubeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 1, columnIndex = 5, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist High Cube", defaultValue = WRIST.kScoringHighCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 5, height = 1, width = 1)
     public void setWHCube(int wHCube) {
         this.wHCube = wHCube;
     }
 
-    @Config.NumberSlider(name = "Wrist Mid Cone", defaultValue = WRIST.kScoringMidConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 2, columnIndex = 5, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Mid Cone", defaultValue = WRIST.kScoringMidConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 5, height = 1, width = 1)
     public void setWMCone(int wMCone) {
         this.wMCone = wMCone;
     }
 
-    @Config.NumberSlider(name = "Wrist Mid Cube", defaultValue = WRIST.kScoringMidCubeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 3, columnIndex = 5, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Mid Cube", defaultValue = WRIST.kScoringMidCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 5, height = 1, width = 1)
     public void setWMCube(int wMCube) {
         this.wMCube = wMCube;
     }
 
-    @Config.NumberSlider(name = "Wrist Hybrid", defaultValue = WRIST.kScoringHybridDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 4, columnIndex = 5, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Hybrid", defaultValue = WRIST.kScoringHybridDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 5, height = 1, width = 1)
     public void setWHybrid(int wHybrid) {
         this.wHybrid = wHybrid;
     }
@@ -682,27 +682,27 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm Pickup Positions Column 6
     // Column 6, Rows 0-5
 
-    @Config.NumberSlider(name = "A G Up Cone", defaultValue = ARM.kGroundIntakeUprightConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A G Up Cone", defaultValue = ARM.kGroundIntakeUprightConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
     public void setAGUprightCone(int aGUprightCone) {
         this.aGUprightCone = aGUprightCone;
     }
 
-    @Config.NumberSlider(name = "A G Down Cone", defaultValue = ARM.kGroundIntakeTippedConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A G Down Cone", defaultValue = ARM.kGroundIntakeTippedConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
     public void setAGTippedCone(int aGTippedCone) {
         this.aGTippedCone = aGTippedCone;
     }
 
-    @Config.NumberSlider(name = "A Ground Cube", defaultValue = ARM.kGroundIntakeCubeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 2, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A Ground Cube", defaultValue = ARM.kGroundIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 2, columnIndex = 6, height = 1, width = 1)
     public void setAGCube(int aGCube) {
         this.aGCube = aGCube;
     }
 
-    @Config.NumberSlider(name = "A Sub Cone", defaultValue = ARM.kSubstationIntakeConeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A Sub Cone", defaultValue = ARM.kSubstationIntakeConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 6, height = 1, width = 1)
     public void setASCone(int aSCone) {
         this.aSCone = aSCone;
     }
 
-    @Config.NumberSlider(name = "A Sub Cube", defaultValue = ARM.kSubstationIntakeCubeDegrees, min = 0, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 6, height = 1, width = 1)
+    @Config.NumberSlider(name = "A Sub Cube", defaultValue = ARM.kSubstationIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 6, height = 1, width = 1)
     public void setASCube(int aSCube) {
         this.aSCube = aSCube;
     }
@@ -712,27 +712,27 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist Pickup Positions Column 7
     // Column 7, Rows
 
-    @Config.NumberSlider(name = "W G Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 0, columnIndex = 7, height = 1, width = 1)
+    @Config.NumberSlider(name = "W G Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 7, height = 1, width = 1)
     public void setWGUprightCone(int wGUprightCone) {
         this.wGUprightCone = wGUprightCone;
     }
 
-    @Config.NumberSlider(name = "W G Down Cone", defaultValue = WRIST.kGroundIntakeTippedConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 1, columnIndex = 7, height = 1, width = 1)
+    @Config.NumberSlider(name = "W G Down Cone", defaultValue = WRIST.kGroundIntakeTippedConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 7, height = 1, width = 1)
     public void setWGTippedCone(int wGTippedCone) {
         this.wGTippedCone = wGTippedCone;
     }
 
-    @Config.NumberSlider(name = "W Ground Cube", defaultValue = WRIST.kGroundIntakeCubeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 2, columnIndex = 7, height = 1, width = 1)
+    @Config.NumberSlider(name = "W Ground Cube", defaultValue = WRIST.kGroundIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 7, height = 1, width = 1)
     public void setWGCube(int wGCube) {
         this.wGCube = wGCube;
     }
 
-    @Config.NumberSlider(name = "W Sub Cone", defaultValue = WRIST.kSubstationIntakeConeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 3, columnIndex = 7, height = 1, width = 1)
+    @Config.NumberSlider(name = "W Sub Cone", defaultValue = WRIST.kSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 7, height = 1, width = 1)
     public void setWSCone(int wSCone) {
         this.wSCone = wSCone;
     }
 
-    @Config.NumberSlider(name = "W Sub Cube", defaultValue = WRIST.kSubstationIntakeCubeDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 4, columnIndex = 7, height = 1, width = 1)
+    @Config.NumberSlider(name = "W Sub Cube", defaultValue = WRIST.kSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 7, height = 1, width = 1)
     public void setWSCube(int wSCube) {
         this.wSCube = wSCube;
     }
@@ -742,12 +742,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Stowed Positions Column 8
     // Column 8, Rows 0-1
 
-    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 0, columnIndex = 8, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 8, height = 1, width = 1)
     public void setAStowed(int aStowed) {
         this.aStowed = aStowed;
     }
 
-    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 0, max = 5, blockIncrement = 1, rowIndex = 1, columnIndex = 8, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 8, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
     }
