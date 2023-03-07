@@ -303,6 +303,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm
 
     public void setArmGoal(double degrees) {
+        System.out.println("Arm Goal Degrees before min and max: " + degrees);
         degrees = Math.min(ARM.kMaxLimitDegrees, Math.max(degrees, ARM.kMinLimitDegrees));
         System.out.println("Arm Goal Degrees: " + degrees);
         armPidController.setGoal(degrees);
