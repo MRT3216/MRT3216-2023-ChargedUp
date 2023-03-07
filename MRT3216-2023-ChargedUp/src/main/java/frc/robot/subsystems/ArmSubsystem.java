@@ -225,7 +225,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     public void periodic() {
         if (this.enabled) {
             if (Math.abs(armPidController.getSetpoint().position - getArmDegrees()) < 20) {
-                double armPidVoltage = armPidController.calculate(getArmDegrees());
+                double armPidVoltage = -armPidController.calculate(getArmDegrees());
                 leadMotor.setVoltage(armPidVoltage);
             } else {
                 this.setArmGoal(armPidController.getGoal().position);

@@ -97,7 +97,7 @@ public class RobotContainer {
 		}
 
 		controller.leftTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runArmMotors(-controller.getLeftTriggerAxis() / 10),
+				Commands.run(() -> this.armSystem.runArmMotors(-controller.getLeftTriggerAxis() / 7),
 						armSystem)
 						.finallyDo(
 								(end) -> {
@@ -106,7 +106,7 @@ public class RobotContainer {
 								}));
 
 		controller.rightTrigger().whileTrue(
-				Commands.run(() -> this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 10),
+				Commands.run(() -> this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 7),
 						armSystem)
 						.finallyDo((end) -> {
 							this.armSystem.stopArmMotorsAndResetPID();
