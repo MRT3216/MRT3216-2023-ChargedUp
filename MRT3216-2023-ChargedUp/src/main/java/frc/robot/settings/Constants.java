@@ -111,8 +111,8 @@ public final class Constants {
 		public static final boolean kRightMotorsInverted = false;
 		public static final float kReverseLimit = .02f;
 		public static final float kForwardLimit = .74f;
-		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
-		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
+		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
+		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 20;
 		public static final double kZeroOffset = .0f;
 		public static final double kScaleFactor = 192.86;
