@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
 import frc.robot.commands.TeleDrive;
@@ -128,12 +129,12 @@ public class RobotContainer {
 		}));
 
 		//controller.a().onTrue(this.armSystem.getWristGotoCommand(108));
-		controller.a().onTrue(armSystem.getGroundIntakeCommand());
-		controller.b().onTrue(armSystem.getGroundTippedConeIntakeCommand());
-		controller.x().onTrue(armSystem.getScoringCommand());
-		controller.y().onTrue(armSystem.getSubstationIntakeCommand());
+		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
+		controller.b().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
+		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
+		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 
-		controller.rightStick().onTrue(armSystem.getStowedCommand());
+		controller.rightStick().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 
 		// Place piece
 		// controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));

@@ -423,12 +423,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Score piece - needs piece and height
     public Command getScoringCommand() {
-        return this.getCommand(() -> getArmAndWristScoringPosition().getValue());
+        return this.getCommand(getArmAndWristScoringPosition());
     }
 
     // Ground intake - needs piece
     public Command getGroundIntakeCommand() {
-        return this.getCommand(() -> getArmAndWristIntakePosition(ARM.IntakePosition.Ground).getValue());
+        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground));
     }
 
     // Ground tipped cone intake - needs nothing
@@ -438,11 +438,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Substation pickup -- needs piece
     public Command getSubstationIntakeCommand() {
-        return this.getCommand(() -> getArmAndWristIntakePosition(ARM.IntakePosition.Substation).getValue());
+        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Substation));
     }
 
     public Command getStowedCommand() {
-        return getCommand(() -> ARM.Position.Stowed.getValue());
+        return getCommand(ARM.Position.Stowed);
     }
 
     // TODO: Finish getting the wrist position WrtArm to wristpositionWrtGround
@@ -450,8 +450,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return getWristGotoCommand(calculateWristDegreesWrtGround(degrees, degrees));
     }
 
-    public Command getCommand(IntSupplier supplier) {
-        ARM.Position position = ARM.Position.valueOf(supplier.getAsInt());
+    public Command getCommand(ARM.Position position) {
         return getArmAndWristGotoCommand(getArmDegreesByPosition(position), getWristDegreesByPosition(position));
     }
 
