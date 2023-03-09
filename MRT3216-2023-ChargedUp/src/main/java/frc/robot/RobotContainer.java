@@ -11,6 +11,8 @@ import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
+import frc.robot.settings.Constants.ARM.GamePiece;
+import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -34,7 +36,7 @@ public class RobotContainer {
 
 	private static RobotContainer instance;
 
-	@Log.BooleanBox(name = "Gyro Con.", methodName = "gyroConnected", rowIndex = 1, columnIndex = 3, width = 1, height = 1)
+	@Log.BooleanBox(name = "Gyro Con.", methodName = "gyroConnected", rowIndex = 0, columnIndex = 1, width = 1, height = 1)
 	private SwerveSubsystem driveSystem;
 
 	private AutoChooser autoChooser;
@@ -116,30 +118,35 @@ public class RobotContainer {
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
-		controller.leftBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
-			this.armSystem.enable();
-			this.armSystem.stopWristMotorAndResetPID();
-			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		}));
+		// controller.leftBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
+		// 	this.armSystem.enable();
+		// 	this.armSystem.stopWristMotorAndResetPID();
+		// 	this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
+		// }));
 
-		controller.rightBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
-			this.armSystem.enable();
-			this.armSystem.stopWristMotorAndResetPID();
-			this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		}));
+		// controller.rightBumper().whileTrue(Commands.run(() -> this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
+		// 	this.armSystem.enable();
+		// 	this.armSystem.stopWristMotorAndResetPID();
+		// 	this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
+		// }));
 
-		//controller.a().onTrue(this.armSystem.getWristGotoCommand(108));
 		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 
 		controller.rightStick().onTrue(new ProxyCommand(armSystem::getStowedCommand));
+		
+		controller.povLeft().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Hybrid)));
+		controller.povUp().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Mid)));
+		controller.povRight().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.High)));
+
+		controller.povDown().onTrue(Commands.runOnce(() -> this.armSystem.toggleGamePiece()));
 
 		// Place piece
-		// controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));
+		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));
 		// Intake
-		// controller.rightBumper().whileTrue(intakeSystem.getConeCommand(true));
+		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(true));
 	}
 
 	public void disablePIDSubsystems() {
@@ -185,5 +192,21 @@ public class RobotContainer {
 	@Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
 	public void setRotationExpo(double expo) {
 		this.rotationExpo = expo;
+	}
+
+	@Log.NumberBar(name = "Scoring Height", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
+	public int getScoringHeight() {
+		if (this.armSystem.getScoringHeight() == ScoringHeight.Hybrid) {
+			return 2;
+		} else if (this.armSystem.getScoringHeight() == ScoringHeight.Mid) {
+			return 1;
+		}
+
+		return 0;
+	}
+
+	@Log.BooleanBox(name = "Cube?", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
+	public boolean getEncoderArmPosition() {
+		return this.armSystem.getGamePiece() == GamePiece.Cone;
 	}
 }

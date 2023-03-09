@@ -19,10 +19,12 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.settings.Constants;
 import frc.robot.settings.RobotMap;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase implements Loggable {
     private static IntakeSubsystem instance;
     protected boolean enabled;
     private CANSparkMax motor;
@@ -41,19 +43,18 @@ public class IntakeSubsystem extends SubsystemBase {
         motor.setSmartCurrentLimit(kMotorCurrentLimit);
         motor.setIdleMode(IdleMode.kBrake);
 
-        motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-        // Reset the encoder position each time the limit switch is passed
-        new Trigger(limitSwitch::isPressed)
-                .onTrue(
-                        Commands.runOnce(() -> armSubsystem.resetWristEncoderPosition())
-                                .andThen(() -> System.out.println("Encoder position reset by limit switch")));
+        limitSwitch = motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
         motor.burnFlash();
     }
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
+        // This method will be called once per scheduler
+        if (limitSwitch.isPressed()) {
+            armSubsystem.resetWristEncoderPosition();
+            System.out.println("Encoder position reset by limit switch");
+        }
     }
 
     public Command getConeCommand(boolean intake) {
@@ -74,5 +75,10 @@ public class IntakeSubsystem extends SubsystemBase {
             instance = new IntakeSubsystem();
         }
         return instance;
+    }
+
+    @Log.BooleanBox(name = "Wrist Limit Switch", tabName = "ArmSubsystem", rowIndex = 4, columnIndex = 0, height = 1, width = 1)
+    public boolean getEncoderArmPosition() {
+        return this.limitSwitch.isPressed();
     }
 }
