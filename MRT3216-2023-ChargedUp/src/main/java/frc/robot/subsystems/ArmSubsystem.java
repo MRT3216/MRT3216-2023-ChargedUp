@@ -180,10 +180,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristEncoderQuad = wristMotor.getAlternateEncoder(8192);
         wristMotor.getPIDController().setFeedbackDevice(wristEncoderQuad);
 
-        wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
-        wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
-        wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        //wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
+        //wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
+        //wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        //wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         wristMotor.burnFlash();
         wristFeedforward = new ArmFeedforward(
                 WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
@@ -240,7 +240,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             if (Math.abs(armPidController.getSetpoint().position - getArmDegrees()) < 20) {
                 double armPidVoltage = -armPidController.calculate(getArmDegrees());
                 leadMotor.setVoltage(armPidVoltage);
-                System.out.println("Arm Voltage: " + armPidVoltage);
+                //System.out.println("Arm Voltage: " + armPidVoltage);
             } else {
                 this.setArmGoal(armPidController.getGoal().position);
             }
@@ -256,8 +256,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                         wristPidController.getSetpoint().position);
                 double ff = -wristFeedforward.calculate(setpoint, wristPidController.getSetpoint().velocity);
                 wristMotor.setVoltage(wristPidVoltage);
-                System.out.println("Wrist: " + wristPidVoltage);
-                System.out.println("FF: " + ff);
+                //System.out.println("Wrist: " + wristPidVoltage);
+                //System.out.println("FF: " + ff);
 
                 // Save the current speed and time for the next loop
                 // lastSpeed = wristPidController.getSetpoint().velocity;
@@ -378,8 +378,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist
 
     public void setWristGoal(double degrees) {
-        degrees = Math.min(WRIST.kForwardLimitDegrees, Math.max(degrees, WRIST.kReverseLimitDegrees));
-        System.out.println("Wrist Goal Degrees: " + degrees);
+        //(degrees, WRIST.kReverseLimitDegrees));
+        //System.out.println("Wrist Goal Degrees: " + degrees);
         wristPidController.setGoal(degrees);
     }
 
@@ -518,6 +518,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public ARM.ScoringHeight getScoringHeight() {
+        /*
         NetworkTableEntry entry = streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight);
 
         if (entry.isValid()) {
@@ -525,23 +526,27 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         }
 
         return this.sH;
+         */
+        return ScoringHeight.High;
     }
 
     public ARM.GamePiece getGamePiece() {
         /*
-         * NetworkTableEntry entry =
-         * streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
-         * 
-         * if (entry.isValid()) {
-         * GamePiece x= ARM.GamePiece.valueOf((int)
-         * entry.getInteger(Constants.ARM.kStowedDegrees));
-         * System.out.println("Game piece " + x + " retrieved from NT.");
-         * return ARM.GamePiece.valueOf((int)
-         * entry.getInteger(Constants.ARM.kStowedDegrees));
-         * }
-         */
+         NetworkTableEntry entry =
+         streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
+         
+        if (entry.isValid()) {
+         GamePiece x= ARM.GamePiece.valueOf((int)
+        entry.getInteger(Constants.ARM.kStowedDegrees));
+         System.out.println("Game piece " + x + " retrieved from NT.");
+         return ARM.GamePiece.valueOf((int)
+         entry.getInteger(Constants.ARM.kStowedDegrees));
+         }
+        
         System.out.println("Game piece " + this.gp + " retrieved.");
         return this.gp;
+        */
+        return GamePiece.Cube;
     }
 
     public void setScoringHeight(ScoringHeight sH) {

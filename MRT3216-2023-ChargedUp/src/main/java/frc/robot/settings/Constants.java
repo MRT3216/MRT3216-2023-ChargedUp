@@ -138,7 +138,7 @@ public final class Constants {
 		 * Constraint Constants
 		 */
 		public static final double kArmMaxVelocity = 150; // degrees/s
-		public static final double kArmMaxAcceleration = 60; // degrees/s^2
+		public static final double kArmMaxAcceleration = 50; // degrees/s^2
 		public static final double kArmStartingPos = 80; // 60 degrees wrt hortizontal
 
 		/*
@@ -146,7 +146,7 @@ public final class Constants {
 		 * Position Constants
 		 */
 		public static final int kScoringHighConeDegrees = 100;
-		public static final int kScoringHighCubeDegrees = 90;
+		public static final int kScoringHighCubeDegrees = 110;
 		public static final int kScoringMidConeDegrees = 80;
 		public static final int kScoringMidCubeDegrees = 70;
 		public static final int kScoringHybridDegrees = 30;
@@ -278,8 +278,8 @@ public final class Constants {
 
 	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
-		public static final float kForwardLimit = .99f;
-		public static final float kReverseLimit = 0.01f;
+		public static final float kForwardLimit = -1f;
+		public static final float kReverseLimit = .35f;
 
 		public static final int kMotorCurrentLimit = 40;
 
@@ -315,8 +315,8 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kWristMaxVelocity = 60; // degrees/s
-		public static final double kWristMaxAcceleration = 60; // degrees/s^2
+		public static final double kWristMaxVelocity = 180; // degrees/s
+		public static final double kWristMaxAcceleration = 120; // degrees/s^2
 		public static final double kWristStartingPos = 0; // 60 degrees wrt arm
 
 		/*
@@ -324,7 +324,7 @@ public final class Constants {
 		 * Position Constants
 		 */
 		public static final int kScoringHighConeDegrees = 100;
-		public static final int kScoringHighCubeDegrees = 90;
+		public static final int kScoringHighCubeDegrees = -175;
 		public static final int kScoringMidConeDegrees = 80;
 		public static final int kScoringMidCubeDegrees = 70;
 		public static final int kScoringHybridDegrees = 30;
@@ -333,7 +333,7 @@ public final class Constants {
 		public static final int kGroundIntakeCubeDegrees = 15;//
 		public static final int kSubstationIntakeConeDegrees = 25;//
 		public static final int kSubstationIntakeCubeDegrees = 9;//
-		public static final int kStowedDegrees = 60;
+		public static final int kStowedDegrees = 46;
 
 	}
 
