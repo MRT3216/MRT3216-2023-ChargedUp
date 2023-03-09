@@ -373,8 +373,8 @@ public final class Constants {
 		public static final int kMaxFetchAcc = kMaxFetchVelocity / 2;
 
 		public static final double kStartDelayTime = 0;
-		public static final double kDriveToShootDelay = 0; // seconds
-		public static final double kMaxShootTime = 2; // seconds
+		public static final double kDriveToPlaceDelay = 0; // seconds
+		public static final double kMaxIntakeTime = 0.25; // seconds
 	}
 
 	public static final class OI {

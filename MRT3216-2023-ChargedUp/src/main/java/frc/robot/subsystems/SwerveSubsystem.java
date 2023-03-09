@@ -261,21 +261,21 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return Rotation2d.fromDegrees(-this.navx.getYaw());
 	};
 
-	/*
-	 * public Pose2d getCurrentRobotPose() {
-	 * return this.odometry.getPoseMeters();
-	 * }
-	 *
-	 *
-	 * public void setCurrentRobotPose(Pose2d pose) {
-	 * this.odometry
-	 * .resetPosition(getGyroscopeRotation(),
-	 * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
-	 * this.frontRightModule.getPosition(),
-	 * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
-	 * pose);
-	 * }
-	 */
+	
+	  public Pose2d getCurrentRobotPose() {
+	  return this.poseEstimator.getEstimatedPosition();
+	  }
+	 
+	 
+	  public void setCurrentRobotPose(Pose2d pose) {
+	  this.poseEstimator
+	  .resetPosition(getGyroscopeRotation(),
+	  new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+	  this.frontRightModule.getPosition(),
+	  this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+	  pose);
+	  }
+	 
 
 	public void stop() {
 		for (SwerveModule swerveModule : this.swerveModules) {

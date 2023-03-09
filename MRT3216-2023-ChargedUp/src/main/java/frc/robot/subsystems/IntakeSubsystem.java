@@ -19,8 +19,10 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.settings.RobotMap;
+import frc.robot.settings.Constants.Auto;
 
 public class IntakeSubsystem extends SubsystemBase {
     private static IntakeSubsystem instance;
@@ -65,6 +67,20 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command getCubeCommand(boolean intake) {
         return Commands.run(() -> {
             motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed);
+        }).finallyDo((end) -> motor.set(0));
+    }
+
+    public Command getAutoConeCommand(boolean intake) {
+        return Commands.run(() -> {
+            motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed);
+            new WaitCommand(Auto.kMaxIntakeTime);
+        }).finallyDo((end) -> motor.set(0));
+    }
+
+    public Command getAutoCubeCommand(boolean intake) {
+        return Commands.run(() -> {
+            motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed);
+            new WaitCommand(Auto.kMaxIntakeTime);
         }).finallyDo((end) -> motor.set(0));
     }
 
