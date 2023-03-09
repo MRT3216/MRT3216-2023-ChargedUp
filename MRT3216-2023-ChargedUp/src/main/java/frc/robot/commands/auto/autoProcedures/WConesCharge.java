@@ -36,19 +36,19 @@ public class WConesCharge extends ParallelCommandGroup {
                         new RunIntake(intakeSubsystem, false, true),
                         new ParallelCommandGroup(
                                 new DrivePath(swerveSubsystem, armSubsystem, intakeSubsystem, limelightSubsystem,
-                                        "cargoRetrieveW.1"),
-                                new PositionArmWrist(armSubsystem, ARM.kGroundIntakeCubeDegrees,
-                                        WRIST.kGroundIntakeCubeDegrees)),
+                                        "cargoRetrieveSS.1"),
+                                new PositionArmWrist(armSubsystem, ARM.kGroundIntakeUprightConeDegrees,
+                                        WRIST.kGroundIntakeUprightConeDegrees)),
                         new RunIntake(intakeSubsystem, true, false),
                         new ParallelCommandGroup(
                                 new DrivePath(swerveSubsystem, armSubsystem, intakeSubsystem, limelightSubsystem,
-                                        "comboChargeW.2"),
-                                new PositionArmWrist(armSubsystem, ARM.kGroundIntakeCubeDegrees,
-                                        WRIST.kGroundIntakeCubeDegrees)),
+                                        "conesChargeSS.2"),
+                                new PositionArmWrist(armSubsystem, ARM.kScoringHighConeDegrees,
+                                        WRIST.kScoringHighConeDegrees)),
                         new RunIntake(intakeSubsystem, false, false),
                         new PositionArmWrist(armSubsystem, ARM.kStowedDegrees, WRIST.kStowedDegrees),
                         new DrivePath(swerveSubsystem, armSubsystem, intakeSubsystem, limelightSubsystem,
-                                "comboChargeW.3")));
+                                "conesChargeSS.3")));
 
     }
 }

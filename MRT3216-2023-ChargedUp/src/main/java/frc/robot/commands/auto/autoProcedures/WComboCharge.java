@@ -43,8 +43,8 @@ public class WComboCharge extends ParallelCommandGroup {
                         new ParallelCommandGroup(
                                 new DrivePath(swerveSubsystem, armSubsystem, intakeSubsystem, limelightSubsystem,
                                         "comboChargeW.2"),
-                                new PositionArmWrist(armSubsystem, ARM.kGroundIntakeCubeDegrees,
-                                        WRIST.kGroundIntakeCubeDegrees)),
+                                new PositionArmWrist(armSubsystem, ARM.kScoringHighCubeDegrees,
+                                        WRIST.kScoringHighCubeDegrees)),
                         new RunIntake(intakeSubsystem, false, false),
                         new PositionArmWrist(armSubsystem, ARM.kStowedDegrees, WRIST.kStowedDegrees),
                         new DrivePath(swerveSubsystem, armSubsystem, intakeSubsystem, limelightSubsystem,

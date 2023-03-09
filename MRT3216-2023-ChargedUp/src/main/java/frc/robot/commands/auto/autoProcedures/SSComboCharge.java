@@ -41,13 +41,13 @@ public class SSComboCharge extends ParallelCommandGroup {
                         new RunIntake(intakeSubsystem, true, false),
                         new ParallelCommandGroup(
                                 new DrivePath(swerveSubsystem, armSubsystem, intakeSubsystem, limelightSubsystem,
-                                        "comboChargeW.2"),
+                                        "comboChargeSS.2"),
                                 new PositionArmWrist(armSubsystem, ARM.kGroundIntakeCubeDegrees,
                                         WRIST.kGroundIntakeCubeDegrees)),
                         new RunIntake(intakeSubsystem, false, false),
                         new PositionArmWrist(armSubsystem, ARM.kStowedDegrees, WRIST.kStowedDegrees),
                         new DrivePath(swerveSubsystem, armSubsystem, intakeSubsystem, limelightSubsystem,
-                                "comboChargeW.3")));
+                                "comboChargeSS.3")));
 
     }
 
