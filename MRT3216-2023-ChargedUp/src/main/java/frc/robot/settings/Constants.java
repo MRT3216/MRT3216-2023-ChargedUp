@@ -168,7 +168,7 @@ public final class Constants {
 			Stowed(10);
 
 			private int value;
-			private static Map map = new HashMap<>();
+			private static Map<Integer, Position> map = new HashMap<>();
 
 			private Position(int value) {
 				this.value = value;
@@ -194,7 +194,7 @@ public final class Constants {
 			Cube(1);
 
 			private int value;
-			private static Map map = new HashMap<>();
+			private static Map<Integer, GamePiece> map = new HashMap<>();
 
 			private GamePiece(int value) {
 				this.value = value;
@@ -221,7 +221,7 @@ public final class Constants {
 			Hybrid(2);
 
 			private int value;
-			private static Map map = new HashMap<>();
+			private static Map<Integer, ScoringHeight> map = new HashMap<>();
 
 			private ScoringHeight(int value) {
 				this.value = value;
@@ -247,7 +247,7 @@ public final class Constants {
 			Substation(1);
 
 			private int value;
-			private static Map map = new HashMap<>();
+			private static Map<Integer, IntakePosition> map = new HashMap<>();
 
 			private IntakePosition(int value) {
 				this.value = value;
@@ -285,6 +285,8 @@ public final class Constants {
 
 		public static final double kZeroOffset = 0;
 		public static final double kScaleFactor = 180;
+
+		public static final double kLimitSwitchPosition = 0;
 
 		/*
 		 * ----------------------------------------------------------------------------
