@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.WRIST;
+import frc.robot.settings.Constants.ARM.GamePiece;
+import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.settings.RobotMap.ROBOT;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -107,6 +110,9 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
+    private GamePiece gp;
+    private ScoringHeight sH;
+
     // #endregion
 
     // #region ArmSubsystem
@@ -115,6 +121,9 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.enabled = false;
         NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
         this.streamDeckNT = table;
+
+        this.gp = GamePiece.Cone;
+        this.sH = ScoringHeight.High;
 
         // #region Arm Motor Initialization
 
@@ -171,10 +180,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristEncoderQuad = wristMotor.getAlternateEncoder(8192);
         wristMotor.getPIDController().setFeedbackDevice(wristEncoderQuad);
 
-        wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
-        wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
-        wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        // wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
+        // wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
+        // wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        // wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         wristMotor.burnFlash();
         wristFeedforward = new ArmFeedforward(
                 WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
@@ -231,7 +240,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             if (Math.abs(armPidController.getSetpoint().position - getArmDegrees()) < 20) {
                 double armPidVoltage = -armPidController.calculate(getArmDegrees());
                 leadMotor.setVoltage(armPidVoltage);
-                System.out.println("Arm Voltage: " + armPidVoltage);
+                // System.out.println("Arm Voltage: " + armPidVoltage);
             } else {
                 this.setArmGoal(armPidController.getGoal().position);
             }
@@ -247,8 +256,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                         wristPidController.getSetpoint().position);
                 double ff = -wristFeedforward.calculate(setpoint, wristPidController.getSetpoint().velocity);
                 wristMotor.setVoltage(wristPidVoltage);
-                System.out.println("Wrist: " + wristPidVoltage);
-                System.out.println("FF: " + ff);
+                // System.out.println("Wrist: " + wristPidVoltage);
+                // System.out.println("FF: " + ff);
 
                 // Save the current speed and time for the next loop
                 // lastSpeed = wristPidController.getSetpoint().velocity;
@@ -308,9 +317,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm
 
     public void setArmGoal(double degrees) {
-        System.out.println("Arm Goal Degrees before min and max: " + degrees);
+        // System.out.println("Arm Goal Degrees before min and max: " + degrees);
         degrees = Math.min(ARM.kMaxLimitDegrees, Math.max(degrees, ARM.kMinLimitDegrees));
-        System.out.println("Arm Goal Degrees: " + degrees);
         armPidController.setGoal(degrees);
     }
 
@@ -369,8 +377,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist
 
     public void setWristGoal(double degrees) {
-        degrees = Math.min(WRIST.kForwardLimitDegrees, Math.max(degrees, WRIST.kReverseLimitDegrees));
-        System.out.println("Wrist Goal Degrees: " + degrees);
+        // (degrees, WRIST.kReverseLimitDegrees));
+        // System.out.println("Wrist Goal Degrees: " + degrees);
         wristPidController.setGoal(degrees);
     }
 
@@ -500,22 +508,65 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         ARM.GamePiece gP = this.getGamePiece();
 
         if (iP == ARM.IntakePosition.Ground) {
-            return gP == ARM.GamePiece.Cone ? ARM.Position.GroundIntakeUprightCone : ARM.Position.ScoringHighCube;
+            return gP == ARM.GamePiece.Cone ? ARM.Position.GroundIntakeUprightCone : ARM.Position.GroundIntakeCube;
         } else if (iP == ARM.IntakePosition.Substation) {
-            return gP == ARM.GamePiece.Cone ? ARM.Position.SubstationIntakeCone : ARM.Position.SubstationIntakeCone;
+            return gP == ARM.GamePiece.Cone ? ARM.Position.SubstationIntakeCone : ARM.Position.SubstationIntakeCube;
         }
 
         return ARM.Position.Stowed;
     }
 
     public ARM.ScoringHeight getScoringHeight() {
-        return ARM.ScoringHeight.valueOf((int) streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight)
-                .getInteger(Constants.ARM.kStowedDegrees));
+        /*
+         * NetworkTableEntry entry =
+         * streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight);
+         * 
+         * if (entry.isValid()) {
+         * return ARM.ScoringHeight.valueOf((int)
+         * entry.getInteger(Constants.ARM.kStowedDegrees));
+         * }
+         */
+
+        return this.sH;
+
+        // return ScoringHeight.High;
     }
 
     public ARM.GamePiece getGamePiece() {
-        return ARM.GamePiece.valueOf((int) streamDeckNT.getEntry(Constants.StreamDeck.gamePiece)
-                .getInteger(Constants.ARM.kStowedDegrees));
+        /*
+         * NetworkTableEntry entry =
+         * streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
+         * 
+         * if (entry.isValid()) {
+         * GamePiece x= ARM.GamePiece.valueOf((int)
+         * entry.getInteger(Constants.ARM.kStowedDegrees));
+         * System.out.println("Game piece " + x + " retrieved from NT.");
+         * return ARM.GamePiece.valueOf((int)
+         * entry.getInteger(Constants.ARM.kStowedDegrees));
+         * }
+         * 
+         * System.out.println("Game piece " + this.gp + " retrieved.");
+         */
+
+       // System.out.println("Game piece " + this.gp + " retrieved.");
+        return this.gp;
+
+        // return GamePiece.Cube;
+    }
+
+    public void setScoringHeight(ScoringHeight sH) {
+        System.out.println("Setting scoring height to " + sH);
+        this.sH = sH;
+    }
+
+    public void toggleGamePiece() {
+        if (this.gp == GamePiece.Cone) {
+            this.gp = GamePiece.Cube;
+        } else {
+            this.gp = GamePiece.Cone;
+        }
+
+        System.out.println("Setting game piece to " + gp);
     }
 
     // #endregion
@@ -560,11 +611,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return calculateWristDegreesWrtArm(wristEncoderQuad.getPosition());
     }
 
-    @Log.NumberBar(name = "Wrist Degrees Wrt G", rowIndex = 4, columnIndex = 1, height = 1, width = 1)
-    public double getWristDegreesWrtGround() {
-        return calculateWristDegreesWrtGround(getArmDegrees(), getWristDegreesWrtArm());
-    }
-
     @Log.NumberBar(name = "Wrist Goal", rowIndex = 2, columnIndex = 1, height = 1, width = 1)
     public double getWristGoal() {
         return wristPidController.getGoal().position;
@@ -573,6 +619,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Log.NumberBar(name = "Wrist Setpoint", rowIndex = 3, columnIndex = 1, height = 1, width = 1)
     public double getWristSetpoint() {
         return wristPidController.getSetpoint().position;
+    }
+
+    @Log.NumberBar(name = "Wrist Degrees Wrt G", rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    public double getWristDegreesWrtGround() {
+        return calculateWristDegreesWrtGround(getArmDegrees(), getWristDegreesWrtArm());
     }
 
     // #endregion

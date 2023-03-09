@@ -21,7 +21,7 @@ public final class Constants {
 		// TODO: set these values
 		// public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54);
 		// public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
-		// public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.13);
+		// public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.15);
 		// public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
 		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.66 + 180);
 		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(200.04 + 180);
@@ -138,24 +138,24 @@ public final class Constants {
 		 * Constraint Constants
 		 */
 		public static final double kArmMaxVelocity = 150; // degrees/s
-		public static final double kArmMaxAcceleration = 60; // degrees/s^2
+		public static final double kArmMaxAcceleration = 50; // degrees/s^2
 		public static final double kArmStartingPos = 80; // 60 degrees wrt hortizontal
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = 100;
-		public static final int kScoringHighCubeDegrees = 90;
-		public static final int kScoringMidConeDegrees = 80;
-		public static final int kScoringMidCubeDegrees = 70;
+		public static final int kScoringHighConeDegrees = 110;
+		public static final int kScoringHighCubeDegrees = 110;
+		public static final int kScoringMidConeDegrees = 107;
+		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridDegrees = 30;
-		public static final int kGroundIntakeUprightConeDegrees = 20;
+		public static final int kGroundIntakeUprightConeDegrees = 24;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 10;
-		public static final int kSubstationIntakeConeDegrees = 124;
-		public static final int kSubstationIntakeCubeDegrees = 133;
-		public static final int kStowedDegrees = 60;
+		public static final int kGroundIntakeCubeDegrees = 13;
+		public static final int kSubstationIntakeConeDegrees = 112;
+		public static final int kSubstationIntakeCubeDegrees = 115;
+		public static final int kStowedDegrees = 69;
 
 		// #region Enums
 
@@ -278,8 +278,8 @@ public final class Constants {
 
 	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
-		public static final float kForwardLimit = .99f;
-		public static final float kReverseLimit = 0.01f;
+		public static final float kForwardLimit = -1f;
+		public static final float kReverseLimit = .35f;
 
 		public static final int kMotorCurrentLimit = 40;
 
@@ -315,32 +315,32 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kWristMaxVelocity = 60; // degrees/s
-		public static final double kWristMaxAcceleration = 30; // degrees/s^2
+		public static final double kWristMaxVelocity = 180; // degrees/s
+		public static final double kWristMaxAcceleration = 120; // degrees/s^2
 		public static final double kWristStartingPos = 0; // 60 degrees wrt arm
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = 100;
-		public static final int kScoringHighCubeDegrees = 90;
-		public static final int kScoringMidConeDegrees = 80;
-		public static final int kScoringMidCubeDegrees = 70;
+		public static final int kScoringHighConeDegrees = -175;
+		public static final int kScoringHighCubeDegrees = -175;
+		public static final int kScoringMidConeDegrees = -80;
+		public static final int kScoringMidCubeDegrees = -90;
 		public static final int kScoringHybridDegrees = 30;
-		public static final int kGroundIntakeUprightConeDegrees = 189;//
+		public static final int kGroundIntakeUprightConeDegrees = 30;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 189;//
-		public static final int kSubstationIntakeConeDegrees = 25;//
-		public static final int kSubstationIntakeCubeDegrees = 9;//
-		public static final int kStowedDegrees = 60;
+		public static final int kGroundIntakeCubeDegrees = 15;
+		public static final int kSubstationIntakeConeDegrees = 25;
+		public static final int kSubstationIntakeCubeDegrees = 9;
+		public static final int kStowedDegrees = 46;
 
 	}
 
 	public static final class INTAKE {
 		public static final boolean kMotorInverted = true;
 		public static final int kMotorCurrentLimit = 30;
-		public static final double kConeIntakeSpeed = 0.7;
+		public static final double kConeIntakeSpeed = .7;
 		public static final double kConeOuttakeSpeed = -0.5;
 		public static final double kCubeIntakeSpeed = -0.5;
 		public static final double kCubeOuttakeSpeed = 0.5;
