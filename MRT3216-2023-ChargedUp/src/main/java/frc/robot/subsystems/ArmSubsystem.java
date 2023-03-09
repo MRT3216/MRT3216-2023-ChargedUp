@@ -517,41 +517,25 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public ARM.ScoringHeight getScoringHeight() {
-        /*
-         * NetworkTableEntry entry =
-         * streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight);
-         * 
-         * if (entry.isValid()) {
-         * return ARM.ScoringHeight.valueOf((int)
-         * entry.getInteger(Constants.ARM.kStowedDegrees));
-         * }
-         */
+        NetworkTableEntry entry = streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight);
+        String scoringHeightNTEntry = entry.getString("nothing").trim();
+
+        if (!"nothing".equals(scoringHeightNTEntry)) {
+            this.sH = ARM.ScoringHeight.valueOf((int) entry.getInteger(Constants.ARM.kStowedDegrees));
+        }
 
         return this.sH;
-
-        // return ScoringHeight.High;
     }
 
     public ARM.GamePiece getGamePiece() {
-        /*
-         * NetworkTableEntry entry =
-         * streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
-         * 
-         * if (entry.isValid()) {
-         * GamePiece x= ARM.GamePiece.valueOf((int)
-         * entry.getInteger(Constants.ARM.kStowedDegrees));
-         * System.out.println("Game piece " + x + " retrieved from NT.");
-         * return ARM.GamePiece.valueOf((int)
-         * entry.getInteger(Constants.ARM.kStowedDegrees));
-         * }
-         * 
-         * System.out.println("Game piece " + this.gp + " retrieved.");
-         */
+        NetworkTableEntry entry = streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
+        String gamePieceNTEntry = entry.getString("nothing").trim();
 
-       // System.out.println("Game piece " + this.gp + " retrieved.");
+        if (!"nothing".equals(gamePieceNTEntry.trim())) {
+            this.gp = ARM.GamePiece.valueOf((int) entry.getInteger(Constants.ARM.kStowedDegrees));
+        }
+
         return this.gp;
-
-        // return GamePiece.Cube;
     }
 
     public void setScoringHeight(ScoringHeight sH) {
