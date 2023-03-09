@@ -1,11 +1,10 @@
 package frc.robot.subsystems;
 
-import java.util.function.IntSupplier;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
@@ -52,9 +51,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private ProfiledPIDController wristPidController;
     private ArmFeedforward wristFeedforward;
     private CANSparkMax wristMotor;
-    private SparkMaxAbsoluteEncoder wristEncoder;
+    // private SparkMaxAbsoluteEncoder wristEncoder;
+    private RelativeEncoder wristEncoderQuad;
 
-    // #endregion
+    // #endregionO
 
     // #region Arm PID
 
@@ -166,8 +166,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristMotor.setIdleMode(IdleMode.kBrake);
         wristMotor.setSmartCurrentLimit(WRIST.kMotorCurrentLimit);
 
-        wristEncoder = wristMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        wristMotor.getPIDController().setFeedbackDevice(wristEncoder);
+        // wristEncoder = wristMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        // wristMotor.getPIDController().setFeedbackDevice(wristEncoder);
+        wristEncoderQuad = wristMotor.getAlternateEncoder(8192);
+        wristMotor.getPIDController().setFeedbackDevice(wristEncoderQuad);
 
         wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
         wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
@@ -229,6 +231,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             if (Math.abs(armPidController.getSetpoint().position - getArmDegrees()) < 20) {
                 double armPidVoltage = -armPidController.calculate(getArmDegrees());
                 leadMotor.setVoltage(armPidVoltage);
+                System.out.println("Arm Voltage: " + armPidVoltage);
             } else {
                 this.setArmGoal(armPidController.getGoal().position);
             }
@@ -417,6 +420,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
+    public void resetWristEncoderPosition() {
+        wristEncoderQuad.setPosition(WRIST.kLimitSwitchPosition);
+    }
+
     // #endregion
 
     // #region Command Factories
@@ -443,11 +450,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public Command getStowedCommand() {
         return getCommand(ARM.Position.Stowed);
-    }
-
-    // TODO: Finish getting the wrist position WrtArm to wristpositionWrtGround
-    public Command getWristHorizontalCommand(double degrees) {
-        return getWristGotoCommand(calculateWristDegreesWrtGround(degrees, degrees));
     }
 
     public Command getCommand(ARM.Position position) {
@@ -550,12 +552,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     @Log.NumberBar(name = "Wrist Encoder", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public double getEncoderPosition() {
-        return this.wristEncoder.getPosition();
+        return this.wristEncoderQuad.getPosition();
     }
 
     @Log.NumberBar(name = "Wrist Degrees Wrt A", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public double getWristDegreesWrtArm() {
-        return calculateWristDegreesWrtArm(wristEncoder.getPosition());
+        return calculateWristDegreesWrtArm(wristEncoderQuad.getPosition());
     }
 
     @Log.NumberBar(name = "Wrist Degrees Wrt G", rowIndex = 4, columnIndex = 1, height = 1, width = 1)
@@ -581,16 +583,24 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Arm P", defaultValue = ARM.kArmKp, min = 0, max = 130, blockIncrement = 0.01, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public void setArmKp(double armKp) {
         this.armKp = armKp;
+        resetArmPID();
     }
 
     @Config.NumberSlider(name = "Arm I", defaultValue = ARM.kArmKi, min = 0, max = 130, blockIncrement = 0.01, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
     public void setArmKi(double armKi) {
         this.armKi = armKi;
+        resetArmPID();
     }
 
     @Config.NumberSlider(name = "Arm D", defaultValue = ARM.kArmKd, min = 0, max = 130, blockIncrement = 0.01, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
     public void setArmKd(double armKd) {
         this.armKd = armKd;
+        resetArmPID();
+    }
+
+    private void resetArmPID() {
+        this.armPidController.setPID(armKp, armKi, armKd);
+        System.out.println("Changing arm P: " + armKp + "  I: " + armKi + " D:" + armKd);
     }
 
     // #endregion
@@ -601,18 +611,24 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Wrist P", defaultValue = WRIST.kWristKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setWristKp(double wristKp) {
         this.wristKp = wristKp;
-        this.wristPidController.setPID(wristKp, wristKi, wristKd);
-        System.out.println("Changing wrist kp to " + wristKp);
+        resetWristPID();
     }
 
     @Config.NumberSlider(name = "Wrist I", defaultValue = WRIST.kWristKi, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
     public void setWristKi(double wristKi) {
         this.wristKi = wristKi;
+        resetWristPID();
     }
 
     @Config.NumberSlider(name = "Wrist D", defaultValue = WRIST.kWristKd, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 2, columnIndex = 3, height = 1, width = 1)
     public void setWristKd(double wristKd) {
         this.wristKd = wristKd;
+        resetWristPID();
+    }
+
+    private void resetWristPID() {
+        this.wristPidController.setPID(wristKp, wristKi, wristKd);
+        System.out.println("Changing wrist P: " + wristKp + "  I: " + wristKi + " D:" + wristKd);
     }
 
     @Config.NumberSlider(name = "Wrist G", defaultValue = WRIST.kWristKg, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
@@ -755,16 +771,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 8, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
-    }
-
-    @Config.ToggleButton(name = "Cone?", rowIndex = 2, columnIndex = 8, height = 1, width = 1)
-    public void setGamePiece(boolean isCone) {
-
-    }
-
-    @Config.NumberSlider(name = "Scoring Height", rowIndex = 3, columnIndex = 8, height = 1, width = 1)
-    public void setScoringHeight(int scoringHeight) {
-
     }
 
     // #endregion

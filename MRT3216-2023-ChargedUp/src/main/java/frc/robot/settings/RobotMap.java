@@ -14,18 +14,18 @@ public final class RobotMap {
 	public static final class ROBOT {
 		public static class DRIVETRAIN {
 			// NEO
-			public static final int LEFT_FRONT_DRIVE = 3;
-			public static final int LEFT_FRONT_ANGLE = 4;
-			public static final int LEFT_FRONT_CANCODER = 5;
-			public static final int RIGHT_FRONT_DRIVE = 6;
-			public static final int RIGHT_FRONT_ANGLE = 7;
-			public static final int RIGHT_FRONT_CANCODER = 8;
-			public static final int LEFT_REAR_DRIVE = 9;
-			public static final int LEFT_REAR_ANGLE = 10;
-			public static final int LEFT_REAR_CANCODER = 11;
-			public static final int RIGHT_REAR_DRIVE = 12;
-			public static final int RIGHT_REAR_ANGLE = 13;
-			public static final int RIGHT_REAR_CANCODER = 14;
+			public static final int LEFT_FRONT_DRIVE = 12;
+			public static final int LEFT_FRONT_ANGLE = 13;
+			public static final int LEFT_FRONT_CANCODER = 14;
+			public static final int RIGHT_FRONT_DRIVE = 9;
+			public static final int RIGHT_FRONT_ANGLE = 10;
+			public static final int RIGHT_FRONT_CANCODER = 11;
+			public static final int LEFT_REAR_DRIVE = 6;
+			public static final int LEFT_REAR_ANGLE = 7;
+			public static final int LEFT_REAR_CANCODER = 8;
+			public static final int RIGHT_REAR_DRIVE = 3;
+			public static final int RIGHT_REAR_ANGLE = 4;
+			public static final int RIGHT_REAR_CANCODER = 5;
 		}
 
 		public static class ARM {
