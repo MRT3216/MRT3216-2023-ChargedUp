@@ -4,25 +4,34 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.settings.Constants.INTAKE.*;
+import static frc.robot.settings.Constants.INTAKE.kConeIntakeSpeed;
+import static frc.robot.settings.Constants.INTAKE.kConeOuttakeSpeed;
+import static frc.robot.settings.Constants.INTAKE.kCubeIntakeSpeed;
+import static frc.robot.settings.Constants.INTAKE.kCubeOuttakeSpeed;
+import static frc.robot.settings.Constants.INTAKE.kMotorCurrentLimit;
+import static frc.robot.settings.Constants.INTAKE.kMotorInverted;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.settings.RobotMap;
 
 public class IntakeSubsystem extends SubsystemBase {
     private static IntakeSubsystem instance;
     protected boolean enabled;
-
     private CANSparkMax motor;
+    private SparkMaxLimitSwitch limitSwitch;
+    private ArmSubsystem armSubsystem;
 
     /** Creates a new IntakeSubsystem. */
     private IntakeSubsystem() {
+        this.armSubsystem = ArmSubsystem.getInstance();
         motor = new CANSparkMax(RobotMap.ROBOT.INTAKE.MOTOR, MotorType.kBrushless);
 
         motor.restoreFactoryDefaults();
@@ -31,6 +40,13 @@ public class IntakeSubsystem extends SubsystemBase {
         motor.setInverted(kMotorInverted);
         motor.setSmartCurrentLimit(kMotorCurrentLimit);
         motor.setIdleMode(IdleMode.kBrake);
+
+        motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+        // Reset the encoder position each time the limit switch is passed
+        new Trigger(limitSwitch::isPressed)
+                .onTrue(
+                        Commands.runOnce(() -> armSubsystem.resetWristEncoderPosition())
+                                .andThen(() -> System.out.println("Encoder position reset by limit switch")));
 
         motor.burnFlash();
     }

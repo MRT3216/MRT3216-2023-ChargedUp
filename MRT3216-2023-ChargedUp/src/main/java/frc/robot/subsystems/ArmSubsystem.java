@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.WRIST;
@@ -55,7 +53,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax wristMotor;
     // private SparkMaxAbsoluteEncoder wristEncoder;
     private RelativeEncoder wristEncoderQuad;
-    private SparkMaxLimitSwitch limitSwitch;
 
     // #endregionO
 
@@ -174,8 +171,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristEncoderQuad = wristMotor.getAlternateEncoder(8192);
         wristMotor.getPIDController().setFeedbackDevice(wristEncoderQuad);
 
-        wristMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-
         wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
         wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
         wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
@@ -184,11 +179,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristFeedforward = new ArmFeedforward(
                 WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
 
-        // Reset the encoder position each time the limit switch is passed
-        new Trigger(limitSwitch::isPressed)
-                .onTrue(
-                        Commands.runOnce(() -> wristEncoderQuad.setPosition(WRIST.kLimitSwitchPosition))
-                                .andThen(() -> System.out.println("Encoder position reset by limit switch")));
         // endregion
 
         // #region Arm PID
@@ -430,6 +420,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
+    public void resetWristEncoderPosition() {
+        wristEncoderQuad.setPosition(WRIST.kLimitSwitchPosition);
+    }
+
     // #endregion
 
     // #region Command Factories
@@ -604,7 +598,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         resetArmPID();
     }
 
-    private void resetArmPID(){
+    private void resetArmPID() {
         this.armPidController.setPID(armKp, armKi, armKd);
         System.out.println("Changing arm P: " + armKp + "  I: " + armKi + " D:" + armKd);
     }
@@ -632,7 +626,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         resetWristPID();
     }
 
-    private void resetWristPID(){
+    private void resetWristPID() {
         this.wristPidController.setPID(wristKp, wristKi, wristKd);
         System.out.println("Changing wrist P: " + wristKp + "  I: " + wristKi + " D:" + wristKd);
     }

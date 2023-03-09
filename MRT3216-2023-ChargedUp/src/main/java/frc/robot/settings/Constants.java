@@ -19,10 +19,15 @@ import frc.robot.subsystems.ArmSubsystem;
 public final class Constants {
 	public static final class Drivetrain {
 		// TODO: set these values
-		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54);
-		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
-		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.13);
-		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
+		// public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54);
+		// public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
+		// public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.13);
+		// public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
+		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.66 + 180);
+		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(200.04 + 180);
+		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.51 + 180);
+		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(27.6 + 180);
+
 
 		public static final double WHEELBASE_METERS = Units.inchesToMeters(23.058); // 0.5461; 
 		public static final double TRACKWIDTH_METERS = Units.inchesToMeters(18.914); //  0.5588;
