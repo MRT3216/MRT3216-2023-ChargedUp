@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.RobotMap;
+import frc.robot.settings.Constants.ARM.GamePiece;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -54,6 +55,16 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         if (limitSwitch.isPressed()) {
             armSubsystem.resetWristEncoderPosition();
             System.out.println("Encoder position reset by limit switch");
+        }
+    }
+
+    public Command getCommand(boolean intake, GamePiece piece) {
+        if(piece == GamePiece.Cone) {
+            System.out.println("Running cone intake");
+            return getConeCommand(intake);
+        } else {
+            System.out.println("Running cube intake");
+            return getCubeCommand(intake);
         }
     }
 

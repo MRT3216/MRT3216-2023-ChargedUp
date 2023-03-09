@@ -90,11 +90,11 @@ public class RobotContainer {
 			driveSystem.setDefaultCommand(
 					new TeleDrive(
 							driveSystem,
-							() -> OIUtils.modifyAxis(-controller.getLeftY(), this.translationExpo)
+							() -> OIUtils.modifyAxis(controller.getLeftY(), this.translationExpo)
 									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-							() -> OIUtils.modifyAxis(-controller.getLeftX(), this.translationExpo)
+							() -> OIUtils.modifyAxis(controller.getLeftX(), this.translationExpo)
 									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-							() -> OIUtils.modifyAxis(controller.getRightX(), this.rotationExpo)
+							() -> OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
 									* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}
@@ -133,11 +133,12 @@ public class RobotContainer {
 		// }));
 
 		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		controller.b().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
+		//controller.b().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
+		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 
-		controller.rightStick().onTrue(new ProxyCommand(armSystem::getStowedCommand));
+		//controller.rightStick().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 
 		controller.povLeft().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Hybrid)));
 		controller.povUp().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Mid)));
@@ -146,9 +147,9 @@ public class RobotContainer {
 		controller.povDown().onTrue(Commands.runOnce(() -> this.armSystem.toggleGamePiece()));
 
 		// Place piece
-		controller.leftBumper().whileTrue(intakeSystem.getConeCommand(false));
+		controller.leftBumper().whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(false, armSystem.getGamePiece())));
 		// Intake
-		controller.rightBumper().whileTrue(intakeSystem.getConeCommand(true));
+		controller.rightBumper().whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(true, armSystem.getGamePiece())));
 	}
 
 	public void disablePIDSubsystems() {
