@@ -19,18 +19,12 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.settings.RobotMap;
-import frc.robot.settings.Constants.Auto;
-
-import frc.robot.settings.Constants;
-import frc.robot.settings.RobotMap;
 import frc.robot.settings.Constants.ARM.GamePiece;
+import frc.robot.settings.Constants.Auto;
+import frc.robot.settings.RobotMap;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
-
 
 public class IntakeSubsystem extends SubsystemBase implements Loggable {
     private static IntakeSubsystem instance;
@@ -66,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getCommand(boolean intake, GamePiece piece) {
-        if(piece == GamePiece.Cone) {
+        if (piece == GamePiece.Cone) {
             System.out.println("Running cone intake");
             return getConeCommand(intake);
         } else {
