@@ -133,12 +133,14 @@ public class RobotContainer {
 		// }));
 
 		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		//controller.b().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
+		// controller.b().onTrue(new
+		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 
-		//controller.rightStick().onTrue(new ProxyCommand(armSystem::getStowedCommand));
+		// controller.rightStick().onTrue(new
+		// ProxyCommand(armSystem::getStowedCommand));
 
 		controller.povLeft().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Hybrid)));
 		controller.povUp().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Mid)));
@@ -147,9 +149,11 @@ public class RobotContainer {
 		controller.povDown().onTrue(Commands.runOnce(() -> this.armSystem.toggleGamePiece()));
 
 		// Place piece
-		controller.leftBumper().whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(false, armSystem.getGamePiece())));
+		controller.leftBumper()
+				.whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(false, armSystem.getGamePiece())));
 		// Intake
-		controller.rightBumper().whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(true, armSystem.getGamePiece())));
+		controller.rightBumper()
+				.whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(true, armSystem.getGamePiece())));
 	}
 
 	public void disablePIDSubsystems() {
@@ -197,19 +201,23 @@ public class RobotContainer {
 		this.rotationExpo = expo;
 	}
 
-	@Log.ToString(name = "Scoring Height", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
-	public String getScoringHeight() {
-		if (this.armSystem.getScoringHeight() == ScoringHeight.Hybrid) {
-			return "Hybrid";
-		} else if (this.armSystem.getScoringHeight() == ScoringHeight.Mid) {
-			return "Mid";
-		}
-
-		return "High";
+	@Log.BooleanBox(name = "Game Piece", rowIndex = 0, columnIndex = 0, height = 3, width = 3, colorWhenTrue = "yellow", colorWhenFalse = "purple")
+	public boolean getGamePiece() {
+		return this.armSystem.getGamePiece() == GamePiece.Cone;
 	}
 
-	@Log.BooleanBox(name = "Cone?", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
-	public boolean getEncoderArmPosition() {
-		return this.armSystem.getGamePiece() == GamePiece.Cone;
+	@Log.BooleanBox(name = "High", rowIndex = 0, columnIndex = 3, height = 3, width = 3)
+	public boolean isScoringHeightHigh() {
+		return this.armSystem.getScoringHeight() == ScoringHeight.High;
+	}
+
+	@Log.BooleanBox(name = "Mid", rowIndex = 3, columnIndex = 3, height = 3, width = 3)
+	public boolean isScoringHeightMid() {
+		return this.armSystem.getScoringHeight() == ScoringHeight.Mid;
+	}
+
+	@Log.BooleanBox(name = "Hybrid", rowIndex = 6, columnIndex = 3, height = 3, width = 3)
+	public boolean isScoringHeightHybrid() {
+		return this.armSystem.getScoringHeight() == ScoringHeight.Hybrid;
 	}
 }
