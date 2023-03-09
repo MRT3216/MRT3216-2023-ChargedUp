@@ -11,8 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.auto.autoProcedures.MCharge;
 import frc.robot.settings.Constants.Directories;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.io.File;
 import java.io.IOException;
@@ -28,11 +33,17 @@ public class AutoChooser {
 	private Dictionary<String, Trajectory> trajectories;
 	private SendableChooser<Supplier<Command>> chooser;
 	private SwerveSubsystem swerveSystem;
+	private ArmSubsystem armSystem;
+	private LimelightSubsystem limelightSystem;
+	private IntakeSubsystem intakeSystem;
 
 	private AutoChooser() {
 		chooser = new SendableChooser<>();
 		chooser.setDefaultOption("Do Nothing", () -> new WaitCommand(0));
 		this.swerveSystem = SwerveSubsystem.getInstance();
+		this.armSystem = ArmSubsystem.getInstance();
+		this.limelightSystem = LimelightSubsystem.getInstance();
+		this.intakeSystem = IntakeSubsystem.getInstance();
 	}
 
 	public static AutoChooser getInstance() {
@@ -61,6 +72,7 @@ public class AutoChooser {
 	}
 
 	public void populateAutoChooser() {
+		/* 
 		chooser.addOption("SS 2 Cone Charge", 
 			() -> new ConditionalCommand(getAutoCommand(), getAutoCommand(), null)
 		);
@@ -75,6 +87,13 @@ public class AutoChooser {
 
 		chooser.addOption("W Cone Cube Charge", 
 			() -> new ConditionalCommand(getAutoCommand(), getAutoCommand(), null)
+		);
+		*/
+
+		chooser.addOption("M Top Cone and Charge", 
+			() -> new SequentialCommandGroup(
+					new MCharge(this.swerveSystem, this.armSystem, this.intakeSystem, this.limelightSystem)
+			)
 		);
 
 		SmartDashboard.putData(chooser);
