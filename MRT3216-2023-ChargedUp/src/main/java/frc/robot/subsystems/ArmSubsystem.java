@@ -540,6 +540,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
          * entry.getInteger(Constants.ARM.kStowedDegrees));
          * }
          */
+        System.out.println("Game piece " + this.gp + " retrieved.");
         return this.gp;
     }
 
