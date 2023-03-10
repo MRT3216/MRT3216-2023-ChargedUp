@@ -369,12 +369,12 @@ public final class Constants {
 		public static final double kMaxTurnErrorAuto = 5;
 		public static final double kMaxTurnRateErrorAuto = 5;
 
-		public static final int kMaxFetchVelocity = 8;
+		public static final int kMaxFetchVelocity = 1;
 		public static final int kMaxFetchAcc = kMaxFetchVelocity / 2;
 
 		public static final double kStartDelayTime = 0;
 		public static final double kDriveToPlaceDelay = 0; // seconds
-		public static final double kMaxIntakeTime = 0.25; // seconds
+		public static final double kMaxIntakeTime = 1.0; // seconds
 	}
 
 	public static final class OI {

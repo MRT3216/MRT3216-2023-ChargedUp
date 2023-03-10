@@ -201,7 +201,7 @@ public class RobotContainer {
 		this.rotationExpo = expo;
 	}
 
-	@Log.BooleanBox(name = "Game Piece", rowIndex = 0, columnIndex = 0, height = 3, width = 3, colorWhenTrue = "yellow", colorWhenFalse = "purple")
+	@Log.BooleanBox(name = "Game Piece", rowIndex = 0, columnIndex = 0, height = 3, width = 3, colorWhenTrue = "#EFBE00", colorWhenFalse = "#7450E8")
 	public boolean getGamePiece() {
 		return this.armSystem.getGamePiece() == GamePiece.Cone;
 	}

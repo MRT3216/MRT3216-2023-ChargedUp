@@ -18,6 +18,7 @@ import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.Constants.ARM.GamePiece;
@@ -82,17 +83,24 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getAutoConeCommand(boolean intake) {
-        return Commands.run(() -> {
-            motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed);
-            new WaitCommand(Auto.kMaxIntakeTime);
-        }).finallyDo((end) -> motor.set(0));
+        return new ParallelRaceGroup(
+            Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
+            Commands.waitSeconds(Auto.kMaxIntakeTime)
+        ).finallyDo((end) -> motor.set(0));
     }
 
     public Command getAutoCubeCommand(boolean intake) {
-        return Commands.run(() -> {
-            motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed);
-            new WaitCommand(Auto.kMaxIntakeTime);
-        }).finallyDo((end) -> motor.set(0));
+        return new ParallelRaceGroup(
+            Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
+            Commands.waitSeconds(Auto.kMaxIntakeTime)
+        ).finallyDo((end) -> {
+            System.out.println("Finishing intake");
+            motor.set(0);
+        });
+        
+        /*Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed))
+            .raceWith(Commands.waitSeconds(Auto.kMaxIntakeTime))
+            .finallyDo((end) -> motor.set(0));*/
     }
 
     public static IntakeSubsystem getInstance() {
