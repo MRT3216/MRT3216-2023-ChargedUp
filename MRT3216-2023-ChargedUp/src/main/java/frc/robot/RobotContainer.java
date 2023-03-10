@@ -36,7 +36,7 @@ public class RobotContainer {
 
 	private static RobotContainer instance;
 
-	@Log.BooleanBox(name = "Gyro Con.", methodName = "gyroConnected", rowIndex = 0, columnIndex = 1, width = 1, height = 1)
+	@Log.BooleanBox(name = "Gyro Con.", methodName = "gyroConnected", rowIndex = 3, columnIndex = 1, width = 1, height = 1)
 	private SwerveSubsystem driveSystem;
 
 	private AutoChooser autoChooser;
@@ -206,17 +206,17 @@ public class RobotContainer {
 		return this.armSystem.getGamePiece() == GamePiece.Cone;
 	}
 
-	@Log.BooleanBox(name = "High", rowIndex = 0, columnIndex = 3, height = 3, width = 3)
+	@Log.BooleanBox(name = "High", rowIndex = 0, columnIndex = 3, height = 1, width = 3)
 	public boolean isScoringHeightHigh() {
 		return this.armSystem.getScoringHeight() == ScoringHeight.High;
 	}
 
-	@Log.BooleanBox(name = "Mid", rowIndex = 3, columnIndex = 3, height = 3, width = 3)
+	@Log.BooleanBox(name = "Mid", rowIndex = 1, columnIndex = 3, height = 1, width = 3)
 	public boolean isScoringHeightMid() {
 		return this.armSystem.getScoringHeight() == ScoringHeight.Mid;
 	}
 
-	@Log.BooleanBox(name = "Hybrid", rowIndex = 6, columnIndex = 3, height = 3, width = 3)
+	@Log.BooleanBox(name = "Hybrid", rowIndex = 2, columnIndex = 3, height = 1, width = 3)
 	public boolean isScoringHeightHybrid() {
 		return this.armSystem.getScoringHeight() == ScoringHeight.Hybrid;
 	}
