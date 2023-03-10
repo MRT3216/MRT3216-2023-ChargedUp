@@ -24,12 +24,15 @@ import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_CANCODER;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_DRIVE;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import com.swervedrivespecialties.swervelib.MkModuleConfiguration;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
 import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -39,8 +42,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
@@ -80,7 +84,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private SwerveSubsystem() {
 		navx = new AHRS(SerialPort.Port.kUSB1);
 
-		ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
+		//ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
 		MkModuleConfiguration moduleConfig = MkModuleConfiguration.getDefaultSteerNEO();
 		moduleConfig.setDriveCurrentLimit(40.0);
 		moduleConfig.setSteerCurrentLimit(30.0);
@@ -177,28 +181,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
-		SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
-
-		SwerveModulePosition[] positions = getPositions();
-		for (int i = 0; i < states.length; i++) {
-			states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
-		}
-
-		double flVoltage = states[0].speedMetersPerSecond;
-		double frVoltage = states[1].speedMetersPerSecond;
-		double blVoltage = states[2].speedMetersPerSecond;
-		double brVoltage = states[3].speedMetersPerSecond;
-
-		flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-
-		this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
-		this.frontRightModule.set(frVoltage, states[1].angle.getRadians());
-		this.backLeftModule.set(blVoltage, states[2].angle.getRadians());
-		this.backRightModule.set(brVoltage, states[3].angle.getRadians());
-
+		setModuleStates(states);
+		System.out.println("Current PoseY = " + getCurrentRobotPose().getY());
 		/*
 		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		 * This is what we had before. Trying similar code from Team 5431 (uses
@@ -221,6 +205,30 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		 * this.odometry.update(gyroAngle, getPositions());
 		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		 */
+	}
+
+	public void setModuleStates(SwerveModuleState[] states) {
+		SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
+
+		SwerveModulePosition[] positions = getPositions();
+		for (int i = 0; i < states.length; i++) {
+			states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
+		}
+
+		double flVoltage = states[0].speedMetersPerSecond;
+		double frVoltage = states[1].speedMetersPerSecond;
+		double blVoltage = states[2].speedMetersPerSecond;
+		double brVoltage = states[3].speedMetersPerSecond;
+
+		flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+
+		this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
+		this.frontRightModule.set(frVoltage, states[1].angle.getRadians());
+		this.backLeftModule.set(blVoltage, states[2].angle.getRadians());
+		this.backRightModule.set(brVoltage, states[3].angle.getRadians());
 	}
 
 	/**
@@ -413,6 +421,31 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	// #endregion
+
+
+
+	// Assuming this method is part of a drivetrain subsystem that provides the necessary methods
+public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+	return new SequentialCommandGroup(
+		 new InstantCommand(() -> {
+		   // Reset odometry for the first path you run during auto
+		   if(isFirstPath){
+			   this.setCurrentRobotPose(traj.getInitialHolonomicPose());
+		   }
+		 }),
+		 new PPSwerveControllerCommand(
+			 traj, 
+			 this::getCurrentRobotPose, // Pose supplier
+			 this.kinematics, // SwerveDriveKinematics
+			 new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+			 new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
+			 new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+			 this::setModuleStates, // Module states consumer
+			 true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+			 this // Requires this drive subsystem
+		 )
+	 );
+ }
 
 	public static SwerveSubsystem getInstance() {
 		if (instance == null) {

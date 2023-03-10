@@ -1,10 +1,14 @@
 package frc.robot.commands.auto.autoProcedures;
 
+import com.pathplanner.lib.PathPlanner;
+
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.auto.DriveHolonomicTrajectory;
 import frc.robot.commands.auto.DrivePath;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.subsystems.ArmSubsystem;
@@ -19,8 +23,11 @@ public class PlaceConeAndDrive extends ParallelCommandGroup {
                 new SequentialCommandGroup(
                         new WaitCommand(Auto.kStartDelayTime),
                         new PlaceHighCone(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem),
-                        new DrivePath(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem,
-                                "PlaceAndDrive")));
+                        Commands.print("Drive auto starting"),
+                        swerveSubsystem.followTrajectoryCommand(PathPlanner.loadPath("PlaceAndDrive", Auto.kMaxFetchVelocity, Auto.kMaxFetchAcc), true),
+                        Commands.print("Drive auto finished"),
+                        Commands.runOnce(() -> swerveSubsystem.stop(), swerveSubsystem)
+                        ));
 
     }
 }
