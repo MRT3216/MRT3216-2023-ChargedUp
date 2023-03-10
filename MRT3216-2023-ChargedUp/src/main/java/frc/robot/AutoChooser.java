@@ -28,12 +28,14 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import io.github.oblarg.oblog.annotations.Config;
 
 /** Add your docs here. */
 public class AutoChooser {
 
 	private static AutoChooser instance;
 	private Dictionary<String, Trajectory> trajectories;
+	@Config(name = "Auto Chooser", tabName = "RobotContainer", rowIndex = 3, columnIndex = 0, width = 3, height = 1)
 	private SendableChooser<Supplier<Command>> chooser;
 	private SwerveSubsystem swerveSystem;
 	private ArmSubsystem armSystem;
