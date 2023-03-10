@@ -182,7 +182,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
 		setModuleStates(states);
-		System.out.println("Current PoseY = " + getCurrentRobotPose().getY());
+		//System.out.println("Current PoseY = " + getCurrentRobotPose().getY());
 		/*
 		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		 * This is what we had before. Trying similar code from Team 5431 (uses

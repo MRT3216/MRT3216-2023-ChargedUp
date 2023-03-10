@@ -828,9 +828,9 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.wStowed = wStowed;
     }
 
-    @Config.NumberSlider(name = "Arm Offset", defaultValue = ARM.kZeroOffsetInDegrees, min = 0, max = 12, blockIncrement = 0.25, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Offset", tabName = "RobotContainer", defaultValue = ARM.kZeroOffsetInDegrees, min = 0, max = 12, blockIncrement = 0.25, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
     public void setArmOffsetInDegrees(double offset) {
-        this.armOffset = calculateNativeUnitsFromDegrees(offset);
+        armOffset = calculateNativeUnitsFromDegrees(offset);
     }
 
     // #endregion

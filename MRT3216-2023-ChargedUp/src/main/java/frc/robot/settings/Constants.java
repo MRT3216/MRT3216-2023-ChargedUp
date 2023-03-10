@@ -120,8 +120,8 @@ public final class Constants {
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
-		public static final double kZeroOffset = .0365;
-		public static final double kZeroOffsetInDegrees = 6.75;
+		public static final double kZeroOffset = 0.0;
+		public static final double kZeroOffsetInDegrees = 0.0;
 		public static final double kScaleFactor = 192.86;
 
 		/*
@@ -342,9 +342,9 @@ public final class Constants {
 		public static final boolean kMotorInverted = true;
 		public static final int kMotorCurrentLimit = 30;
 		public static final double kConeIntakeSpeed = .7;
-		public static final double kConeOuttakeSpeed = -0.5;
+		public static final double kConeOuttakeSpeed = -0.53;
 		public static final double kCubeIntakeSpeed = -0.5;
-		public static final double kCubeOuttakeSpeed = 0.5;
+		public static final double kCubeOuttakeSpeed = 0.52;
 	}
 
 	public static final class Auto {
