@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.auto.autoProcedures.PlaceConeAndDrive;
+import frc.robot.commands.auto.autoProcedures.PlaceCubeAndDrive;
 import frc.robot.commands.auto.autoProcedures.PlaceHighCone;
 import frc.robot.commands.auto.autoProcedures.PlaceHighCube;
 import frc.robot.settings.Constants.Directories;
@@ -91,10 +93,10 @@ public class AutoChooser {
 		 * );
 		 */
 
-		chooser.addOption("M High Cube",
+		chooser.addOption("High Cube",
 				() -> new PlaceHighCube(this.swerveSystem, this.armSystem, this.intakeSystem, this.limelightSystem));
 
-		chooser.addOption("M High Cone",
+		chooser.addOption("High Cone",
 				() -> new PlaceHighCone(this.swerveSystem, this.armSystem, this.intakeSystem, this.limelightSystem));
 
 		// chooser.addOption("M Top Cone and Charge",
@@ -102,10 +104,15 @@ public class AutoChooser {
 		// new MCharge(this.swerveSystem, this.armSystem, this.intakeSystem,
 		// this.limelightSystem)));
 
-		// chooser.addOption("Place and drive",
-		// () -> new SequentialCommandGroup(
-		// new MCharge(this.swerveSystem, this.armSystem, this.intakeSystem,
-		// this.limelightSystem)));
+		chooser.addOption("Place Cube and Drive",
+				() -> new SequentialCommandGroup(
+						new PlaceCubeAndDrive(this.swerveSystem, this.armSystem, this.intakeSystem,
+								this.limelightSystem)));
+
+		chooser.addOption("Place Cone and Drive",
+				() -> new SequentialCommandGroup(
+						new PlaceConeAndDrive(this.swerveSystem, this.armSystem, this.intakeSystem,
+								this.limelightSystem)));
 
 		SmartDashboard.putData(chooser);
 	}
