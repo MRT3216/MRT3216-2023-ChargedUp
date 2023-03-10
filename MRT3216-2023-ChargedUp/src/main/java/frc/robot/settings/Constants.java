@@ -121,6 +121,7 @@ public final class Constants {
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
 		public static final double kZeroOffset = .0365;
+		public static final double kZeroOffsetInDegrees = 6.75;
 		public static final double kScaleFactor = 192.86;
 
 		/*

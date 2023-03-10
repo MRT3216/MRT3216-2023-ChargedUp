@@ -92,6 +92,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private int aSCone = ARM.kSubstationIntakeConeDegrees;
     private int aSCube = ARM.kSubstationIntakeCubeDegrees;
     private int aStowed = ARM.kStowedDegrees;
+    private static double armOffset = ARM.kZeroOffset;
 
     // #endregion
 
@@ -333,7 +334,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public static double calculateArmDegrees(double nativeUnits) {
-        return (nativeUnits - ARM.kZeroOffset) * ARM.kScaleFactor;
+        return (nativeUnits - armOffset) * ARM.kScaleFactor;
+    }
+
+    public static double calculateNativeUnitsFromDegrees(double degrees) {
+        return degrees / ARM.kScaleFactor;
     }
 
     public static double calculateWristDegreesWrtGround(double armDegrees, double wristDegrees) {
@@ -437,7 +442,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
-    public boolean isWristZeroed(){
+    public boolean isWristZeroed() {
         return isWristZeroed;
     }
 
@@ -527,25 +532,29 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public ARM.ScoringHeight getScoringHeight() {
         /*
-        NetworkTableEntry entry = streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight);
-        String scoringHeightNTEntry = entry.getString("nothing").trim();
-
-        if (!"nothing".equals(scoringHeightNTEntry)) {
-            this.sH = ARM.ScoringHeight.valueOf((int) entry.getInteger(Constants.ARM.kStowedDegrees));
-        }
-        */
+         * NetworkTableEntry entry =
+         * streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight);
+         * String scoringHeightNTEntry = entry.getString("nothing").trim();
+         * 
+         * if (!"nothing".equals(scoringHeightNTEntry)) {
+         * this.sH = ARM.ScoringHeight.valueOf((int)
+         * entry.getInteger(Constants.ARM.kStowedDegrees));
+         * }
+         */
         return this.sH;
     }
 
     public ARM.GamePiece getGamePiece() {
         /*
-        NetworkTableEntry entry = streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
-        String gamePieceNTEntry = entry.getString("nothing").trim();
-
-        if (!"nothing".equals(gamePieceNTEntry.trim())) {
-            this.gp = ARM.GamePiece.valueOf((int) entry.getInteger(Constants.ARM.kStowedDegrees));
-        }
-        */
+         * NetworkTableEntry entry =
+         * streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
+         * String gamePieceNTEntry = entry.getString("nothing").trim();
+         * 
+         * if (!"nothing".equals(gamePieceNTEntry.trim())) {
+         * this.gp = ARM.GamePiece.valueOf((int)
+         * entry.getInteger(Constants.ARM.kStowedDegrees));
+         * }
+         */
         return this.gp;
     }
 
@@ -817,6 +826,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 8, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
+    }
+
+    @Config.NumberSlider(name = "Arm Offset", defaultValue = ARM.kZeroOffsetInDegrees, min = 0, max = 12, blockIncrement = 0.25, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
+    public void setArmOffsetInDegrees(double offset) {
+        this.armOffset = calculateNativeUnitsFromDegrees(offset);
     }
 
     // #endregion
