@@ -81,23 +81,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command getAutoConeCommand(boolean intake) {
         return new ParallelRaceGroup(
-            Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
-            Commands.waitSeconds(Auto.kMaxIntakeTime)
-        ).finallyDo((end) -> motor.set(0));
+                Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
+                Commands.waitSeconds(Auto.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
     }
 
     public Command getAutoCubeCommand(boolean intake) {
         return new ParallelRaceGroup(
-            Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
-            Commands.waitSeconds(Auto.kMaxIntakeTime)
-        ).finallyDo((end) -> {
-            System.out.println("Finishing intake");
-            motor.set(0);
-        });
-        
-        /*Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed))
-            .raceWith(Commands.waitSeconds(Auto.kMaxIntakeTime))
-            .finallyDo((end) -> motor.set(0));*/
+                Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed)),
+                Commands.waitSeconds(Auto.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
     }
 
     public static IntakeSubsystem getInstance() {
