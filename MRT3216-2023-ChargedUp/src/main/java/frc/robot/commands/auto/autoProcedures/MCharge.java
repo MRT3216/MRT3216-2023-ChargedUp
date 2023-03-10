@@ -19,26 +19,18 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class MCharge extends ParallelCommandGroup{
+public class MCharge extends ParallelCommandGroup {
     public MCharge(SwerveSubsystem swerveSubsystem, ArmSubsystem armSubsystem,
-                         IntakeSubsystem intakeSystem, LimelightSubsystem limelightSubsystem) {
+            IntakeSubsystem intakeSystem, LimelightSubsystem limelightSubsystem) {
         super(
-                new FunctionalCommand(
-                    () -> {
-                        swerveSubsystem.zeroGyroscope();
-                    }, 
-                    () -> {}, 
-                    interrupted -> new InstantCommand(), 
-                    () -> true
-                ),
                 new SequentialCommandGroup(
-                    new WaitCommand(Auto.kStartDelayTime),
-                    new PositionArmWrist(armSubsystem, ARM.kScoringHighConeDegrees, WRIST.kScoringHighConeDegrees),
-                    new RunIntake(intakeSystem, false, true),
-                    new PositionArmWrist(armSubsystem, ARM.kStowedDegrees, WRIST.kStowedDegrees),
-                    new DrivePath(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem, "MCharge")          
+                        new WaitCommand(Auto.kStartDelayTime),
+                        armSubsystem.getCommand(ARM.Position.ScoringHighCone),
+                        //new RunIntake(intakeSystem, false, true).withTimeout(2),
+                        intakeSystem.getAutoConeCommand(false),                        
+                        armSubsystem.getCommand(ARM.Position.Stowed),
+                        new DrivePath(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem, "MCharge")
                 )
         );
-                            
     }
 }
