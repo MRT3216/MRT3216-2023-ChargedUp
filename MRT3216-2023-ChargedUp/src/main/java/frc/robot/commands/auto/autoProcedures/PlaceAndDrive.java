@@ -33,9 +33,7 @@ public class PlaceAndDrive extends ParallelCommandGroup{
                 ),
                 new SequentialCommandGroup(
                     new WaitCommand(Auto.kStartDelayTime),
-                    new PositionArmWrist(armSubsystem, ARM.kScoringHighConeDegrees, WRIST.kScoringHighConeDegrees),
-                    new RunIntake(intakeSystem, false, true),
-                    new PositionArmWrist(armSubsystem, ARM.kStowedDegrees, WRIST.kStowedDegrees),
+                    new PlaceHighCone(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem),
                     new DrivePath(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem, "PlaceAndDrive")          
                 )
         );
