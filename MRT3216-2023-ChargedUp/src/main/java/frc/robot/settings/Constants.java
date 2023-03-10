@@ -153,8 +153,8 @@ public final class Constants {
 		public static final int kGroundIntakeUprightConeDegrees = 24;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 12;
-		public static final int kSubstationIntakeConeDegrees = 112;
-		public static final int kSubstationIntakeCubeDegrees = 115;
+		public static final int kSubstationIntakeConeDegrees = 43;
+		public static final int kSubstationIntakeCubeDegrees = 43;
 		public static final int kStowedDegrees = 69;
 
 		// #region Enums
@@ -331,8 +331,8 @@ public final class Constants {
 		public static final int kGroundIntakeUprightConeDegrees = 30;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 25;
-		public static final int kSubstationIntakeConeDegrees = 25;
-		public static final int kSubstationIntakeCubeDegrees = 9;
+		public static final int kSubstationIntakeConeDegrees = 110;
+		public static final int kSubstationIntakeCubeDegrees = 90;
 		public static final int kStowedDegrees = 46;
 
 	}
