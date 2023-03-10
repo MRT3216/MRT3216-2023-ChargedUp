@@ -96,6 +96,12 @@ public class AutoChooser {
 			)
 		);
 
+		chooser.addOption("Place and drive", 
+			() -> new SequentialCommandGroup(
+					new MCharge(this.swerveSystem, this.armSystem, this.intakeSystem, this.limelightSystem)
+			)
+		);
+
 		SmartDashboard.putData(chooser);
 	}
 
