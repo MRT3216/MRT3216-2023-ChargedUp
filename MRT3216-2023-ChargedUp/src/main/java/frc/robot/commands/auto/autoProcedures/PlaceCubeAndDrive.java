@@ -19,8 +19,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class PlaceAndDrive extends ParallelCommandGroup{
-    public PlaceAndDrive(SwerveSubsystem swerveSubsystem, ArmSubsystem armSubsystem,
+public class PlaceCubeAndDrive extends ParallelCommandGroup{
+    public PlaceCubeAndDrive(SwerveSubsystem swerveSubsystem, ArmSubsystem armSubsystem,
                          IntakeSubsystem intakeSystem, LimelightSubsystem limelightSubsystem) {
         super(
                 new FunctionalCommand(
@@ -33,7 +33,7 @@ public class PlaceAndDrive extends ParallelCommandGroup{
                 ),
                 new SequentialCommandGroup(
                     new WaitCommand(Auto.kStartDelayTime),
-                    new PlaceHighCone(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem),
+                    new PlaceHighCube(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem),
                     new DrivePath(swerveSubsystem, armSubsystem, intakeSystem, limelightSubsystem, "PlaceAndDrive")          
                 )
         );
