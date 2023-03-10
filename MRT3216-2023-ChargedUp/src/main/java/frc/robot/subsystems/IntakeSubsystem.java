@@ -20,14 +20,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.RobotMap;
-import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Log;
 
-public class IntakeSubsystem extends SubsystemBase implements Loggable {
+public class IntakeSubsystem extends SubsystemBase {
     private static IntakeSubsystem instance;
     protected boolean enabled;
     private CANSparkMax motor;
@@ -109,10 +106,5 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             instance = new IntakeSubsystem();
         }
         return instance;
-    }
-
-    @Log.BooleanBox(name = "Wrist Limit Switch", tabName = "ArmSubsystem", rowIndex = 4, columnIndex = 0, height = 1, width = 1)
-    public boolean getEncoderArmPosition() {
-        return this.limitSwitch.isPressed();
     }
 }

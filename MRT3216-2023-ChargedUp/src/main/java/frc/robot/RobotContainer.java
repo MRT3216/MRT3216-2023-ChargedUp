@@ -220,4 +220,9 @@ public class RobotContainer {
 	public boolean isScoringHeightHybrid() {
 		return this.armSystem.getScoringHeight() == ScoringHeight.Hybrid;
 	}
+
+	@Log.BooleanBox(name = "Wrist Zeroed", rowIndex = 0, columnIndex = 6, height = 1, width = 1)
+    public boolean isWristZeroed() {
+        return this.armSystem.isWristZeroed();
+    }
 }

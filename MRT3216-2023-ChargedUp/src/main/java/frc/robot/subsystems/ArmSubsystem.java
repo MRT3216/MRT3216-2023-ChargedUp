@@ -56,6 +56,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax wristMotor;
     // private SparkMaxAbsoluteEncoder wristEncoder;
     private RelativeEncoder wristEncoderQuad;
+    private boolean isWristZeroed;
 
     // #endregionO
 
@@ -430,6 +431,14 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public void resetWristEncoderPosition() {
         wristEncoderQuad.setPosition(WRIST.kLimitSwitchPosition);
+
+        if (!isWristZeroed) {
+            isWristZeroed = true;
+        }
+    }
+
+    public boolean isWristZeroed(){
+        return isWristZeroed;
     }
 
     // #endregion
