@@ -16,7 +16,7 @@ public class PlaceHighCone extends ParallelCommandGroup {
         super(
                 new SequentialCommandGroup(
                         new WaitCommand(Auto.kStartDelayTime),
-                        armSubsystem.getCommand(ARM.Position.ScoringHighCone),
+                        armSubsystem.getCommand(ARM.Position.ScoringHighCone).withTimeout(5),
                         // new RunIntake(intakeSystem, false, true).withTimeout(2),
                         intakeSystem.getAutoConeCommand(false),
                         armSubsystem.getCommand(ARM.Position.Stowed)));

@@ -123,7 +123,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
         this.streamDeckNT = table;
 
-        this.gp = GamePiece.Cone;
+        this.gp = GamePiece.Cube;
         this.sH = ScoringHeight.High;
 
         // #region Arm Motor Initialization
@@ -526,24 +526,26 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public ARM.ScoringHeight getScoringHeight() {
+        /*
         NetworkTableEntry entry = streamDeckNT.getEntry(Constants.StreamDeck.scoringHeight);
         String scoringHeightNTEntry = entry.getString("nothing").trim();
 
         if (!"nothing".equals(scoringHeightNTEntry)) {
             this.sH = ARM.ScoringHeight.valueOf((int) entry.getInteger(Constants.ARM.kStowedDegrees));
         }
-
+        */
         return this.sH;
     }
 
     public ARM.GamePiece getGamePiece() {
+        /*
         NetworkTableEntry entry = streamDeckNT.getEntry(Constants.StreamDeck.gamePiece);
         String gamePieceNTEntry = entry.getString("nothing").trim();
 
         if (!"nothing".equals(gamePieceNTEntry.trim())) {
             this.gp = ARM.GamePiece.valueOf((int) entry.getInteger(Constants.ARM.kStowedDegrees));
         }
-
+        */
         return this.gp;
     }
 

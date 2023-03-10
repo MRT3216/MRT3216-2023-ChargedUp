@@ -16,7 +16,7 @@ public class PlaceHighCube extends ParallelCommandGroup {
         super(
                 new SequentialCommandGroup(
                         new WaitCommand(Auto.kStartDelayTime),
-                        armSubsystem.getCommand(ARM.Position.ScoringHighCube),
+                        armSubsystem.getCommand(ARM.Position.ScoringHighCube).withTimeout(5),
                         intakeSystem.getAutoCubeCommand(false),
                         armSubsystem.getCommand(ARM.Position.Stowed)));
     }

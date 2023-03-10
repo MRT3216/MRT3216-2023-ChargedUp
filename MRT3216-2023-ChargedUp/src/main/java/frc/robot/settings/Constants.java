@@ -120,7 +120,7 @@ public final class Constants {
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
-		public static final double kZeroOffset = .0f;
+		public static final double kZeroOffset = .0365;
 		public static final double kScaleFactor = 192.86;
 
 		/*
@@ -152,7 +152,7 @@ public final class Constants {
 		public static final int kScoringHybridDegrees = 30;
 		public static final int kGroundIntakeUprightConeDegrees = 24;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 13;
+		public static final int kGroundIntakeCubeDegrees = 12;
 		public static final int kSubstationIntakeConeDegrees = 112;
 		public static final int kSubstationIntakeCubeDegrees = 115;
 		public static final int kStowedDegrees = 69;
@@ -297,7 +297,7 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * PID Constants
 		 */
-		public static final double kWristKp = .2;
+		public static final double kWristKp = .25;
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
 		public static final double kWristPositionTolerance = 2;
@@ -330,7 +330,7 @@ public final class Constants {
 		public static final int kScoringHybridDegrees = 30;
 		public static final int kGroundIntakeUprightConeDegrees = 30;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 15;
+		public static final int kGroundIntakeCubeDegrees = 25;
 		public static final int kSubstationIntakeConeDegrees = 25;
 		public static final int kSubstationIntakeCubeDegrees = 9;
 		public static final int kStowedDegrees = 46;
