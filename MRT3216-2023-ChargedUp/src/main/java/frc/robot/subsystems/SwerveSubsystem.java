@@ -41,6 +41,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -436,7 +437,9 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				new InstantCommand(() -> {
 					// Reset odometry for the first path you run during auto
 					if (isFirstPath) {
-						this.setCurrentRobotPose(traj.getInitialHolonomicPose());
+						PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(traj,
+								DriverStation.getAlliance());
+						this.setCurrentRobotPose(transformed.getInitialHolonomicPose());
 					}
 				}),
 				new PPSwerveControllerCommand(
@@ -453,7 +456,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						thetaController, // Rotation controller. Tune these values for your robot. Leaving
 											// them 0 will only use feedforwards.
 						this::setModuleStates, // Module states consumer
-						false, // Should the path be automatically mirrored depending on alliance color.
+						true, // Should the path be automatically mirrored depending on alliance color.
 								// Optional, defaults to true
 						this // Requires this drive subsystem
 				));
