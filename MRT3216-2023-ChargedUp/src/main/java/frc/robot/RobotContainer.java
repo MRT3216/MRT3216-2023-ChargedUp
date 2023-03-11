@@ -148,10 +148,12 @@ public class RobotContainer {
 
 		// Place piece
 		controller.leftBumper()
-				.whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(false, armSystem.getGamePiece())));
+				.whileTrue(new ProxyCommand(
+						() -> intakeSystem.getCommand(false, armSystem.getGamePiece(), armSystem.getScoringHeight())));
 		// Intake
 		controller.rightBumper()
-				.whileTrue(new ProxyCommand(() -> intakeSystem.getCommand(true, armSystem.getGamePiece())));
+				.whileTrue(new ProxyCommand(
+						() -> intakeSystem.getCommand(true, armSystem.getGamePiece(), armSystem.getScoringHeight())));
 	}
 
 	public void disablePIDSubsystems() {
