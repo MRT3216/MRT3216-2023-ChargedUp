@@ -563,6 +563,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.sH = sH;
     }
 
+    public void setGamePiece(GamePiece gp) {
+        this.gp = gp;
+    }
+
     public void toggleGamePiece() {
         if (this.gp == GamePiece.Cone) {
             this.gp = GamePiece.Cube;
