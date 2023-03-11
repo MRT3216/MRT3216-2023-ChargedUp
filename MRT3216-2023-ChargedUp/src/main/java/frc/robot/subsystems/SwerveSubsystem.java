@@ -402,6 +402,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.navx.isMagneticDisturbance();
 	}
 
+	/*
 	@Config.NumberSlider(name = "Theta P", tabName = "Tuning", defaultValue = Auto.kThetaP, min = 0, max = 20, rowIndex = 5, columnIndex = 0, height = 1, width = 1)
 	public void setThetaP(double thetaP) {
 		this.thetaGains.kP = thetaP;
@@ -416,6 +417,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public void setThetaD(double thetaD) {
 		this.thetaGains.kD = thetaD;
 	}
+	 */
 
 	@Log.Graph(name = "Gyro Angle", width = 4, height = 2, rowIndex = 2, columnIndex = 2)
 	public double getGyroDegrees() {

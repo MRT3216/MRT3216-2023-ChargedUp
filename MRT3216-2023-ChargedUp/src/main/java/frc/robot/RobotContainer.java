@@ -35,7 +35,7 @@ public class RobotContainer {
 	// #region Fields
 
 	private static RobotContainer instance;
-	@Log.BooleanBox(name = "Gyro Con.", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
+	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
 	private SwerveSubsystem driveSystem;
 	private AutoChooser autoChooser;
 	private double autoStartDelayTime;
@@ -184,7 +184,7 @@ public class RobotContainer {
 	}
 
 	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = Auto.kStartDelayTime, methodTypes = {
-			double.class }, rowIndex = 1, columnIndex = 1)
+			double.class }, rowIndex = 1, columnIndex = 0)
 	public void setStartDelayTime(double startDelayTime) {
 		this.autoStartDelayTime = startDelayTime;
 	}
@@ -193,37 +193,37 @@ public class RobotContainer {
 		return this.autoStartDelayTime;
 	}
 
-	@Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue = Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 2, columnIndex = 0, height = 1, width = 1)
+	@Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue = Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 0, columnIndex = 0, height = 1, width = 1)
 	public void setTranslationExpo(double expo) {
 		this.translationExpo = expo;
 	}
 
-	@Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
+	@Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 1, columnIndex = 0, height = 1, width = 1)
 	public void setRotationExpo(double expo) {
 		this.rotationExpo = expo;
 	}
 
-	@Log.BooleanBox(name = "Game Piece", rowIndex = 0, columnIndex = 0, height = 3, width = 3, colorWhenTrue = "#EFBE00", colorWhenFalse = "#7450E8")
+	@Log.BooleanBox(name = "Game Piece", tabName = "Driver", rowIndex = 0, columnIndex = 0, height = 3, width = 3, colorWhenTrue = "#EFBE00", colorWhenFalse = "#7450E8")
 	public boolean getGamePiece() {
 		return this.armSystem.getGamePiece() == GamePiece.Cone;
 	}
 
-	@Log.BooleanBox(name = "High", rowIndex = 0, columnIndex = 3, height = 1, width = 3)
+	@Log.BooleanBox(name = "High", tabName = "Driver", rowIndex = 0, columnIndex = 3, height = 1, width = 3)
 	public boolean isScoringHeightHigh() {
 		return this.armSystem.getScoringHeight() == ScoringHeight.High;
 	}
 
-	@Log.BooleanBox(name = "Mid", rowIndex = 1, columnIndex = 3, height = 1, width = 3)
+	@Log.BooleanBox(name = "Mid", tabName = "Driver", rowIndex = 1, columnIndex = 3, height = 1, width = 3)
 	public boolean isScoringHeightMid() {
 		return this.armSystem.getScoringHeight() == ScoringHeight.Mid;
 	}
 
-	@Log.BooleanBox(name = "Hybrid", rowIndex = 2, columnIndex = 3, height = 1, width = 3)
+	@Log.BooleanBox(name = "Hybrid", tabName = "Driver", rowIndex = 2, columnIndex = 3, height = 1, width = 3)
 	public boolean isScoringHeightHybrid() {
 		return this.armSystem.getScoringHeight() == ScoringHeight.Hybrid;
 	}
 
-	@Log.BooleanBox(name = "Wrist Zeroed", rowIndex = 0, columnIndex = 6, height = 1, width = 1)
+	@Log.BooleanBox(name = "Wrist Zeroed", tabName = "Driver", rowIndex = 0, columnIndex = 6, height = 1, width = 1)
 	public boolean isWristZeroed() {
 		return this.armSystem.isWristZeroed();
 	}

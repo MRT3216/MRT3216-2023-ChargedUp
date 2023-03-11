@@ -35,7 +35,7 @@ public class AutoChooser {
 
 	private static AutoChooser instance;
 	private Dictionary<String, Trajectory> trajectories;
-	@Config(name = "Auto Chooser", tabName = "RobotContainer", rowIndex = 3, columnIndex = 0, width = 3, height = 1)
+	@Config(name = "Auto Chooser", tabName = "Driver", rowIndex = 3, columnIndex = 0, width = 3, height = 1)
 	private SendableChooser<Supplier<Command>> chooser;
 	private SwerveSubsystem swerveSystem;
 	private ArmSubsystem armSystem;

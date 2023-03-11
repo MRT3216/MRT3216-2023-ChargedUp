@@ -636,68 +636,87 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region ARM PID Setters Column 2
-    // Column 2, Rows 0-3
-
-    @Config.NumberSlider(name = "Arm P", defaultValue = ARM.kArmKp, min = 0, max = 130, blockIncrement = 0.01, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
-    public void setArmKp(double armKp) {
-        this.armKp = armKp;
-        resetArmPID();
-    }
-
-    @Config.NumberSlider(name = "Arm I", defaultValue = ARM.kArmKi, min = 0, max = 130, blockIncrement = 0.01, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
-    public void setArmKi(double armKi) {
-        this.armKi = armKi;
-        resetArmPID();
-    }
-
-    @Config.NumberSlider(name = "Arm D", defaultValue = ARM.kArmKd, min = 0, max = 130, blockIncrement = 0.01, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
-    public void setArmKd(double armKd) {
-        this.armKd = armKd;
-        resetArmPID();
-    }
-
-    private void resetArmPID() {
-        this.armPidController.setPID(armKp, armKi, armKd);
-        System.out.println("Changing arm P: " + armKp + "  I: " + armKi + " D:" + armKd);
-    }
-
-    // #endregion
-
-    // #region Wrist Position PID Column 3
-    // Column 3, Row 0-3
-
-    @Config.NumberSlider(name = "Wrist P", defaultValue = WRIST.kWristKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
-    public void setWristKp(double wristKp) {
-        this.wristKp = wristKp;
-        resetWristPID();
-    }
-
-    @Config.NumberSlider(name = "Wrist I", defaultValue = WRIST.kWristKi, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
-    public void setWristKi(double wristKi) {
-        this.wristKi = wristKi;
-        resetWristPID();
-    }
-
-    @Config.NumberSlider(name = "Wrist D", defaultValue = WRIST.kWristKd, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 2, columnIndex = 3, height = 1, width = 1)
-    public void setWristKd(double wristKd) {
-        this.wristKd = wristKd;
-        resetWristPID();
-    }
-
-    private void resetWristPID() {
-        this.wristPidController.setPID(wristKp, wristKi, wristKd);
-        System.out.println("Changing wrist P: " + wristKp + "  I: " + wristKi + " D:" + wristKd);
-    }
-
-    @Config.NumberSlider(name = "Wrist G", defaultValue = WRIST.kWristKg, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
-    public void setWristKg(double wristKg) {
-        this.wristKg = wristKg;
-        this.wristFeedforward = new ArmFeedforward(
-                WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
-    }
-
-    // #endregion
+    /*
+     * // #region ARM PID Setters Column 2
+     * // Column 2, Rows 0-3
+     * 
+     * @Config.NumberSlider(name = "Arm P", defaultValue = ARM.kArmKp, min = 0, max
+     * = 130, blockIncrement = 0.01, rowIndex = 0, columnIndex = 2, height = 1,
+     * width = 1)
+     * public void setArmKp(double armKp) {
+     * this.armKp = armKp;
+     * resetArmPID();
+     * }
+     * 
+     * @Config.NumberSlider(name = "Arm I", defaultValue = ARM.kArmKi, min = 0, max
+     * = 130, blockIncrement = 0.01, rowIndex = 1, columnIndex = 2, height = 1,
+     * width = 1)
+     * public void setArmKi(double armKi) {
+     * this.armKi = armKi;
+     * resetArmPID();
+     * }
+     * 
+     * @Config.NumberSlider(name = "Arm D", defaultValue = ARM.kArmKd, min = 0, max
+     * = 130, blockIncrement = 0.01, rowIndex = 2, columnIndex = 2, height = 1,
+     * width = 1)
+     * public void setArmKd(double armKd) {
+     * this.armKd = armKd;
+     * resetArmPID();
+     * }
+     * 
+     * private void resetArmPID() {
+     * this.armPidController.setPID(armKp, armKi, armKd);
+     * System.out.println("Changing arm P: " + armKp + "  I: " + armKi + " D:" +
+     * armKd);
+     * }
+     * 
+     * // #endregion
+     * 
+     * // #region Wrist Position PID Column 3
+     * // Column 3, Row 0-3
+     * 
+     * @Config.NumberSlider(name = "Wrist P", defaultValue = WRIST.kWristKp, min =
+     * 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 3, height = 1,
+     * width = 1)
+     * public void setWristKp(double wristKp) {
+     * this.wristKp = wristKp;
+     * resetWristPID();
+     * }
+     * 
+     * @Config.NumberSlider(name = "Wrist I", defaultValue = WRIST.kWristKi, min =
+     * 0, max = 5, blockIncrement = 0.01, rowIndex = 1, columnIndex = 3, height = 1,
+     * width = 1)
+     * public void setWristKi(double wristKi) {
+     * this.wristKi = wristKi;
+     * resetWristPID();
+     * }
+     * 
+     * @Config.NumberSlider(name = "Wrist D", defaultValue = WRIST.kWristKd, min =
+     * 0, max = 5, blockIncrement = 0.01, rowIndex = 2, columnIndex = 3, height = 1,
+     * width = 1)
+     * public void setWristKd(double wristKd) {
+     * this.wristKd = wristKd;
+     * resetWristPID();
+     * }
+     * 
+     * private void resetWristPID() {
+     * this.wristPidController.setPID(wristKp, wristKi, wristKd);
+     * System.out.println("Changing wrist P: " + wristKp + "  I: " + wristKi + " D:"
+     * + wristKd);
+     * }
+     * 
+     * @Config.NumberSlider(name = "Wrist G", defaultValue = WRIST.kWristKg, min =
+     * 0, max = 5, blockIncrement = 0.01, rowIndex = 3, columnIndex = 3, height = 1,
+     * width = 1)
+     * public void setWristKg(double wristKg) {
+     * this.wristKg = wristKg;
+     * this.wristFeedforward = new ArmFeedforward(
+     * WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
+     * }
+     * 
+     * // #endregion
+     * 
+     */
 
     // #region Arm Scoring Positions Column 4
     // Column 4, Rows 0-4
@@ -832,7 +851,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.wStowed = wStowed;
     }
 
-    @Config.NumberSlider(name = "Arm Offset", tabName = "RobotContainer", defaultValue = ARM.kZeroOffsetInDegrees, min = 0, max = 12, blockIncrement = 0.25, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
+    @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
     public void setArmOffsetInDegrees(double offset) {
         armOffset = calculateNativeUnitsFromDegrees(offset);
     }
