@@ -136,6 +136,7 @@ public class RobotContainer {
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
+		controller.start().onTrue(new ProxyCommand(armSystem::getStartCommand));
 
 		// controller.rightStick().onTrue(new
 		// ProxyCommand(armSystem::getStowedCommand));
@@ -147,6 +148,7 @@ public class RobotContainer {
 
 		controller.leftStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cone)));
 		controller.rightStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cube)));
+		
 
 		// Place piece
 		controller.leftBumper()

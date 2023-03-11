@@ -93,6 +93,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private int aSCube = ARM.kSubstationIntakeCubeDegrees;
     private int aStowed = ARM.kStowedDegrees;
     private static double armOffset = ARM.kZeroOffset;
+    private int aStart = ARM.kStartDegrees;
 
     // #endregion
 
@@ -109,6 +110,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private int wSCone = WRIST.kSubstationIntakeConeDegrees;
     private int wSCube = WRIST.kSubstationIntakeCubeDegrees;
     private int wStowed = WRIST.kStowedDegrees;
+    private int wStart = WRIST.kStartDegrees;
 
     // #endregion
 
@@ -372,6 +374,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 return this.aSCone;
             case SubstationIntakeCube:
                 return this.aSCube;
+            case Start:
+                return this.aStart;
             // Stowed
             default:
                 return this.aStowed;
@@ -428,6 +432,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 return this.wSCone;
             case SubstationIntakeCube:
                 return this.wSCube;
+            case Start:
+                return this.wStart;
             // ARM.Positions.Stowed
             default:
                 return this.wStowed;
@@ -472,6 +478,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public Command getStowedCommand() {
         return getCommand(ARM.Position.Stowed);
+    }
+
+    public Command getStartCommand() {
+        return getCommand(ARM.Position.Start);
     }
 
     public Command getCommand(ARM.Position position) {
