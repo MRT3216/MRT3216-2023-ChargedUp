@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.settings.Gains;
@@ -84,7 +85,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private SwerveSubsystem() {
 		navx = new AHRS(SerialPort.Port.kUSB1);
 
-		//ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
+		// ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
 		MkModuleConfiguration moduleConfig = MkModuleConfiguration.getDefaultSteerNEO();
 		moduleConfig.setDriveCurrentLimit(40.0);
 		moduleConfig.setSteerCurrentLimit(30.0);
@@ -182,7 +183,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
 		setModuleStates(states);
-		//System.out.println("Current PoseY = " + getCurrentRobotPose().getY());
+		// System.out.println("Current PoseY = " + getCurrentRobotPose().getY());
 		/*
 		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		 * This is what we had before. Trying similar code from Team 5431 (uses
@@ -422,30 +423,41 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	// #endregion
 
+	// Assuming this method is part of a drivetrain subsystem that provides the
+	// necessary methods
+	public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+		var thetaController = new PIDController(
+				Constants.Auto.kThetaP, Constants.Auto.kThetaP, Constants.Auto.kThetaP);
+		// , Constants.Auto.kThetaControllerConstraints);
+		thetaController.enableContinuousInput(-Math.PI, Math.PI);
+		// thetaController.setTolerance(positionTolerance);
 
-
-	// Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-	return new SequentialCommandGroup(
-		 new InstantCommand(() -> {
-		   // Reset odometry for the first path you run during auto
-		   if(isFirstPath){
-			   this.setCurrentRobotPose(traj.getInitialHolonomicPose());
-		   }
-		 }),
-		 new PPSwerveControllerCommand(
-			 traj, 
-			 this::getCurrentRobotPose, // Pose supplier
-			 this.kinematics, // SwerveDriveKinematics
-			 new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-			 new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-			 new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-			 this::setModuleStates, // Module states consumer
-			 true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-			 this // Requires this drive subsystem
-		 )
-	 );
- }
+		return new SequentialCommandGroup(
+				new InstantCommand(() -> {
+					// Reset odometry for the first path you run during auto
+					if (isFirstPath) {
+						this.setCurrentRobotPose(traj.getInitialHolonomicPose());
+					}
+				}),
+				new PPSwerveControllerCommand(
+						traj,
+						this::getCurrentRobotPose, // Pose supplier
+						this.kinematics, // SwerveDriveKinematics
+						new PIDController(Auto.kPositionP, Auto.kPositionI, Auto.kPositionD), // X controller. Tune
+																								// these values for your
+																								// robot. Leaving them 0
+						// will only use feedforwards.
+						new PIDController(Auto.kPositionP, Auto.kPositionI, Auto.kPositionD), // Y controller (usually
+																								// the same values as X
+																								// controller)
+						thetaController, // Rotation controller. Tune these values for your robot. Leaving
+											// them 0 will only use feedforwards.
+						this::setModuleStates, // Module states consumer
+						false, // Should the path be automatically mirrored depending on alliance color.
+								// Optional, defaults to true
+						this // Requires this drive subsystem
+				));
+	}
 
 	public static SwerveSubsystem getInstance() {
 		if (instance == null) {

@@ -12,8 +12,10 @@ import java.util.Map;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 
 public final class Constants {
@@ -28,9 +30,8 @@ public final class Constants {
 		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.51 + 180);
 		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(27.6 + 180);
 
-
-		public static final double WHEELBASE_METERS = Units.inchesToMeters(23.058); // 0.5461; 
-		public static final double TRACKWIDTH_METERS = Units.inchesToMeters(18.914); //  0.5588;
+		public static final double WHEELBASE_METERS = Units.inchesToMeters(23.058); // 0.5461;
+		public static final double TRACKWIDTH_METERS = Units.inchesToMeters(18.914); // 0.5588;
 
 		/**
 		 * The maximum voltage that will be delivered to the drive motors.
@@ -273,7 +274,7 @@ public final class Constants {
 				return value;
 			}
 		}
-		
+
 		// #endregion
 	}
 
@@ -376,6 +377,10 @@ public final class Constants {
 		public static final double kStartDelayTime = 0;
 		public static final double kDriveToPlaceDelay = 0; // seconds
 		public static final double kMaxIntakeTime = 1.0; // seconds
+
+		public static final Constraints kThetaControllerConstraints = new Constraints(
+				Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+				Drivetrain.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND);
 	}
 
 	public static final class OI {
