@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 public final class Constants {
 	public static final class Drivetrain {
@@ -288,8 +289,8 @@ public final class Constants {
 
 		public static final boolean kMotorInverted = false;
 
-		public static final double kReverseLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
-		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
+		public static final double kReverseLimitDegrees = WristSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
+		public static final double kForwardLimitDegrees = WristSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
 
 		public static final double kZeroOffset = 0;
 		public static final double kScaleFactor = 180;

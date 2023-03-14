@@ -16,6 +16,7 @@ import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
@@ -43,6 +44,7 @@ public class RobotContainer {
 	private double rotationExpo;
 	private CommandXboxController controller;
 	private ArmSubsystem armSystem;
+	private WristSubsystem wristSubsystem;
 	private IntakeSubsystem intakeSystem;
 
 	// #endregion
@@ -72,6 +74,7 @@ public class RobotContainer {
 		this.driveSystem = SwerveSubsystem.getInstance();
 		this.autoChooser = AutoChooser.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
+		this.wristSubsystem = WristSubsystem.getInstance();
 		this.intakeSystem = IntakeSubsystem.getInstance();
 	}
 
@@ -227,6 +230,6 @@ public class RobotContainer {
 
 	@Log.BooleanBox(name = "Wrist Zeroed", tabName = "Driver", rowIndex = 0, columnIndex = 6, height = 1, width = 1)
 	public boolean isWristZeroed() {
-		return this.armSystem.isWristZeroed();
+		return this.wristSubsystem.isWristZeroed();
 	}
 }

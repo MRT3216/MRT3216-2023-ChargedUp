@@ -4,23 +4,18 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
-import frc.robot.settings.Constants.WRIST;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.settings.RobotMap.ROBOT;
@@ -32,6 +27,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Fields
 
     private static ArmSubsystem instance;
+    private WristSubsystem wristSubsystem;
     protected boolean enabled;
     private NetworkTable streamDeckNT;
 
@@ -49,33 +45,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Wrist Motors
-
-    private ProfiledPIDController wristPidController;
-    private ArmFeedforward wristFeedforward;
-    private CANSparkMax wristMotor;
-    // private SparkMaxAbsoluteEncoder wristEncoder;
-    private RelativeEncoder wristEncoderQuad;
-    private boolean isWristZeroed;
-
-    // #endregionO
-
     // #region Arm PID
 
     private double armKp = ARM.kArmKp;
     private double armKi = ARM.kArmKi;
     private double armKd = ARM.kArmKd;
-
-    // #endregion
-
-    // #region Wrist PID
-
-    private double wristKp = WRIST.kWristKp;
-    private double wristKi = WRIST.kWristKi;
-    private double wristKd = WRIST.kWristKd;
-    private double wristKg = WRIST.kWristKg;
-    private double lastSpeed = 0;
-    private double lastTime = Timer.getFPGATimestamp();
 
     // #endregion
 
@@ -97,23 +71,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Wrist Positions
-
-    private int wHCone = WRIST.kScoringHighConeDegrees;
-    private int wHCube = WRIST.kScoringHighCubeDegrees;
-    private int wMCone = WRIST.kScoringMidConeDegrees;
-    private int wMCube = WRIST.kScoringMidCubeDegrees;
-    private int wHybrid = WRIST.kScoringHybridDegrees;
-    private int wGUprightCone = WRIST.kGroundIntakeUprightConeDegrees;
-    private int wGTippedCone = WRIST.kGroundIntakeTippedConeDegrees;
-    private int wGCube = WRIST.kGroundIntakeCubeDegrees;
-    private int wSCone = WRIST.kSubstationIntakeConeDegrees;
-    private int wSCube = WRIST.kSubstationIntakeCubeDegrees;
-    private int wStowed = WRIST.kStowedDegrees;
-    private int wStart = WRIST.kStartDegrees;
-
-    // #endregion
-
     private GamePiece gp;
     private ScoringHeight sH;
 
@@ -123,6 +80,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private ArmSubsystem() {
         this.enabled = false;
+        this.wristSubsystem = WristSubsystem.getInstance();
         NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
         this.streamDeckNT = table;
 
@@ -170,30 +128,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
         // endregion
 
-        // #region Wrist Motor Initialization
-
-        wristMotor = new CANSparkMax(ROBOT.WRIST.MOTOR, MotorType.kBrushless);
-        wristMotor.restoreFactoryDefaults();
-        wristMotor.clearFaults();
-        wristMotor.setInverted(WRIST.kMotorInverted);
-        wristMotor.setIdleMode(IdleMode.kBrake);
-        wristMotor.setSmartCurrentLimit(WRIST.kMotorCurrentLimit);
-
-        // wristEncoder = wristMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        // wristMotor.getPIDController().setFeedbackDevice(wristEncoder);
-        wristEncoderQuad = wristMotor.getAlternateEncoder(8192);
-        wristMotor.getPIDController().setFeedbackDevice(wristEncoderQuad);
-
-        // wristMotor.setSoftLimit(SoftLimitDirection.kReverse, WRIST.kReverseLimit);
-        // wristMotor.setSoftLimit(SoftLimitDirection.kForward, WRIST.kForwardLimit);
-        // wristMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        // wristMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-        wristMotor.burnFlash();
-        wristFeedforward = new ArmFeedforward(
-                WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
-
-        // endregion
-
         // #region Arm PID
 
         // The arm ProfiledPIDController
@@ -215,27 +149,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         System.out.println("Arm Initial Goal: " + armPidController.getGoal().position);
 
         // endregion
-
-        // #region Wrist PID
-
-        wristPidController = new ProfiledPIDController(
-                this.wristKp,
-                this.wristKi,
-                this.wristKd,
-                // The motion profile constraints
-                new TrapezoidProfile.Constraints(WRIST.kWristMaxVelocity,
-                        WRIST.kWristMaxAcceleration));
-
-        wristPidController.setGoal(getWristDegreesWrtArm());
-
-        wristPidController.setTolerance(WRIST.kWristPositionTolerance);
-        System.out.println("Wrist Setpoint before reset:" + wristPidController.getSetpoint().position);
-        System.out.println("Wrist Resetting PIDController; current degrees: " + getWristDegreesWrtArm());
-        wristPidController.reset(getWristDegreesWrtArm());
-        System.out.println("Wrist Setpoint after reset:" + wristPidController.getSetpoint().position);
-        System.out.println("Wrist Initial Goal: " + wristPidController.getGoal().position);
-
-        // endregion
     }
 
     @Override
@@ -248,28 +161,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             } else {
                 this.setArmGoal(armPidController.getGoal().position);
             }
-
-            if (Math.abs(wristPidController.getSetpoint().position - getWristDegreesWrtArm()) < 20) {
-                double wristPidVoltage = -wristPidController.calculate(getWristDegreesWrtArm());
-                // TODO: Finish this
-                // Calculate the acceleration based on the speed at the last time stamp
-                // double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
-                // / (Timer.getFPGATimestamp() - lastTime);
-                // Calculate the feedforward based on the current velocity and acceleration
-                double setpoint = calculateWristDegreesWrtGround(getArmDegrees(),
-                        wristPidController.getSetpoint().position);
-                double ff = -wristFeedforward.calculate(setpoint, wristPidController.getSetpoint().velocity);
-                wristMotor.setVoltage(wristPidVoltage);
-                // System.out.println("Wrist: " + wristPidVoltage);
-                // System.out.println("FF: " + ff);
-
-                // Save the current speed and time for the next loop
-                // lastSpeed = wristPidController.getSetpoint().velocity;
-                // lastTime = Timer.getFPGATimestamp();
-            } else {
-                this.setWristGoal(wristPidController.getGoal().position);
-            }
-
         }
     }
 
@@ -277,7 +168,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     public void enable() {
         enabled = true;
         armPidController.reset(getArmDegrees());
-        wristPidController.reset(getWristDegreesWrtArm());
+        wristSubsystem.enable();
     }
 
     /** Disables the PID control. Sets output to zero. */
@@ -285,9 +176,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.enabled = false;
         // This wasn't in ProfiledPIDSubsystem, but seems reasonable
         armPidController.setGoal(getArmDegrees());
-        wristPidController.setGoal(getWristDegreesWrtArm());
+        wristSubsystem.disable();
         runArmMotors(0);
-        runWristMotor(0);
     }
 
     /**
@@ -309,11 +199,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public void setArmWristGoal(double armDegrees, double wristDegrees) {
         setArmGoal(armDegrees);
-        setWristGoal(wristDegrees);
+        wristSubsystem.setWristGoal(wristDegrees);
     }
 
     public boolean armWristAtGoal() {
-        return armAtGoal() && wristAtGoal();
+        return armAtGoal() && wristSubsystem.wristAtGoal();
     }
 
     // #endregion
@@ -384,74 +274,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Wrist
-
-    public void setWristGoal(double degrees) {
-        // (degrees, WRIST.kReverseLimitDegrees));
-        // System.out.println("Wrist Goal Degrees: " + degrees);
-        wristPidController.setGoal(degrees);
-    }
-
-    public boolean wristAtGoal() {
-        return wristPidController.getPositionTolerance() >= Math
-                .abs(getWristDegreesWrtArm() - wristPidController.getGoal().position);
-    }
-
-    public void runWristMotor(double speed) {
-        wristMotor.set(speed);
-    }
-
-    public static double calculateWristDegreesWrtArm(double nativeUnits) {
-        return (nativeUnits - WRIST.kZeroOffset) * WRIST.kScaleFactor;
-    }
-
-    public void stopWristMotorAndResetPID() {
-        wristMotor.stopMotor();
-        wristPidController.reset(getWristDegreesWrtArm());
-    }
-
-    public double getWristDegreesByPosition(ARM.Position position) {
-        switch (position) {
-            case ScoringHighCone:
-                return this.wHCone;
-            case ScoringHighCube:
-                return this.wHCube;
-            case ScoringMidCone:
-                return this.wMCone;
-            case ScoringMidCube:
-                return this.wMCube;
-            case ScoringHybrid:
-                return this.wHybrid;
-            case GroundIntakeUprightCone:
-                return this.wGUprightCone;
-            case GroundIntakeTippedCone:
-                return this.wGTippedCone;
-            case GroundIntakeCube:
-                return this.wGCube;
-            case SubstationIntakeCone:
-                return this.wSCone;
-            case SubstationIntakeCube:
-                return this.wSCube;
-            case Start:
-                return this.wStart;
-            // ARM.Positions.Stowed
-            default:
-                return this.wStowed;
-        }
-    }
-
-    public void resetWristEncoderPosition() {
-        wristEncoderQuad.setPosition(WRIST.kLimitSwitchPosition);
-
-        if (!isWristZeroed) {
-            isWristZeroed = true;
-        }
-    }
-
-    public boolean isWristZeroed() {
-        return isWristZeroed;
-    }
-
     // #endregion
 
     // #region Command Factories
@@ -466,10 +288,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground));
     }
 
-    // Ground tipped cone intake - needs nothing
-    public Command getGroundTippedConeIntakeCommand() {
-        return getArmAndWristGotoCommand(this.aGTippedCone, this.wGTippedCone);
-    }
+    // // Ground tipped cone intake - needs nothing
+    // public Command getGroundTippedConeIntakeCommand() {
+    // return getArmAndWristGotoCommand(this.aGTippedCone, this.wGTippedCone);
+    // }
 
     // Substation pickup -- needs piece
     public Command getSubstationIntakeCommand() {
@@ -485,27 +307,28 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getCommand(ARM.Position position) {
-        return getArmAndWristGotoCommand(getArmDegreesByPosition(position), getWristDegreesByPosition(position));
+        return getArmAndWristGotoCommand(getArmDegreesByPosition(position),
+                wristSubsystem.getWristDegreesByPosition(position));
     }
 
     private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees) {
         return Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
                 .andThen(Commands.runOnce(() -> {
                     setArmGoal(armDegrees);
-                    setWristGoal(wristDegrees);
+                    wristSubsystem.setWristGoal(wristDegrees);
                     this.enable();
                 }, this))
-                .andThen(Commands.waitUntil(() -> armAtGoal() && wristAtGoal()))
+                .andThen(Commands.waitUntil(() -> armAtGoal() && wristSubsystem.wristAtGoal()))
                 .andThen(Commands.print("Arm and wrist at goal"));
     }
 
     public Command getWristGotoCommand(double wristDegrees) {
         return Commands.print("Setting wrist goal")
                 .andThen(Commands.runOnce(() -> {
-                    setWristGoal(wristDegrees);
+                    wristSubsystem.setWristGoal(wristDegrees);
                     this.enable();
                 }, this))
-                .andThen(Commands.waitUntil(() -> wristAtGoal()))
+                .andThen(Commands.waitUntil(() -> wristSubsystem.wristAtGoal()))
                 .andThen(Commands.print("Wrist at goal"));
     }
 
@@ -619,37 +442,17 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist Position PID Controller Column 1
     // Column 1, Rows 0-3
 
-    @Log.NumberBar(name = "Wrist Encoder", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
-    public double getEncoderPosition() {
-        return this.wristEncoderQuad.getPosition();
-    }
-
-    @Log.NumberBar(name = "Wrist Degrees Wrt A", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
-    public double getWristDegreesWrtArm() {
-        return calculateWristDegreesWrtArm(wristEncoderQuad.getPosition());
-    }
-
-    @Log.NumberBar(name = "Wrist Goal", rowIndex = 2, columnIndex = 1, height = 1, width = 1)
-    public double getWristGoal() {
-        return wristPidController.getGoal().position;
-    }
-
-    @Log.NumberBar(name = "Wrist Setpoint", rowIndex = 3, columnIndex = 1, height = 1, width = 1)
-    public double getWristSetpoint() {
-        return wristPidController.getSetpoint().position;
-    }
-
     @Log.NumberBar(name = "Wrist Degrees Wrt G", rowIndex = 4, columnIndex = 1, height = 1, width = 1)
     public double getWristDegreesWrtGround() {
-        return calculateWristDegreesWrtGround(getArmDegrees(), getWristDegreesWrtArm());
+        return calculateWristDegreesWrtGround(getArmDegrees(), wristSubsystem.getWristDegreesWrtArm());
     }
 
     // #endregion
 
+    // #region ARM PID Setters Column 2
+    // Column 2, Rows 0-3
+
     /*
-     * // #region ARM PID Setters Column 2
-     * // Column 2, Rows 0-3
-     * 
      * @Config.NumberSlider(name = "Arm P", defaultValue = ARM.kArmKp, min = 0, max
      * = 130, blockIncrement = 0.01, rowIndex = 0, columnIndex = 2, height = 1,
      * width = 1)
@@ -680,53 +483,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
      * armKd);
      * }
      * 
-     * // #endregion
-     * 
-     * // #region Wrist Position PID Column 3
-     * // Column 3, Row 0-3
-     * 
-     * @Config.NumberSlider(name = "Wrist P", defaultValue = WRIST.kWristKp, min =
-     * 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 3, height = 1,
-     * width = 1)
-     * public void setWristKp(double wristKp) {
-     * this.wristKp = wristKp;
-     * resetWristPID();
-     * }
-     * 
-     * @Config.NumberSlider(name = "Wrist I", defaultValue = WRIST.kWristKi, min =
-     * 0, max = 5, blockIncrement = 0.01, rowIndex = 1, columnIndex = 3, height = 1,
-     * width = 1)
-     * public void setWristKi(double wristKi) {
-     * this.wristKi = wristKi;
-     * resetWristPID();
-     * }
-     * 
-     * @Config.NumberSlider(name = "Wrist D", defaultValue = WRIST.kWristKd, min =
-     * 0, max = 5, blockIncrement = 0.01, rowIndex = 2, columnIndex = 3, height = 1,
-     * width = 1)
-     * public void setWristKd(double wristKd) {
-     * this.wristKd = wristKd;
-     * resetWristPID();
-     * }
-     * 
-     * private void resetWristPID() {
-     * this.wristPidController.setPID(wristKp, wristKi, wristKd);
-     * System.out.println("Changing wrist P: " + wristKp + "  I: " + wristKi + " D:"
-     * + wristKd);
-     * }
-     * 
-     * @Config.NumberSlider(name = "Wrist G", defaultValue = WRIST.kWristKg, min =
-     * 0, max = 5, blockIncrement = 0.01, rowIndex = 3, columnIndex = 3, height = 1,
-     * width = 1)
-     * public void setWristKg(double wristKg) {
-     * this.wristKg = wristKg;
-     * this.wristFeedforward = new ArmFeedforward(
-     * WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
-     * }
-     * 
-     * // #endregion
-     * 
      */
+    // #endregion
 
     // #region Arm Scoring Positions Column 4
     // Column 4, Rows 0-4
@@ -754,36 +512,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Arm Hybrid", defaultValue = ARM.kScoringHybridDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 4, height = 1, width = 1)
     public void setAHybrid(int aHybrid) {
         this.aHybrid = aHybrid;
-    }
-
-    // #endregion
-
-    // #region Wrist Scoring Positions Column 5
-    // Column 5, Rows 0-4
-
-    @Config.NumberSlider(name = "Wrist High Cone", defaultValue = WRIST.kScoringHighConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 5, height = 1, width = 1)
-    public void setWHCone(int wHCone) {
-        this.wHCone = wHCone;
-    }
-
-    @Config.NumberSlider(name = "Wrist High Cube", defaultValue = WRIST.kScoringHighCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 5, height = 1, width = 1)
-    public void setWHCube(int wHCube) {
-        this.wHCube = wHCube;
-    }
-
-    @Config.NumberSlider(name = "Wrist Mid Cone", defaultValue = WRIST.kScoringMidConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 5, height = 1, width = 1)
-    public void setWMCone(int wMCone) {
-        this.wMCone = wMCone;
-    }
-
-    @Config.NumberSlider(name = "Wrist Mid Cube", defaultValue = WRIST.kScoringMidCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 5, height = 1, width = 1)
-    public void setWMCube(int wMCube) {
-        this.wMCube = wMCube;
-    }
-
-    @Config.NumberSlider(name = "Wrist Hybrid", defaultValue = WRIST.kScoringHybridDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 5, height = 1, width = 1)
-    public void setWHybrid(int wHybrid) {
-        this.wHybrid = wHybrid;
     }
 
     // #endregion
@@ -818,47 +546,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Wrist Pickup Positions Column 7
-    // Column 7, Rows
-
-    @Config.NumberSlider(name = "W G Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 7, height = 1, width = 1)
-    public void setWGUprightCone(int wGUprightCone) {
-        this.wGUprightCone = wGUprightCone;
-    }
-
-    @Config.NumberSlider(name = "W G Down Cone", defaultValue = WRIST.kGroundIntakeTippedConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 7, height = 1, width = 1)
-    public void setWGTippedCone(int wGTippedCone) {
-        this.wGTippedCone = wGTippedCone;
-    }
-
-    @Config.NumberSlider(name = "W Ground Cube", defaultValue = WRIST.kGroundIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 7, height = 1, width = 1)
-    public void setWGCube(int wGCube) {
-        this.wGCube = wGCube;
-    }
-
-    @Config.NumberSlider(name = "W Sub Cone", defaultValue = WRIST.kSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 7, height = 1, width = 1)
-    public void setWSCone(int wSCone) {
-        this.wSCone = wSCone;
-    }
-
-    @Config.NumberSlider(name = "W Sub Cube", defaultValue = WRIST.kSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 7, height = 1, width = 1)
-    public void setWSCube(int wSCube) {
-        this.wSCube = wSCube;
-    }
-
-    // #endregion
-
     // #region Stowed Positions Column 8
     // Column 8, Rows 0-1
 
     @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 8, height = 1, width = 1)
     public void setAStowed(int aStowed) {
         this.aStowed = aStowed;
-    }
-
-    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 8, height = 1, width = 1)
-    public void setWStowed(int wStowed) {
-        this.wStowed = wStowed;
     }
 
     @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 1, columnIndex = 6, height = 1, width = 1)

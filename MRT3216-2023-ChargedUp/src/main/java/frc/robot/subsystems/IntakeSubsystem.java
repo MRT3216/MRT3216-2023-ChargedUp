@@ -31,11 +31,11 @@ public class IntakeSubsystem extends SubsystemBase {
     protected boolean enabled;
     private CANSparkMax motor;
     private SparkMaxLimitSwitch limitSwitch;
-    private ArmSubsystem armSubsystem;
+    private WristSubsystem wristSubsystem;
 
     /** Creates a new IntakeSubsystem. */
     private IntakeSubsystem() {
-        this.armSubsystem = ArmSubsystem.getInstance();
+        this.wristSubsystem = WristSubsystem.getInstance();
         motor = new CANSparkMax(RobotMap.ROBOT.INTAKE.MOTOR, MotorType.kBrushless);
 
         motor.restoreFactoryDefaults();
@@ -55,7 +55,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler
         if (limitSwitch.isPressed()) {
-            armSubsystem.resetWristEncoderPosition();
+            wristSubsystem.resetWristEncoderPosition();
             System.out.println("Encoder position reset by limit switch");
         }
     }
