@@ -7,21 +7,31 @@
 
 package frc.robot.settings;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN;
+import frc.robot.subsystems.ArmSubsystem;
 
 public final class Constants {
 	public static final class Drivetrain {
 		// TODO: set these values
-		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54); // rotating inverse of other
-		// wheels
-		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
-		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.13);
-		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
+		// public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54);
+		// public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
+		// public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.15);
+		// public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
+		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.66 + 180);
+		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(200.04 + 180);
+		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.51 + 180);
+		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(27.6 + 180);
 
-		// TODO: set these values
-		public static final double WHEELBASE_METERS = 0.5461;
-		public static final double TRACKWIDTH_METERS = 0.5588;
+		public static final double WHEELBASE_METERS = Units.inchesToMeters(23.058); // 0.5461;
+		public static final double TRACKWIDTH_METERS = Units.inchesToMeters(18.914); // 0.5588;
 
 		/**
 		 * The maximum voltage that will be delivered to the drive motors.
@@ -103,6 +113,245 @@ public final class Constants {
 		}
 	}
 
+	public static final class ARM {
+		public static final boolean kLeftMotorsInverted = true;
+		public static final boolean kRightMotorsInverted = false;
+		public static final float kReverseLimit = .02f;
+		public static final float kForwardLimit = .74f;
+		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
+		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
+		public static final int kMotorCurrentLimit = 40;
+		public static final double kZeroOffset = 0.0;
+		public static final double kZeroOffsetInDegrees = 0.0;
+		public static final double kScaleFactor = 192.86;
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * PID Constants
+		 */
+		public static final double kArmKp = .2;
+		public static final double kArmKi = 0;
+		public static final double kArmKd = 0;
+		public static final double kArmPositionTolerance = 2;
+		public static final double kArmVelocityTolerance = 20;
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * Constraint Constants
+		 */
+		public static final double kArmMaxVelocity = 150; // degrees/s
+		public static final double kArmMaxAcceleration = 50; // degrees/s^2
+		public static final double kArmStartingPos = 80; // 60 degrees wrt hortizontal
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * Position Constants
+		 */
+		public static final int kScoringHighConeDegrees = 110;
+		public static final int kScoringHighCubeDegrees = 110;
+		public static final int kScoringMidConeDegrees = 107;
+		public static final int kScoringMidCubeDegrees = 110;
+		public static final int kScoringHybridDegrees = 30;
+		public static final int kGroundIntakeUprightConeDegrees = 24;
+		public static final int kGroundIntakeTippedConeDegrees = 15;
+		public static final int kGroundIntakeCubeDegrees = 13;
+		public static final int kSubstationIntakeConeDegrees = 43;
+		public static final int kSubstationIntakeCubeDegrees = 43;
+		public static final int kStowedDegrees = 50;
+		public static final int kStartDegrees = 69;
+
+
+		// #region Enums
+
+		public enum Position {
+			ScoringHighCone(0),
+			ScoringHighCube(1),
+			ScoringMidCone(2),
+			ScoringMidCube(3),
+			ScoringHybrid(4),
+			GroundIntakeUprightCone(5),
+			GroundIntakeTippedCone(6),
+			GroundIntakeCube(7),
+			SubstationIntakeCone(8),
+			SubstationIntakeCube(9),
+			Stowed(10);
+
+			private int value;
+			private static Map<Integer, Position> map = new HashMap<>();
+
+			private Position(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (Position position : Position.values()) {
+					map.put(position.value, position);
+				}
+			}
+
+			public static Position valueOf(int position) {
+				return (Position) map.get(position);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+
+		public enum GamePiece {
+			Cone(0),
+			Cube(1);
+
+			private int value;
+			private static Map<Integer, GamePiece> map = new HashMap<>();
+
+			private GamePiece(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (GamePiece gamePiece : GamePiece.values()) {
+					map.put(gamePiece.value, gamePiece);
+				}
+			}
+
+			public static GamePiece valueOf(int gamePiece) {
+				return (GamePiece) map.get(gamePiece);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+
+		public enum ScoringHeight {
+			High(0),
+			Mid(1),
+			Hybrid(2);
+
+			private int value;
+			private static Map<Integer, ScoringHeight> map = new HashMap<>();
+
+			private ScoringHeight(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (ScoringHeight scoringPiece : ScoringHeight.values()) {
+					map.put(scoringPiece.value, scoringPiece);
+				}
+			}
+
+			public static ScoringHeight valueOf(int scoringPiece) {
+				return (ScoringHeight) map.get(scoringPiece);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+
+		public enum IntakePosition {
+			Ground(0),
+			Substation(1);
+
+			private int value;
+			private static Map<Integer, IntakePosition> map = new HashMap<>();
+
+			private IntakePosition(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (IntakePosition position : IntakePosition.values()) {
+					map.put(position.value, position);
+				}
+			}
+
+			public static IntakePosition valueOf(int position) {
+				return (IntakePosition) map.get(position);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+
+		// #endregion
+	}
+
+	public static final class WRIST {
+		// TODO add in actual limits for manipulator encoder
+		public static final float kForwardLimit = -1f;
+		public static final float kReverseLimit = .35f;
+
+		public static final int kMotorCurrentLimit = 40;
+
+		public static final boolean kMotorInverted = false;
+
+		public static final double kReverseLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
+		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
+
+		public static final double kZeroOffset = 0;
+		public static final double kScaleFactor = 180;
+
+		public static final double kLimitSwitchPosition = 0;
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * PID Constants
+		 */
+		public static final double kWristKp = .25;
+		public static final double kWristKi = 0;
+		public static final double kWristKd = 0;
+		public static final double kWristPositionTolerance = 2;
+		public static final double kWristVelocityTolerance = 20;
+
+		// Feed-Forward from SysID
+		public static final double kWristKs = 0.29522;
+		public static final double kWristKv = 0.0095926;
+		public static final double kWristKa = 0.0032297;
+		public static final double kWristKg = 0.52135 * 3;
+
+		public static final double kVVoltSecondPerRad = 0.5;
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * Constraint Constants
+		 */
+		public static final double kWristMaxVelocity = 180; // degrees/s
+		public static final double kWristMaxAcceleration = 120; // degrees/s^2
+		public static final double kWristStartingPos = 0; // 60 degrees wrt arm
+
+		/*
+		 * ----------------------------------------------------------------------------
+		 * Position Constants
+		 */
+		public static final int kScoringHighConeDegrees = -175;
+		public static final int kScoringHighCubeDegrees = -175;
+		public static final int kScoringMidConeDegrees = -80;
+		public static final int kScoringMidCubeDegrees = -90;
+		public static final int kScoringHybridDegrees = 43;
+		public static final int kGroundIntakeUprightConeDegrees = 30;
+		public static final int kGroundIntakeTippedConeDegrees = 15;
+		public static final int kGroundIntakeCubeDegrees = 25;
+		public static final int kSubstationIntakeConeDegrees = 110;
+		public static final int kSubstationIntakeCubeDegrees = 90; 
+		public static final int kStowedDegrees = 46;
+		public static final int kStartDegrees = 0;
+
+	}
+
+	public static final class INTAKE {
+		public static final boolean kMotorInverted = true;
+		public static final int kMotorCurrentLimit = 30;
+		public static final double kConeIntakeSpeed = .7;
+		public static final double kConeOuttakeSpeed = -0.53;
+		public static final double kCubeIntakeSpeed = -0.5;
+		public static final double kCubeOuttakeSpeed = 0.52;
+		public static final double kCubeShootSpeed = 1.0;
+	}
+
 	public static final class Auto {
 		// Proportional gain
 		public static final double kPositionP = 0.001;
@@ -126,18 +375,28 @@ public final class Constants {
 		public static final double kMaxTurnErrorAuto = 5;
 		public static final double kMaxTurnRateErrorAuto = 5;
 
-		public static final int kMaxFetchVelocity = 8;
+		public static final int kMaxFetchVelocity = 1;
 		public static final int kMaxFetchAcc = kMaxFetchVelocity / 2;
 
 		public static final double kStartDelayTime = 0;
-		public static final double kDriveToShootDelay = 0; // seconds
-		public static final double kMaxShootTime = 2; // seconds
+		public static final double kDriveToPlaceDelay = 0; // seconds
+		public static final double kMaxIntakeTime = 1.0; // seconds
+
+		public static final Constraints kThetaControllerConstraints = new Constraints(
+				Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+				Drivetrain.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND);
 	}
 
 	public static final class OI {
 		public static final double kJoystickDeadband = 0.1;
 		public static final double kTranslationExpo = 75;
 		public static final double kRotationnExpo = 75;
+	}
+
+	public static final class StreamDeck {
+		public static final String NTtable = "StreamDeck";
+		public static final String scoringHeight = "scoringHeight";
+		public static final String gamePiece = "gamePiece";
 	}
 
 	public static final class Directories {

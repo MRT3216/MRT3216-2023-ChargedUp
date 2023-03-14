@@ -24,11 +24,15 @@ import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_CANCODER;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_DRIVE;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import com.swervedrivespecialties.swervelib.MkModuleConfiguration;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
 import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,11 +41,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.Auto;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.settings.Gains;
@@ -80,17 +86,17 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private SwerveSubsystem() {
 		navx = new AHRS(SerialPort.Port.kUSB1);
 
-		ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
+		// ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
 		MkModuleConfiguration moduleConfig = MkModuleConfiguration.getDefaultSteerNEO();
 		moduleConfig.setDriveCurrentLimit(40.0);
 		moduleConfig.setSteerCurrentLimit(30.0);
 
 		this.frontLeftModule = new MkSwerveModuleBuilder(moduleConfig)
-				.withLayout(
-						shuffleboardTab
-								.getLayout("Front Left Module", BuiltInLayouts.kList)
-								.withSize(2, 4)
-								.withPosition(0, 0))
+				// .withLayout(
+				// shuffleboardTab
+				// .getLayout("Front Left Module", BuiltInLayouts.kList)
+				// .withSize(2, 4)
+				// .withPosition(0, 0))
 				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
 				.withDriveMotor(MotorType.NEO, LEFT_FRONT_DRIVE)
 				.withSteerMotor(MotorType.NEO, LEFT_FRONT_ANGLE)
@@ -99,11 +105,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				.build();
 
 		this.frontRightModule = new MkSwerveModuleBuilder()
-				.withLayout(
-						shuffleboardTab
-								.getLayout("Front Right Module", BuiltInLayouts.kList)
-								.withSize(2, 4)
-								.withPosition(2, 0))
+				// .withLayout(
+				// shuffleboardTab
+				// .getLayout("Front Right Module", BuiltInLayouts.kList)
+				// .withSize(2, 4)
+				// .withPosition(2, 0))
 				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
 				.withDriveMotor(MotorType.NEO, RIGHT_FRONT_DRIVE)
 				.withSteerMotor(MotorType.NEO, RIGHT_FRONT_ANGLE)
@@ -112,11 +118,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				.build();
 
 		this.backLeftModule = new MkSwerveModuleBuilder()
-				.withLayout(
-						shuffleboardTab
-								.getLayout("Back Left Module", BuiltInLayouts.kList)
-								.withSize(2, 4)
-								.withPosition(6, 0))
+				// .withLayout(
+				// shuffleboardTab
+				// .getLayout("Back Left Module", BuiltInLayouts.kList)
+				// .withSize(2, 4)
+				// .withPosition(6, 0))
 				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
 				.withDriveMotor(MotorType.NEO, LEFT_REAR_DRIVE)
 				.withSteerMotor(MotorType.NEO, LEFT_REAR_ANGLE)
@@ -125,11 +131,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				.build();
 
 		this.backRightModule = new MkSwerveModuleBuilder()
-				.withLayout(
-						shuffleboardTab
-								.getLayout("Back Right Module", BuiltInLayouts.kList)
-								.withSize(2, 4)
-								.withPosition(4, 0))
+				// .withLayout(
+				// shuffleboardTab
+				// .getLayout("Back Right Module", BuiltInLayouts.kList)
+				// .withSize(2, 4)
+				// .withPosition(4, 0))
 				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
 				.withDriveMotor(MotorType.NEO, RIGHT_REAR_DRIVE)
 				.withSteerMotor(MotorType.NEO, RIGHT_REAR_ANGLE)
@@ -177,28 +183,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
-		SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
-
-		SwerveModulePosition[] positions = getPositions();
-		for (int i = 0; i < states.length; i++) {
-			states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
-		}
-
-		double flVoltage = states[0].speedMetersPerSecond;
-		double frVoltage = states[1].speedMetersPerSecond;
-		double blVoltage = states[2].speedMetersPerSecond;
-		double brVoltage = states[3].speedMetersPerSecond;
-
-		flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-
-		this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
-		this.frontRightModule.set(frVoltage, states[1].angle.getRadians());
-		this.backLeftModule.set(blVoltage, states[2].angle.getRadians());
-		this.backRightModule.set(brVoltage, states[3].angle.getRadians());
-
+		setModuleStates(states);
+		// System.out.println("Current PoseY = " + getCurrentRobotPose().getY());
 		/*
 		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		 * This is what we had before. Trying similar code from Team 5431 (uses
@@ -221,6 +207,30 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		 * this.odometry.update(gyroAngle, getPositions());
 		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		 */
+	}
+
+	public void setModuleStates(SwerveModuleState[] states) {
+		SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
+
+		SwerveModulePosition[] positions = getPositions();
+		for (int i = 0; i < states.length; i++) {
+			states[i] = SwerveModuleState.optimize(states[i], positions[i].angle);
+		}
+
+		double flVoltage = states[0].speedMetersPerSecond;
+		double frVoltage = states[1].speedMetersPerSecond;
+		double blVoltage = states[2].speedMetersPerSecond;
+		double brVoltage = states[3].speedMetersPerSecond;
+
+		flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+
+		this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
+		this.frontRightModule.set(frVoltage, states[1].angle.getRadians());
+		this.backLeftModule.set(blVoltage, states[2].angle.getRadians());
+		this.backRightModule.set(brVoltage, states[3].angle.getRadians());
 	}
 
 	/**
@@ -261,21 +271,18 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return Rotation2d.fromDegrees(-this.navx.getYaw());
 	};
 
-	/*
-	 * public Pose2d getCurrentRobotPose() {
-	 * return this.odometry.getPoseMeters();
-	 * }
-	 *
-	 *
-	 * public void setCurrentRobotPose(Pose2d pose) {
-	 * this.odometry
-	 * .resetPosition(getGyroscopeRotation(),
-	 * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
-	 * this.frontRightModule.getPosition(),
-	 * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
-	 * pose);
-	 * }
-	 */
+	public Pose2d getCurrentRobotPose() {
+		return this.poseEstimator.getEstimatedPosition();
+	}
+
+	public void setCurrentRobotPose(Pose2d pose) {
+		this.poseEstimator
+				.resetPosition(getGyroscopeRotation(),
+						new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+								this.frontRightModule.getPosition(),
+								this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+						pose);
+	}
 
 	public void stop() {
 		for (SwerveModule swerveModule : this.swerveModules) {
@@ -395,6 +402,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.navx.isMagneticDisturbance();
 	}
 
+	/*
 	@Config.NumberSlider(name = "Theta P", tabName = "Tuning", defaultValue = Auto.kThetaP, min = 0, max = 20, rowIndex = 5, columnIndex = 0, height = 1, width = 1)
 	public void setThetaP(double thetaP) {
 		this.thetaGains.kP = thetaP;
@@ -409,6 +417,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public void setThetaD(double thetaD) {
 		this.thetaGains.kD = thetaD;
 	}
+	 */
 
 	@Log.Graph(name = "Gyro Angle", width = 4, height = 2, rowIndex = 2, columnIndex = 2)
 	public double getGyroDegrees() {
@@ -416,6 +425,44 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	// #endregion
+
+	// Assuming this method is part of a drivetrain subsystem that provides the
+	// necessary methods
+	public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+		var thetaController = new PIDController(
+				Constants.Auto.kThetaP, Constants.Auto.kThetaP, Constants.Auto.kThetaP);
+		// , Constants.Auto.kThetaControllerConstraints);
+		thetaController.enableContinuousInput(-Math.PI, Math.PI);
+		// thetaController.setTolerance(positionTolerance);
+
+		return new SequentialCommandGroup(
+				new InstantCommand(() -> {
+					// Reset odometry for the first path you run during auto
+					if (isFirstPath) {
+						PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(traj,
+								DriverStation.getAlliance());
+						this.setCurrentRobotPose(transformed.getInitialHolonomicPose());
+					}
+				}),
+				new PPSwerveControllerCommand(
+						traj,
+						this::getCurrentRobotPose, // Pose supplier
+						this.kinematics, // SwerveDriveKinematics
+						new PIDController(Auto.kPositionP, Auto.kPositionI, Auto.kPositionD), // X controller. Tune
+																								// these values for your
+																								// robot. Leaving them 0
+						// will only use feedforwards.
+						new PIDController(Auto.kPositionP, Auto.kPositionI, Auto.kPositionD), // Y controller (usually
+																								// the same values as X
+																								// controller)
+						thetaController, // Rotation controller. Tune these values for your robot. Leaving
+											// them 0 will only use feedforwards.
+						this::setModuleStates, // Module states consumer
+						true, // Should the path be automatically mirrored depending on alliance color.
+								// Optional, defaults to true
+						this // Requires this drive subsystem
+				));
+	}
 
 	public static SwerveSubsystem getInstance() {
 		if (instance == null) {
