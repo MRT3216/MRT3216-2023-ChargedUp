@@ -15,7 +15,6 @@ import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
-import frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 
 public final class Constants {
@@ -160,7 +159,6 @@ public final class Constants {
 		public static final int kStowedDegrees = 50;
 		public static final int kStartDegrees = 69;
 
-
 		// #region Enums
 
 		public enum Position {
@@ -174,7 +172,8 @@ public final class Constants {
 			GroundIntakeCube(7),
 			SubstationIntakeCone(8),
 			SubstationIntakeCube(9),
-			Stowed(10);
+			Stowed(10),
+			Start(11);
 
 			private int value;
 			private static Map<Integer, Position> map = new HashMap<>();
@@ -336,7 +335,7 @@ public final class Constants {
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 25;
 		public static final int kSubstationIntakeConeDegrees = 110;
-		public static final int kSubstationIntakeCubeDegrees = 90; 
+		public static final int kSubstationIntakeCubeDegrees = 90;
 		public static final int kStowedDegrees = 46;
 		public static final int kStartDegrees = 0;
 
