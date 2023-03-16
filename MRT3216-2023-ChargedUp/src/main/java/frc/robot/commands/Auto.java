@@ -28,6 +28,11 @@ public class Auto {
         return swerveSubsystem.getFollowTrajectoryCommand(path, true);
     }
 
+    public Command getPlaceAndDriveCommand(){
+        PathPlannerTrajectory path = PathPlanner.loadPath("PlaceAndDrive", new PathConstraints(1, 1));
+        return swerveSubsystem.getFollowTrajectoryCommand(path, true);
+    }
+
     public Command getDriveBackwardsCommand() {
         // return swerveSubsystem.getFollowTrajectoryCommand(
         // PathPlanner.loadPath("PlaceAndDrive", AUTO.kMaxFetchVelocity,
