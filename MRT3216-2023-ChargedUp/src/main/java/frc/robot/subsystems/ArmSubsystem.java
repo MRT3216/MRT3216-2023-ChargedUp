@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.math.BigDecimal;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -27,6 +29,9 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Fields
 
     private static ArmSubsystem instance;
+
+    @Log.Exclude
+    @Config.Exclude
     private WristSubsystem wristSubsystem;
     protected boolean enabled;
     private NetworkTable streamDeckNT;
@@ -548,7 +553,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #region Driver
 
-    @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 2, columnIndex = 4, height = 1, width = 1)
+    @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 2, columnIndex = 6, height = 1, width = 1)
     public void setArmOffsetInDegrees(double offset) {
         armOffset = calculateNativeUnitsFromDegrees(offset);
     }

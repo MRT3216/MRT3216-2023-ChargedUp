@@ -56,7 +56,7 @@ public class IntakeSubsystem extends SubsystemBase {
         // This method will be called once per scheduler
         if (limitSwitch.isPressed()) {
             wristSubsystem.resetWristEncoderPosition();
-            System.out.println("Encoder position reset by limit switch");
+            //System.out.println("Encoder position reset by limit switch");
         }
     }
 
