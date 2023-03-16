@@ -1,5 +1,9 @@
 package frc.robot.commands;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -17,6 +21,11 @@ public class Auto {
         armSubsystem = ArmSubsystem.getInstance();
         intakeSubystem = IntakeSubsystem.getInstance();
         swerveSubsystem = SwerveSubsystem.getInstance();
+    }
+
+    public Command getDriveCommand() {
+        PathPlannerTrajectory path = PathPlanner.loadPath("Drive", new PathConstraints(1, 1));
+        return swerveSubsystem.getFollowTrajectoryCommand(path, true);
     }
 
     public Command getDriveBackwardsCommand() {

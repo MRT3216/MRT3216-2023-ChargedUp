@@ -43,11 +43,11 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.Auto;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Drivetrain;
@@ -408,20 +408,26 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	/*
-	@Config.NumberSlider(name = "Theta P", tabName = "Tuning", defaultValue = Auto.kThetaP, min = 0, max = 20, rowIndex = 5, columnIndex = 0, height = 1, width = 1)
-	public void setThetaP(double thetaP) {
-		this.thetaGains.kP = thetaP;
-	}
-
-	@Config.NumberSlider(name = "Theta I", tabName = "Tuning", defaultValue = Auto.kThetaI, min = 0, max = 1, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
-	public void setThetaI(double thetaI) {
-		this.thetaGains.kI = thetaI;
-	}
-
-	@Config.NumberSlider(name = "Theta D", tabName = "Tuning", defaultValue = Auto.kThetaD, min = 0, max = 1, rowIndex = 5, columnIndex = 2, height = 1, width = 1)
-	public void setThetaD(double thetaD) {
-		this.thetaGains.kD = thetaD;
-	}
+	 * @Config.NumberSlider(name = "Theta P", tabName = "Tuning", defaultValue =
+	 * Auto.kThetaP, min = 0, max = 20, rowIndex = 5, columnIndex = 0, height = 1,
+	 * width = 1)
+	 * public void setThetaP(double thetaP) {
+	 * this.thetaGains.kP = thetaP;
+	 * }
+	 * 
+	 * @Config.NumberSlider(name = "Theta I", tabName = "Tuning", defaultValue =
+	 * Auto.kThetaI, min = 0, max = 1, rowIndex = 5, columnIndex = 1, height = 1,
+	 * width = 1)
+	 * public void setThetaI(double thetaI) {
+	 * this.thetaGains.kI = thetaI;
+	 * }
+	 * 
+	 * @Config.NumberSlider(name = "Theta D", tabName = "Tuning", defaultValue =
+	 * Auto.kThetaD, min = 0, max = 1, rowIndex = 5, columnIndex = 2, height = 1,
+	 * width = 1)
+	 * public void setThetaD(double thetaD) {
+	 * this.thetaGains.kD = thetaD;
+	 * }
 	 */
 
 	@Log.Graph(name = "Gyro Angle", width = 4, height = 2, rowIndex = 2, columnIndex = 2)
@@ -429,7 +435,14 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.getGyroscopeRotation().getDegrees();
 	}
 
+	// @Log.Field2d(name="Field2D", width =2, height = 2, rowIndex = 0, columnIndex = 6)
+	// public Field2d getField2D(){
+	// 	return this.poseEstimator.getEstimatedPosition();
+	// }
+
 	// #endregion
+
+	// #region Command Factory
 
 	// Assuming this method is part of a drivetrain subsystem that provides the
 	// necessary methods
@@ -466,6 +479,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						this // Requires this drive subsystem
 				));
 	}
+
+	// #endregion
 
 	public static SwerveSubsystem getInstance() {
 		if (instance == null) {
