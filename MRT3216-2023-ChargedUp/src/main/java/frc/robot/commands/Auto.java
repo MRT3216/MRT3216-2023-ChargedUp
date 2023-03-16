@@ -33,19 +33,6 @@ public class Auto {
         return swerveSubsystem.getFollowTrajectoryCommand(path, true);
     }
 
-    public Command getDriveBackwardsCommand() {
-        // return swerveSubsystem.getFollowTrajectoryCommand(
-        // PathPlanner.loadPath("PlaceAndDrive", AUTO.kMaxFetchVelocity,
-        // AUTO.kMaxFetchAcc), true);
-        return new RunCommand(() -> swerveSubsystem.drive(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        0.1,
-                        0,
-                        0,
-                        this.swerveSubsystem.getGyroscopeRotation())));
-
-    }
-
     public static Auto getInstance() {
         if (instance == null) {
             // if instance is null, initialize

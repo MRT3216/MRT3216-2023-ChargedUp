@@ -64,7 +64,7 @@ public class AutoChooser {
 
 	public void populateAutoChooser() {
 		chooser.addOption("Drive", () -> auto.getDriveCommand());
-		chooser.addOption("Place and Drive", () -> auto.getDriveCommand());
+		chooser.addOption("Place and Drive", () -> auto.getPlaceAndDriveCommand());
 		/*
 		 * chooser.addOption("SS 2 Cone Charge",
 		 * () -> new ConditionalCommand(getAutoCommand(), getAutoCommand(), null)
