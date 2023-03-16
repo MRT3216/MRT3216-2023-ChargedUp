@@ -332,6 +332,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.frontLeftModule.getDriveVelocity();
 	}
 
+	@Log.NumberBar(name = "FL Speed", min = -15, max = 15, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
+	public double getFrontLeftVoltage() {
+		return this.frontLeftModule.getState().speedMetersPerSecond;
+	}
+
 	@Log.Dial(name = "FL Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
 	public double getFrontLeftAngle() {
 		return Math.IEEEremainder(Math.toDegrees(this.frontLeftModule.getSteerAngle()), 180);
