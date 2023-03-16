@@ -1,9 +1,8 @@
 package frc.robot.commands;
 
-import com.pathplanner.lib.PathPlanner;
-
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.settings.Constants.AUTO;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -21,8 +20,15 @@ public class Auto {
     }
 
     public Command getDriveBackwardsCommand() {
-        return swerveSubsystem.getFollowTrajectoryCommand(
-                PathPlanner.loadPath("PlaceAndDrive", AUTO.kMaxFetchVelocity, AUTO.kMaxFetchAcc), true);
+        // return swerveSubsystem.getFollowTrajectoryCommand(
+        // PathPlanner.loadPath("PlaceAndDrive", AUTO.kMaxFetchVelocity,
+        // AUTO.kMaxFetchAcc), true);
+        return new RunCommand(() -> swerveSubsystem.drive(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                        0.1,
+                        0,
+                        0,
+                        this.swerveSubsystem.getGyroscopeRotation())));
 
     }
 
