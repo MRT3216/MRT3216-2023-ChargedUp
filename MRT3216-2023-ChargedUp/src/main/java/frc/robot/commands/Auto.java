@@ -7,6 +7,9 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.settings.Constants.AUTO;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -23,12 +26,14 @@ public class Auto {
         swerveSubsystem = SwerveSubsystem.getInstance();
     }
 
-    public Command getDriveCommand() {
+    public Command getDriveBackwardsCommand() {
         PathPlannerTrajectory path = PathPlanner.loadPath("Drive", new PathConstraints(1, 1));
-        return swerveSubsystem.getFollowTrajectoryCommand(path, true);
+        return new SequentialCommandGroup(
+                new WaitCommand(AUTO.kStartDelayTime),
+                swerveSubsystem.getFollowTrajectoryCommand(path, true));
     }
 
-    public Command getPlaceAndDriveCommand(){
+    public Command getPlaceAndDriveCommand() {
         PathPlannerTrajectory path = PathPlanner.loadPath("PlaceAndDrive", new PathConstraints(1, 1));
         return swerveSubsystem.getFollowTrajectoryCommand(path, true);
     }
