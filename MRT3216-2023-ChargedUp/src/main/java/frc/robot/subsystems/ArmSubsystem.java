@@ -439,16 +439,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Wrist Position PID Controller Column 1
-    // Column 1, Rows 0-3
-
-    @Log.NumberBar(name = "Wrist Degrees Wrt G", rowIndex = 4, columnIndex = 1, height = 1, width = 1)
-    public double getWristDegreesWrtGround() {
-        return calculateWristDegreesWrtGround(getArmDegrees(), wristSubsystem.getWristDegreesWrtArm());
-    }
-
-    // #endregion
-
     // #region ARM PID Setters Column 2
     // Column 2, Rows 0-3
 
