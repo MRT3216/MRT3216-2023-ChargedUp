@@ -536,13 +536,17 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Stowed Positions Column 8
-    // Column 8, Rows 0-1
+    // #region Stowed Positions Column 4
+    // Column 4, Rows 0
 
-    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 8, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
     public void setAStowed(int aStowed) {
         this.aStowed = aStowed;
     }
+
+    // #endregion
+
+    // #region Driver
 
     @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
     public void setArmOffsetInDegrees(double offset) {
