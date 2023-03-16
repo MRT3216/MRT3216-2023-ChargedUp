@@ -352,7 +352,7 @@ public final class Constants {
 		public static final double kCubeShootSpeed = 1.0;
 	}
 
-	public static final class Auto {
+	public static final class AUTO {
 		// Proportional gain
 		public static final double kPositionP = 0.001;
 		// Integral gain

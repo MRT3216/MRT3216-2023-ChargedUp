@@ -17,17 +17,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.auto.autoProcedures.PlaceConeAndDrive;
-import frc.robot.commands.auto.autoProcedures.PlaceCubeAndDrive;
-import frc.robot.commands.auto.autoProcedures.PlaceHighCone;
-import frc.robot.commands.auto.autoProcedures.PlaceHighCube;
+import frc.robot.commands.Auto;
 import frc.robot.settings.Constants.Directories;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.annotations.Config;
 
 /** Add your docs here. */
@@ -37,18 +29,12 @@ public class AutoChooser {
 	private Dictionary<String, Trajectory> trajectories;
 	@Config(name = "Auto Chooser", tabName = "Driver", rowIndex = 3, columnIndex = 0, width = 3, height = 1)
 	private SendableChooser<Supplier<Command>> chooser;
-	private SwerveSubsystem swerveSystem;
-	private ArmSubsystem armSystem;
-	private LimelightSubsystem limelightSystem;
-	private IntakeSubsystem intakeSystem;
+	private Auto auto;
 
 	private AutoChooser() {
 		chooser = new SendableChooser<>();
 		chooser.setDefaultOption("Do Nothing", () -> new WaitCommand(0));
-		this.swerveSystem = SwerveSubsystem.getInstance();
-		this.armSystem = ArmSubsystem.getInstance();
-		this.limelightSystem = LimelightSubsystem.getInstance();
-		this.intakeSystem = IntakeSubsystem.getInstance();
+		auto = Auto.getInstance();
 	}
 
 	public static AutoChooser getInstance() {
@@ -77,6 +63,7 @@ public class AutoChooser {
 	}
 
 	public void populateAutoChooser() {
+		chooser.addOption("Drive Backwards", () -> auto.getDriveBackwardsCommand());
 		/*
 		 * chooser.addOption("SS 2 Cone Charge",
 		 * () -> new ConditionalCommand(getAutoCommand(), getAutoCommand(), null)
@@ -95,26 +82,28 @@ public class AutoChooser {
 		 * );
 		 */
 
-		chooser.addOption("High Cube",
-				() -> new PlaceHighCube(this.swerveSystem, this.armSystem, this.intakeSystem, this.limelightSystem));
+		// chooser.addOption("High Cube",
+		// () -> new PlaceHighCube(this.swerveSystem, this.armSystem, this.intakeSystem,
+		// this.limelightSystem));
 
-		chooser.addOption("High Cone",
-				() -> new PlaceHighCone(this.swerveSystem, this.armSystem, this.intakeSystem, this.limelightSystem));
+		// chooser.addOption("High Cone",
+		// () -> new PlaceHighCone(this.swerveSystem, this.armSystem, this.intakeSystem,
+		// this.limelightSystem));
 
 		// chooser.addOption("M Top Cone and Charge",
 		// () -> new SequentialCommandGroup(
 		// new MCharge(this.swerveSystem, this.armSystem, this.intakeSystem,
 		// this.limelightSystem)));
 
-		chooser.addOption("Place Cube and Drive",
-				() -> new SequentialCommandGroup(
-						new PlaceCubeAndDrive(this.swerveSystem, this.armSystem, this.intakeSystem,
-								this.limelightSystem)));
+		// chooser.addOption("Place Cube and Drive",
+		// () -> new SequentialCommandGroup(
+		// new PlaceCubeAndDrive(this.swerveSystem, this.armSystem, this.intakeSystem,
+		// this.limelightSystem)));
 
-		chooser.addOption("Place Cone and Drive",
-				() -> new SequentialCommandGroup(
-						new PlaceConeAndDrive(this.swerveSystem, this.armSystem, this.intakeSystem,
-								this.limelightSystem)));
+		// chooser.addOption("Place Cone and Drive",
+		// () -> new SequentialCommandGroup(
+		// new PlaceConeAndDrive(this.swerveSystem, this.armSystem, this.intakeSystem,
+		// this.limelightSystem)));
 
 		SmartDashboard.putData(chooser);
 	}

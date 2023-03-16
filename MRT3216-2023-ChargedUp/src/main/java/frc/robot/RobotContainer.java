@@ -11,7 +11,7 @@ import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
-import frc.robot.settings.Constants.Auto;
+import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -54,7 +54,7 @@ public class RobotContainer {
 	 */
 	private RobotContainer() {
 		this.controller = new CommandXboxController(0);
-		this.autoStartDelayTime = Constants.Auto.kStartDelayTime;
+		this.autoStartDelayTime = Constants.AUTO.kStartDelayTime;
 		this.translationExpo = Constants.OI.kTranslationExpo;
 		this.rotationExpo = Constants.OI.kRotationnExpo;
 
@@ -151,7 +151,6 @@ public class RobotContainer {
 
 		controller.leftStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cone)));
 		controller.rightStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cube)));
-		
 
 		// Place piece
 		controller.leftBumper()
@@ -188,7 +187,7 @@ public class RobotContainer {
 		return driveSystem;
 	}
 
-	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = Auto.kStartDelayTime, methodTypes = {
+	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = AUTO.kStartDelayTime, methodTypes = {
 			double.class }, rowIndex = 1, columnIndex = 0)
 	public void setStartDelayTime(double startDelayTime) {
 		this.autoStartDelayTime = startDelayTime;

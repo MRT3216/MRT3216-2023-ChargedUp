@@ -8,9 +8,9 @@ import static frc.robot.settings.Constants.INTAKE.kConeIntakeSpeed;
 import static frc.robot.settings.Constants.INTAKE.kConeOuttakeSpeed;
 import static frc.robot.settings.Constants.INTAKE.kCubeIntakeSpeed;
 import static frc.robot.settings.Constants.INTAKE.kCubeOuttakeSpeed;
+import static frc.robot.settings.Constants.INTAKE.kCubeShootSpeed;
 import static frc.robot.settings.Constants.INTAKE.kMotorCurrentLimit;
 import static frc.robot.settings.Constants.INTAKE.kMotorInverted;
-import static frc.robot.settings.Constants.INTAKE.kCubeShootSpeed;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
-import frc.robot.settings.Constants.Auto;
+import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.RobotMap;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -83,13 +83,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command getAutoConeCommand(boolean intake) {
         return new ParallelRaceGroup(
                 Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
-                Commands.waitSeconds(Auto.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
+                Commands.waitSeconds(AUTO.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
     }
 
     public Command getAutoCubeCommand(boolean intake) {
         return new ParallelRaceGroup(
                 Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed)),
-                Commands.waitSeconds(Auto.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
+                Commands.waitSeconds(AUTO.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
     }
 
     public static IntakeSubsystem getInstance() {

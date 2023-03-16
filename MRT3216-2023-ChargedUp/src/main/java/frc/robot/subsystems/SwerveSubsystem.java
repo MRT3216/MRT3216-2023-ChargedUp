@@ -47,12 +47,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.Auto;
 import frc.robot.settings.Constants;
-import frc.robot.settings.Constants.Auto;
+import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.settings.Gains;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class SwerveSubsystem extends SubsystemBase implements Loggable {
@@ -150,7 +150,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
-		this.thetaGains = Auto.kAutoThetaGains;
+		this.thetaGains = AUTO.kAutoThetaGains;
 	}
 
 	@Override
@@ -428,12 +428,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	// Assuming this method is part of a drivetrain subsystem that provides the
 	// necessary methods
-	public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+	public Command getFollowTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
 		var thetaController = new PIDController(
-				Constants.Auto.kThetaP, Constants.Auto.kThetaP, Constants.Auto.kThetaP);
-		// , Constants.Auto.kThetaControllerConstraints);
+				Constants.AUTO.kThetaP, Constants.AUTO.kThetaP, Constants.AUTO.kThetaP);
 		thetaController.enableContinuousInput(-Math.PI, Math.PI);
-		// thetaController.setTolerance(positionTolerance);
 
 		return new SequentialCommandGroup(
 				new InstantCommand(() -> {
@@ -448,11 +446,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						traj,
 						this::getCurrentRobotPose, // Pose supplier
 						this.kinematics, // SwerveDriveKinematics
-						new PIDController(Auto.kPositionP, Auto.kPositionI, Auto.kPositionD), // X controller. Tune
+						new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD), // X controller. Tune
 																								// these values for your
 																								// robot. Leaving them 0
 						// will only use feedforwards.
-						new PIDController(Auto.kPositionP, Auto.kPositionI, Auto.kPositionD), // Y controller (usually
+						new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD), // Y controller (usually
 																								// the same values as X
 																								// controller)
 						thetaController, // Rotation controller. Tune these values for your robot. Leaving
