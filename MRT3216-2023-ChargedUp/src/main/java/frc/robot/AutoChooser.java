@@ -63,7 +63,7 @@ public class AutoChooser {
 	}
 
 	public void populateAutoChooser() {
-		chooser.addOption("Drive Backwards", () -> auto.getDriveBackwardsCommand());
+		chooser.addOption("Drive", () -> auto.getDriveCommand());
 		/*
 		 * chooser.addOption("SS 2 Cone Charge",
 		 * () -> new ConditionalCommand(getAutoCommand(), getAutoCommand(), null)
