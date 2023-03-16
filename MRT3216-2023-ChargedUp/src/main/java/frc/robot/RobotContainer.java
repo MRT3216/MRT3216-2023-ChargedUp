@@ -36,7 +36,7 @@ public class RobotContainer {
 	// #region Fields
 
 	private static RobotContainer instance;
-	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
+	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 2, columnIndex = 6, width = 1, height = 1)
 	private SwerveSubsystem driveSystem;
 	private AutoChooser autoChooser;
 	private double autoStartDelayTime;
