@@ -548,7 +548,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #region Driver
 
-    @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
+    @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 2, columnIndex = 4, height = 1, width = 1)
     public void setArmOffsetInDegrees(double offset) {
         armOffset = calculateNativeUnitsFromDegrees(offset);
     }
