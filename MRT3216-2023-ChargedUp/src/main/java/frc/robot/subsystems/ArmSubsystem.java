@@ -146,7 +146,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
         Shuffleboard.getTab("ArmSubsystem")
                 .add("Arm PID", armPidController)
-                .withSize(1, 3) // make the widget 2x1
+                .withSize(2, 2) // make the widget 2x1
                 .withPosition(4, 0); // place it in the top-left corner
 
         // endregion

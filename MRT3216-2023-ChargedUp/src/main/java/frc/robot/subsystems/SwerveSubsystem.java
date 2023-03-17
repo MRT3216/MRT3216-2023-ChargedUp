@@ -52,7 +52,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Drivetrain;
-import frc.robot.settings.Gains;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -164,17 +163,17 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 		Shuffleboard.getTab("Auto")
 				.add("X PID", autoXController)
-				.withSize(1, 3) // make the widget 2x1
+				.withSize(1, 2) // make the widget 2x1
 				.withPosition(0, 0); // place it in the top-left corner
 
 		Shuffleboard.getTab("Auto")
 				.add("Y PID", autoYController)
-				.withSize(1, 3) // make the widget 2x1
+				.withSize(1, 2) // make the widget 2x1
 				.withPosition(1, 0); // place it in the top-left corner
 
 		Shuffleboard.getTab("Auto")
 				.add("Theta PID", autoThetaController)
-				.withSize(21, 3) // make the widget 2x1
+				.withSize(1, 2) // make the widget 2x1
 				.withPosition(2, 0); // place it in the top-left corner
 	}
 
@@ -429,7 +428,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.getGyroscopeRotation().getDegrees();
 	}
 
-	@Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0)
+	@Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0, height = 4, width = 8)
 	public Field2d getField2D() {
 		return this.field2d;
 	}
