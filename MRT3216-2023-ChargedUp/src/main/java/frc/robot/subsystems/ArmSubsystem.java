@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -142,6 +143,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         armPidController.reset(getArmDegrees());
         System.out.println("Arm Setpoint after reset:" + armPidController.getSetpoint().position);
         System.out.println("Arm Initial Goal: " + armPidController.getGoal().position);
+
+        Shuffleboard.getTab("SwerveSubsystem")
+                .add("Arm PID", armPidController)
+                .withSize(1, 3) // make the widget 2x1
+                .withPosition(1, 0); // place it in the top-left corner
 
         // endregion
     }
