@@ -78,6 +78,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private final SwerveModule[] swerveModules;
 
 	public final SwerveDrivePoseEstimator poseEstimator;
+	public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
@@ -150,12 +151,15 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
+		this.field2d = new Field2d();
+
 		this.thetaGains = AUTO.kAutoThetaGains;
 	}
 
 	@Override
 	public void periodic() {
 		this.poseEstimator.update(getGyroscopeRotation(), getPositions());
+		this.field2d.setRobotPose(poseEstimator.getEstimatedPosition());
 
 		final double zeroDeadzone = 0.001;
 
@@ -174,39 +178,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		 * Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
 		 * this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
 		 * }
-		 * 
-		 * /*
-		 * SmartDashboard.putNumber("DT X spd", m_chassisSpeeds.vxMetersPerSecond);
-		 * SmartDashboard.putNumber("DT Y spd", m_chassisSpeeds.vyMetersPerSecond);
-		 * SmartDashboard.putNumber("DT O rot", m_chassisSpeeds.omegaRadiansPerSecond);
 		 */
 
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
 		setModuleStates(states);
-		// System.out.println("Current PoseY = " + getCurrentRobotPose().getY());
-		/*
-		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-		 * This is what we had before. Trying similar code from Team 5431 (uses
-		 * democat's library)
-		 * SwerveModuleState[] states =
-		 * this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
-		 * SwerveDriveKinematics.desaturateWheelSpeeds(states,
-		 * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
-		 *
-		 * for (int i = 0; i < this.swerveModules.length; i++) {
-		 * this.swerveModules[i].set(
-		 * states[i].speedMetersPerSecond / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND *
-		 * Drivetrain.MAX_VOLTAGE,
-		 * states[i].angle.getRadians());
-		 * }
-		 *
-		 * var gyroAngle = this.getGyroscopeRotation();
-		 *
-		 * // Update the pose
-		 * this.odometry.update(gyroAngle, getPositions());
-		 * XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-		 */
 	}
 
 	public void setModuleStates(SwerveModuleState[] states) {
@@ -435,10 +411,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.getGyroscopeRotation().getDegrees();
 	}
 
-	// @Log.Field2d(name="Field2D", width =2, height = 2, rowIndex = 0, columnIndex = 6)
-	// public Field2d getField2D(){
-	// 	return this.poseEstimator.getEstimatedPosition();
-	// }
+	@Log.Field2d(name = "Field2D", width = 2, height = 2, rowIndex = 0, columnIndex = 6)
+	public Field2d getField2D() {
+		return this.field2d;
+	}
 
 	// #endregion
 
