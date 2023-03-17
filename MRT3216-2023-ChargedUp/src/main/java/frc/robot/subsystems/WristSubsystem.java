@@ -26,7 +26,6 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #region Wrist Motors
 
-    @Config
     private ProfiledPIDController wristPidController;
     private CANSparkMax wristMotor;
     // private SparkMaxAbsoluteEncoder wristEncoder;
