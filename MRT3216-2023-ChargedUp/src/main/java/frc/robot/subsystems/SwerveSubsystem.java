@@ -82,13 +82,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-
-	private Gains thetaGains;
-
 	private PIDController autoXController;
-
 	private PIDController autoYController;
-
 	private PIDController autoThetaController;
 
 	private SwerveSubsystem() {
@@ -160,7 +155,27 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 		this.field2d = new Field2d();
 
-		this.thetaGains = AUTO.kAutoThetaGains;
+		autoThetaController = new PIDController(
+				Constants.AUTO.kThetaP, Constants.AUTO.kThetaP, Constants.AUTO.kThetaP);
+		autoThetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+		autoXController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
+		autoYController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
+
+		Shuffleboard.getTab("Auto")
+				.add("X PID", autoXController)
+				.withSize(1, 3) // make the widget 2x1
+				.withPosition(0, 0); // place it in the top-left corner
+
+		Shuffleboard.getTab("Auto")
+				.add("Y PID", autoYController)
+				.withSize(1, 3) // make the widget 2x1
+				.withPosition(1, 0); // place it in the top-left corner
+
+		Shuffleboard.getTab("Auto")
+				.add("Theta PID", autoThetaController)
+				.withSize(21, 3) // make the widget 2x1
+				.withPosition(2, 0); // place it in the top-left corner
 	}
 
 	@Override
@@ -299,10 +314,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.navx.isConnected();
 	}
 
-	public Gains getThetaGains() {
-		return this.thetaGains;
-	}
-
 	// #region Logging
 
 	@Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
@@ -430,28 +441,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	// Assuming this method is part of a drivetrain subsystem that provides the
 	// necessary methods
 	public Command getFollowTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-		autoThetaController = new PIDController(
-				Constants.AUTO.kThetaP, Constants.AUTO.kThetaP, Constants.AUTO.kThetaP);
-		autoThetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-		autoXController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
-		autoYController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
-
-		Shuffleboard.getTab("Auto")
-				.add("X PID", autoXController)
-				.withSize(1, 3) // make the widget 2x1
-				.withPosition(0, 0); // place it in the top-left corner
-
-		Shuffleboard.getTab("Auto")
-				.add("Y PID", autoYController)
-				.withSize(1, 3) // make the widget 2x1
-				.withPosition(1, 0); // place it in the top-left corner
-
-		Shuffleboard.getTab("Auto")
-				.add("Theta PID", autoThetaController)
-				.withSize(21, 3) // make the widget 2x1
-				.withPosition(2, 0); // place it in the top-left corner
-
 		return new SequentialCommandGroup(
 				new InstantCommand(() -> {
 					// Reset odometry for the first path you run during auto
