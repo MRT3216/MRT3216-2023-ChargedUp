@@ -26,7 +26,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #region Wrist Motors
 
-    @Config.PIDController(name = "Wrist PID", rowIndex = 0, columnIndex = 1, width = 1, height = 3)
+    @Config.PIDController(name = "Wrist PID", rowIndex = 0, columnIndex = 5)
     private ProfiledPIDController wristPidController;
     private CANSparkMax wristMotor;
     // private SparkMaxAbsoluteEncoder wristEncoder;
@@ -37,6 +37,9 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #region Wrist PID
 
+    private double wristKp = WRIST.kWristKp;
+    private double wristKi = WRIST.kWristKi;
+    private double wristKd = WRIST.kWristKd;
     private double wristKg = WRIST.kWristKg;
     private double lastSpeed = 0;
     private double lastTime = Timer.getFPGATimestamp();
@@ -96,9 +99,9 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         // #region Wrist PID
 
         wristPidController = new ProfiledPIDController(
-                WRIST.kWristKp,
-                WRIST.kWristKi,
-                WRIST.kWristKd,
+                this.wristKp,
+                this.wristKi,
+                this.wristKd,
                 // The motion profile constraints
                 new TrapezoidProfile.Constraints(WRIST.kWristMaxVelocity,
                         WRIST.kWristMaxAcceleration));
@@ -263,7 +266,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #region Logging
 
-    // #region Wrist Position Column 0
+    // #region Wrist Position PID Controller Column 0
     // Column 0, Rows 0-3
 
     @Log.NumberBar(name = "Wrist Encoder", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
@@ -290,6 +293,30 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #region Wrist Position PID Column 1
     // Column 1, Row 0-3
+
+    @Config.NumberSlider(name = "Wrist P", defaultValue = WRIST.kWristKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
+    public void setWristKp(double wristKp) {
+        this.wristKp = wristKp;
+        resetWristPID();
+    }
+
+    @Config.NumberSlider(name = "Wrist I", defaultValue = WRIST.kWristKi, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
+    public void setWristKi(double wristKi) {
+        this.wristKi = wristKi;
+        resetWristPID();
+    }
+
+    @Config.NumberSlider(name = "Wrist D", defaultValue = WRIST.kWristKd, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
+    public void setWristKd(double wristKd) {
+        this.wristKd = wristKd;
+        resetWristPID();
+    }
+
+    private void resetWristPID() {
+        this.wristPidController.setPID(wristKp, wristKi, wristKd);
+        System.out.println("Changing wrist P: " + wristKp + "  I: " + wristKi + " D:"
+                + wristKd);
+    }
 
     @Config.NumberSlider(name = "Wrist G", defaultValue = WRIST.kWristKg, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 3, columnIndex = 1, height = 1, width = 1)
     public void setWristKg(double wristKg) {
