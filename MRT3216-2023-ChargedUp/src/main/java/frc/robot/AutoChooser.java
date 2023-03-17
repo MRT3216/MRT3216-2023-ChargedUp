@@ -14,21 +14,19 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoCommands;
 import frc.robot.settings.Constants.Directories;
-import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 
 /** Add your docs here. */
-public class AutoChooser implements Loggable {
+public class AutoChooser {
 
 	private static AutoChooser instance;
 	private Dictionary<String, Trajectory> trajectories;
-	@Config(name = "Auto Chooser", tabName = "Driver", rowIndex = 3, columnIndex = 0, width = 3, height = 1)
 	private SendableChooser<Supplier<Command>> chooser;
 	private AutoCommands auto;
 
@@ -36,6 +34,11 @@ public class AutoChooser implements Loggable {
 		chooser = new SendableChooser<>();
 		chooser.setDefaultOption("Do Nothing", () -> new WaitCommand(0));
 		auto = AutoCommands.getInstance();
+
+		Shuffleboard.getTab("Driver")
+				.add("Auto Mode", chooser)
+				.withSize(2, 1) // make the widget 2x1
+				.withPosition(0, 3); // place it in the top-left corner
 	}
 
 	public static AutoChooser getInstance() {
