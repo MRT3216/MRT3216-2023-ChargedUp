@@ -24,15 +24,12 @@ import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_CANCODER;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_DRIVE;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import com.swervedrivespecialties.swervelib.MkModuleConfiguration;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
 import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,16 +38,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.settings.Constants;
-import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Drivetrain;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -81,9 +71,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-	private PIDController autoXController;
-	private PIDController autoYController;
-	private PIDController autoThetaController;
+	// private PIDController autoXYController;
+	// private PIDController autoThetaController;
 
 	private SwerveSubsystem() {
 		navx = new AHRS(SerialPort.Port.kUSB1);
@@ -153,28 +142,22 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
 		this.field2d = new Field2d();
+		// autoThetaController = new PIDController(
+		// Constants.AUTO.kThetaP, Constants.AUTO.kThetaI, Constants.AUTO.kThetaD);
+		// autoThetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-		autoThetaController = new PIDController(
-				Constants.AUTO.kThetaP, Constants.AUTO.kThetaP, Constants.AUTO.kThetaP);
-		autoThetaController.enableContinuousInput(-Math.PI, Math.PI);
+		// autoXYController = new PIDController(AUTO.kPositionP, AUTO.kPositionI,
+		// AUTO.kPositionD);
 
-		autoXController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
-		autoYController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
+		// Shuffleboard.getTab("Auto")
+		// .add("XY PID", autoXYController)
+		// .withSize(1, 2) // make the widget 2x1
+		// .withPosition(0, 0); // place it in the top-left corner
 
-		Shuffleboard.getTab("Auto")
-				.add("X PID", autoXController)
-				.withSize(1, 2) // make the widget 2x1
-				.withPosition(0, 0); // place it in the top-left corner
-
-		Shuffleboard.getTab("Auto")
-				.add("Y PID", autoYController)
-				.withSize(1, 2) // make the widget 2x1
-				.withPosition(1, 0); // place it in the top-left corner
-
-		Shuffleboard.getTab("Auto")
-				.add("Theta PID", autoThetaController)
-				.withSize(1, 2) // make the widget 2x1
-				.withPosition(2, 0); // place it in the top-left corner
+		// Shuffleboard.getTab("Auto")
+		// .add("Theta PID", autoThetaController)
+		// .withSize(1, 2) // make the widget 2x1
+		// .withPosition(1, 0); // place it in the top-left corner
 	}
 
 	@Override
@@ -300,6 +283,12 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.chassisSpeeds = chassisSpeeds;
 	}
 
+	public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
+		this.drive(
+				ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds,
+						this.getGyroscopeRotation()));
+	}
+
 	/**
 	 * Returns the current state of the module.
 	 *
@@ -411,7 +400,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public double getThetaPos() {
 		return this.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
 	}
-	
+
 	// #endregion
 
 	// #region Column 7
@@ -444,33 +433,39 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	// Assuming this method is part of a drivetrain subsystem that provides the
 	// necessary methods
-	public Command getFollowTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-		return new SequentialCommandGroup(
-				new InstantCommand(() -> {
-					// Reset odometry for the first path you run during auto
-					if (isFirstPath) {
-						PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(traj,
-								DriverStation.getAlliance());
-						this.setCurrentRobotPose(transformed.getInitialHolonomicPose());
-					}
-				}),
-				new PPSwerveControllerCommand(
-						traj,
-						this::getCurrentRobotPose, // Pose supplier
-						this.kinematics, // SwerveDriveKinematics
-						this.autoXController, // X controller. Tune these values for your robot. Leaving them 0 will
-												// only use feedforwards.
-						this.autoYController, // Y controller (usually the same values as X controller)
-						this.autoThetaController, // Rotation controller. Tune these values for your robot. Leaving them
-													// 0
-													// will
-													// only use feedforwards.
-						this::setModuleStates, // Module states consumer
-						false, // Should the path be automatically mirrored depending on alliance color.
-								// Optional, defaults to true
-						this // Requires this drive subsystem
-				));
-	}
+	// public Command getFollowTrajectoryCommand(PathPlannerTrajectory traj, boolean
+	// isFirstPath) {
+	// return new SequentialCommandGroup(
+	// new InstantCommand(() -> {
+	// // Reset odometry for the first path you run during auto
+	// if (isFirstPath) {
+	// PathPlannerTrajectory transformed =
+	// PathPlannerTrajectory.transformTrajectoryForAlliance(traj,
+	// DriverStation.getAlliance());
+	// this.setCurrentRobotPose(transformed.getInitialHolonomicPose());
+	// }
+	// }),
+	// new PPSwerveControllerCommand(
+	// traj,
+	// this::getCurrentRobotPose, // Pose supplier
+	// this.kinematics, // SwerveDriveKinematics
+	// this.autoXController, // X controller. Tune these values for your robot.
+	// Leaving them 0 will
+	// // only use feedforwards.
+	// this.autoYController, // Y controller (usually the same values as X
+	// controller)
+	// this.autoThetaController, // Rotation controller. Tune these values for your
+	// robot. Leaving them
+	// // 0
+	// // will
+	// // only use feedforwards.
+	// this::setModuleStates, // Module states consumer
+	// false, // Should the path be automatically mirrored depending on alliance
+	// color.
+	// // Optional, defaults to true
+	// this // Requires this drive subsystem
+	// ));
+	// }
 
 	// #endregion
 

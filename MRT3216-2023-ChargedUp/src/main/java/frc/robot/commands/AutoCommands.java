@@ -23,16 +23,18 @@ public class AutoCommands {
         swerveSubsystem = SwerveSubsystem.getInstance();
     }
 
-    public Command getDriveBackwardsCommand() {
-        PathPlannerTrajectory path = PathPlanner.loadPath("Drive", new PathConstraints(1, 1));
-        return new WaitCommand(AUTO.kStartDelayTime).andThen(
-                swerveSubsystem.getFollowTrajectoryCommand(path, true));
-    }
+    // public Command getDriveBackwardsCommand() {
+    // PathPlannerTrajectory path = PathPlanner.loadPath("Drive", new
+    // PathConstraints(1, 1));
+    // return new WaitCommand(AUTO.kStartDelayTime).andThen(
+    // swerveSubsystem.getFollowTrajectoryCommand(path, true));
+    // }
 
-    public Command getPlaceAndDriveCommand() {
-        PathPlannerTrajectory path = PathPlanner.loadPath("PlaceAndDrive", new PathConstraints(1, 1));
-        return swerveSubsystem.getFollowTrajectoryCommand(path, true);
-    }
+    // public Command getPlaceAndDriveCommand() {
+    // PathPlannerTrajectory path = PathPlanner.loadPath("PlaceAndDrive", new
+    // PathConstraints(1, 1));
+    // return swerveSubsystem.getFollowTrajectoryCommand(path, true);
+    // }
 
     public static AutoCommands getInstance() {
         if (instance == null) {
