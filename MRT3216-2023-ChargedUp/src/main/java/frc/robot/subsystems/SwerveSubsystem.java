@@ -315,34 +315,20 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	// #region Logging
 
-	@Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
-	private AHRS getGyro() {
-		return this.navx;
+	// #region Column 0
+
+	@Log.BooleanBox(name = "Gyro Int?", rowIndex = 0, columnIndex = 0)
+	public boolean getGyroInterference() {
+		return !this.navx.isMagneticDisturbance();
 	}
 
-	@Log.NumberBar(name = "FL Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
-	public double getFrontLeftSpeed() {
-		return this.frontLeftModule.getDriveVelocity();
-	}
+	// #endregion
 
-	@Log.NumberBar(name = "FL Speed", min = -15, max = 15, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
-	public double getFrontLeftVoltage() {
-		return this.frontLeftModule.getState().speedMetersPerSecond;
-	}
+	// #region Column 1
 
 	@Log.Dial(name = "FL Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
 	public double getFrontLeftAngle() {
 		return Math.IEEEremainder(Math.toDegrees(this.frontLeftModule.getSteerAngle()), 180);
-	}
-
-	@Log.NumberBar(name = "FR Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 5, height = 1, width = 1)
-	public double getFrontRightSpeed() {
-		return this.frontRightModule.getDriveVelocity();
-	}
-
-	@Log.Dial(name = "FR Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
-	public double getFrontRightAngle() {
-		return Math.IEEEremainder(Math.toDegrees(this.frontRightModule.getSteerAngle()), 180);
 	}
 
 	@Log.Dial(name = "BL Angle", min = -90, max = 90, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
@@ -350,14 +336,60 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return Math.IEEEremainder(Math.toDegrees(this.backLeftModule.getSteerAngle()), 180);
 	}
 
+	@Log.NumberBar(name = "FL Speed", min = -15, max = 15, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
+	public double getFrontLeftVoltage() {
+		return this.frontLeftModule.getState().speedMetersPerSecond;
+	}
+
+	// #endregion
+
+	// #region Column 2
+
+	@Log.NumberBar(name = "FL Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
+	public double getFrontLeftSpeed() {
+		return this.frontLeftModule.getDriveVelocity();
+	}
+
 	@Log.NumberBar(name = "BL Velocity", min = -5, max = 5, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
 	public double getBackLeftSpeed() {
 		return this.backLeftModule.getDriveVelocity();
 	}
 
+	@Log.Graph(name = "Gyro Angle", width = 4, height = 2, rowIndex = 2, columnIndex = 2)
+	public double getGyroDegrees() {
+		return this.getGyroscopeRotation().getDegrees();
+	}
+
+	// #endregion
+
+	// #region Column 3-4
+
+	@Log.Gyro(name = "Robot Angle", rowIndex = 0, columnIndex = 3)
+	private AHRS getGyro() {
+		return this.navx;
+	}
+
+	// #endregion
+
+	// #region Column 5
+
+	@Log.NumberBar(name = "FR Velocity", min = -5, max = 5, rowIndex = 0, columnIndex = 5, height = 1, width = 1)
+	public double getFrontRightSpeed() {
+		return this.frontRightModule.getDriveVelocity();
+	}
+
 	@Log.NumberBar(name = "BR Velocity", min = -5, max = 5, rowIndex = 1, columnIndex = 5, height = 1, width = 1)
 	public double getBackRightSpeed() {
 		return this.backRightModule.getDriveVelocity();
+	}
+
+	// #endregion
+
+	// #region Column 6
+
+	@Log.Dial(name = "FR Angle", min = -90, max = 90, rowIndex = 0, columnIndex = 6, height = 1, width = 1)
+	public double getFrontRightAngle() {
+		return Math.IEEEremainder(Math.toDegrees(this.frontRightModule.getSteerAngle()), 180);
 	}
 
 	@Log.Dial(name = "BR Angle", min = -90, max = 90, rowIndex = 1, columnIndex = 6, height = 1, width = 1)
@@ -379,6 +411,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public double getThetaPos() {
 		return this.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
 	}
+	
+	// #endregion
+
+	// #region Column 7
 
 	@Log(name = "x-Velocity", rowIndex = 2, columnIndex = 7, height = 1, width = 1)
 	public double getRobotXVelocity() {
@@ -395,38 +431,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.chassisSpeeds.omegaRadiansPerSecond;
 	}
 
-	@Log.BooleanBox(name = "Gyro Int?", rowIndex = 0, columnIndex = 0)
-	public boolean getGyroInterference() {
-		return !this.navx.isMagneticDisturbance();
-	}
-
-	/*
-	 * @Config.NumberSlider(name = "Theta P", tabName = "Tuning", defaultValue =
-	 * Auto.kThetaP, min = 0, max = 20, rowIndex = 5, columnIndex = 0, height = 1,
-	 * width = 1)
-	 * public void setThetaP(double thetaP) {
-	 * this.thetaGains.kP = thetaP;
-	 * }
-	 * 
-	 * @Config.NumberSlider(name = "Theta I", tabName = "Tuning", defaultValue =
-	 * Auto.kThetaI, min = 0, max = 1, rowIndex = 5, columnIndex = 1, height = 1,
-	 * width = 1)
-	 * public void setThetaI(double thetaI) {
-	 * this.thetaGains.kI = thetaI;
-	 * }
-	 * 
-	 * @Config.NumberSlider(name = "Theta D", tabName = "Tuning", defaultValue =
-	 * Auto.kThetaD, min = 0, max = 1, rowIndex = 5, columnIndex = 2, height = 1,
-	 * width = 1)
-	 * public void setThetaD(double thetaD) {
-	 * this.thetaGains.kD = thetaD;
-	 * }
-	 */
-
-	@Log.Graph(name = "Gyro Angle", width = 4, height = 2, rowIndex = 2, columnIndex = 2)
-	public double getGyroDegrees() {
-		return this.getGyroscopeRotation().getDegrees();
-	}
+	// #endregion
 
 	@Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0, height = 4, width = 8)
 	public Field2d getField2D() {
