@@ -450,7 +450,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						thetaController, // Rotation controller. Tune these values for your robot. Leaving
 											// them 0 will only use feedforwards.
 						this::setModuleStates, // Module states consumer
-						true, // Should the path be automatically mirrored depending on alliance color.
+						false, // Should the path be automatically mirrored depending on alliance color.
 								// Optional, defaults to true
 						this // Requires this drive subsystem
 				));

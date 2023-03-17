@@ -38,7 +38,7 @@ public class AutoChooser {
 		Shuffleboard.getTab("Driver")
 				.add("Auto Mode", chooser)
 				.withSize(2, 1) // make the widget 2x1
-				.withPosition(0, 3); // place it in the top-left corner
+				.withPosition(7, 0); // place it in the top-left corner
 	}
 
 	public static AutoChooser getInstance() {

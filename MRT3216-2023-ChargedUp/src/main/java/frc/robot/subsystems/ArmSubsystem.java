@@ -144,10 +144,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         System.out.println("Arm Setpoint after reset:" + armPidController.getSetpoint().position);
         System.out.println("Arm Initial Goal: " + armPidController.getGoal().position);
 
-        Shuffleboard.getTab("SwerveSubsystem")
+        Shuffleboard.getTab("ArmSubsystem")
                 .add("Arm PID", armPidController)
                 .withSize(1, 3) // make the widget 2x1
-                .withPosition(1, 0); // place it in the top-left corner
+                .withPosition(4, 0); // place it in the top-left corner
 
         // endregion
     }
