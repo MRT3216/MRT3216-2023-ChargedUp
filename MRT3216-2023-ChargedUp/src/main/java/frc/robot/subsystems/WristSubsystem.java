@@ -26,7 +26,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #region Wrist Motors
 
-    @Config.PIDController
+    @Config
     private ProfiledPIDController wristPidController;
     private CANSparkMax wristMotor;
     // private SparkMaxAbsoluteEncoder wristEncoder;
@@ -37,10 +37,6 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #region Wrist PID
 
-    private double wristKp = WRIST.kWristKp;
-    private double wristKi = WRIST.kWristKi;
-    private double wristKd = WRIST.kWristKd;
-    private double wristKg = WRIST.kWristKg;
     private double lastSpeed = 0;
     private double lastTime = Timer.getFPGATimestamp();
 
@@ -99,9 +95,9 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         // #region Wrist PID
 
         wristPidController = new ProfiledPIDController(
-                this.wristKp,
-                this.wristKi,
-                this.wristKd,
+                WRIST.kWristKp,
+                WRIST.kWristKi,
+                WRIST.kWristKd,
                 // The motion profile constraints
                 new TrapezoidProfile.Constraints(WRIST.kWristMaxVelocity,
                         WRIST.kWristMaxAcceleration));
@@ -291,106 +287,70 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Wrist Position PID Column 1
-    // Column 1, Row 0-3
-
-    // @Config.NumberSlider(name = "Wrist P", defaultValue = WRIST.kWristKp, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
-    // public void setWristKp(double wristKp) {
-    //     this.wristKp = wristKp;
-    //     resetWristPID();
-    // }
-
-    // @Config.NumberSlider(name = "Wrist I", defaultValue = WRIST.kWristKi, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
-    // public void setWristKi(double wristKi) {
-    //     this.wristKi = wristKi;
-    //     resetWristPID();
-    // }
-
-    // @Config.NumberSlider(name = "Wrist D", defaultValue = WRIST.kWristKd, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
-    // public void setWristKd(double wristKd) {
-    //     this.wristKd = wristKd;
-    //     resetWristPID();
-    // }
-
-    // private void resetWristPID() {
-    //     this.wristPidController.setPID(wristKp, wristKi, wristKd);
-    //     System.out.println("Changing wrist P: " + wristKp + "  I: " + wristKi + " D:"
-    //             + wristKd);
-    // }
-
-    // @Config.NumberSlider(name = "Wrist G", defaultValue = WRIST.kWristKg, min = 0, max = 5, blockIncrement = 0.01, rowIndex = 3, columnIndex = 1, height = 1, width = 1)
-    // public void setWristKg(double wristKg) {
-    //     this.wristKg = wristKg;
-    //     // this.wristFeedforward = new ArmFeedforward(
-    //     // WRIST.kWristKs, this.wristKg, WRIST.kWristKv, WRIST.kWristKa);
-    // }
-
-    // #endregion
-
-    // #region Wrist Scoring Positions Column 2
+    // #region Wrist Scoring Positions Column 1
     // Column 2, Rows 0-4
 
-    @Config.NumberSlider(name = "Wrist High Cone", defaultValue = WRIST.kScoringHighConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist High Cone", defaultValue = WRIST.kScoringHighConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public void setWHCone(int wHCone) {
         this.wHCone = wHCone;
     }
 
-    @Config.NumberSlider(name = "Wrist High Cube", defaultValue = WRIST.kScoringHighCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist High Cube", defaultValue = WRIST.kScoringHighCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public void setWHCube(int wHCube) {
         this.wHCube = wHCube;
     }
 
-    @Config.NumberSlider(name = "Wrist Mid Cone", defaultValue = WRIST.kScoringMidConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Mid Cone", defaultValue = WRIST.kScoringMidConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
     public void setWMCone(int wMCone) {
         this.wMCone = wMCone;
     }
 
-    @Config.NumberSlider(name = "Wrist Mid Cube", defaultValue = WRIST.kScoringMidCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Mid Cube", defaultValue = WRIST.kScoringMidCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 1, height = 1, width = 1)
     public void setWMCube(int wMCube) {
         this.wMCube = wMCube;
     }
 
-    @Config.NumberSlider(name = "Wrist Hybrid", defaultValue = WRIST.kScoringHybridDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Hybrid", defaultValue = WRIST.kScoringHybridDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
     public void setWHybrid(int wHybrid) {
         this.wHybrid = wHybrid;
     }
 
     // #endregion
 
-    // #region Wrist Pickup Positions Column 3
+    // #region Wrist Pickup Positions Column 2
     // Column 3, Rows
 
-    @Config.NumberSlider(name = "W G Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "W G Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public void setWGUprightCone(int wGUprightCone) {
         this.wGUprightCone = wGUprightCone;
     }
 
-    @Config.NumberSlider(name = "W G Down Cone", defaultValue = WRIST.kGroundIntakeTippedConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "W G Down Cone", defaultValue = WRIST.kGroundIntakeTippedConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
     public void setWGTippedCone(int wGTippedCone) {
         this.wGTippedCone = wGTippedCone;
     }
 
-    @Config.NumberSlider(name = "W Ground Cube", defaultValue = WRIST.kGroundIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "W Ground Cube", defaultValue = WRIST.kGroundIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
     public void setWGCube(int wGCube) {
         this.wGCube = wGCube;
     }
 
-    @Config.NumberSlider(name = "W Sub Cone", defaultValue = WRIST.kSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "W Sub Cone", defaultValue = WRIST.kSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
     public void setWSCone(int wSCone) {
         this.wSCone = wSCone;
     }
 
-    @Config.NumberSlider(name = "W Sub Cube", defaultValue = WRIST.kSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "W Sub Cube", defaultValue = WRIST.kSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
     public void setWSCube(int wSCube) {
         this.wSCube = wSCube;
     }
 
     // #endregion
 
-    // #region Stowed Positions Column 4
+    // #region Stowed Positions Column 3
     // Column 4, Rows 0-1
 
-    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 4, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
     }
