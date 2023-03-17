@@ -411,7 +411,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.getGyroscopeRotation().getDegrees();
 	}
 
-	@Log.Field2d(name = "Field2D", width = 2, height = 2, rowIndex = 0, columnIndex = 6)
+	@Log.Field2d(name = "Field2D", tabName="Field", rowIndex = 0, columnIndex = 0)
 	public Field2d getField2D() {
 		return this.field2d;
 	}
