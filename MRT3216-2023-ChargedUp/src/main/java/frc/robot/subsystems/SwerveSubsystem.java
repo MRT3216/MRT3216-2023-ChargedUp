@@ -43,6 +43,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -83,6 +84,12 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
 	private Gains thetaGains;
+
+	private PIDController autoXController;
+
+	private PIDController autoYController;
+
+	private PIDController autoThetaController;
 
 	private SwerveSubsystem() {
 		navx = new AHRS(SerialPort.Port.kUSB1);
@@ -411,7 +418,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return this.getGyroscopeRotation().getDegrees();
 	}
 
-	@Log.Field2d(name = "Field2D", tabName="Field", rowIndex = 0, columnIndex = 0)
+	@Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0)
 	public Field2d getField2D() {
 		return this.field2d;
 	}
@@ -423,9 +430,27 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	// Assuming this method is part of a drivetrain subsystem that provides the
 	// necessary methods
 	public Command getFollowTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-		var thetaController = new PIDController(
+		autoThetaController = new PIDController(
 				Constants.AUTO.kThetaP, Constants.AUTO.kThetaP, Constants.AUTO.kThetaP);
-		thetaController.enableContinuousInput(-Math.PI, Math.PI);
+		autoThetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+		autoXController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
+		autoYController = new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD);
+
+		Shuffleboard.getTab("Auto")
+				.add("X PID", autoXController)
+				.withSize(1, 3) // make the widget 2x1
+				.withPosition(0, 0); // place it in the top-left corner
+
+		Shuffleboard.getTab("Auto")
+				.add("Y PID", autoYController)
+				.withSize(1, 3) // make the widget 2x1
+				.withPosition(1, 0); // place it in the top-left corner
+
+		Shuffleboard.getTab("Auto")
+				.add("Theta PID", autoThetaController)
+				.withSize(21, 3) // make the widget 2x1
+				.withPosition(2, 0); // place it in the top-left corner
 
 		return new SequentialCommandGroup(
 				new InstantCommand(() -> {
@@ -440,15 +465,13 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						traj,
 						this::getCurrentRobotPose, // Pose supplier
 						this.kinematics, // SwerveDriveKinematics
-						new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD), // X controller. Tune
-																								// these values for your
-																								// robot. Leaving them 0
-						// will only use feedforwards.
-						new PIDController(AUTO.kPositionP, AUTO.kPositionI, AUTO.kPositionD), // Y controller (usually
-																								// the same values as X
-																								// controller)
-						thetaController, // Rotation controller. Tune these values for your robot. Leaving
-											// them 0 will only use feedforwards.
+						this.autoXController, // X controller. Tune these values for your robot. Leaving them 0 will
+												// only use feedforwards.
+						this.autoYController, // Y controller (usually the same values as X controller)
+						this.autoThetaController, // Rotation controller. Tune these values for your robot. Leaving them
+													// 0
+													// will
+													// only use feedforwards.
 						this::setModuleStates, // Module states consumer
 						false, // Should the path be automatically mirrored depending on alliance color.
 								// Optional, defaults to true

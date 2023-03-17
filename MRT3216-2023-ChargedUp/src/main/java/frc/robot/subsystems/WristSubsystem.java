@@ -8,6 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -109,6 +110,11 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         wristPidController.reset(getWristDegreesWrtArm());
         System.out.println("Wrist Setpoint after reset:" + wristPidController.getSetpoint().position);
         System.out.println("Wrist Initial Goal: " + wristPidController.getGoal().position);
+
+        Shuffleboard.getTab("WristSubsystem")
+                .add("Wrist PID", wristPidController)
+                .withSize(1, 3) // make the widget 2x1
+                .withPosition(4, 0); // place it in the top-left corner
 
         // endregion
     }
@@ -346,8 +352,13 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Stowed Positions Column 3
+    // #region Start and Stowed Positions Column 3
     // Column 4, Rows 0-1
+
+    @Config.NumberSlider(name = "Wrist Start", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
+    public void setWStart(int wStart) {
+        this.wStart = wStart;
+    }
 
     @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setWStowed(int wStowed) {

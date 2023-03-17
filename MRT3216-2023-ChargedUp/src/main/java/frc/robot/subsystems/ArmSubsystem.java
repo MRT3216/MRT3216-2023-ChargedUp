@@ -62,8 +62,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private int aSCone = ARM.kSubstationIntakeConeDegrees;
     private int aSCube = ARM.kSubstationIntakeCubeDegrees;
     private int aStowed = ARM.kStowedDegrees;
-    private static double armOffset = ARM.kZeroOffset;
     private int aStart = ARM.kStartDegrees;
+    private static double armOffset = ARM.kZeroOffset;
 
     // #endregion
 
@@ -498,10 +498,15 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Stowed Positions Column 3
+    // #region Start and Stowed Positions Column 3
     // Column 4, Rows 0
 
-    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "Arm Start", defaultValue = ARM.kStartDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
+    public void setAStart(int aStart) {
+        this.aStart = aStart;
+    }
+
+    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
     public void setAStowed(int aStowed) {
         this.aStowed = aStowed;
     }
