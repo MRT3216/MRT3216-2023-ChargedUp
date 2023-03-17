@@ -380,7 +380,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	@Log.BooleanBox(name = "Gyro Int?", rowIndex = 0, columnIndex = 0)
 	public boolean getGyroInterference() {
-		return this.navx.isMagneticDisturbance();
+		return !this.navx.isMagneticDisturbance();
 	}
 
 	/*

@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.math.BigDecimal;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -37,7 +35,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private NetworkTable streamDeckNT;
 
     // #region Arm Motors
-
+    @Config.PIDController(name = "Arm PID")
     private ProfiledPIDController armPidController;
     private CANSparkMax leftTopMotor;
     private CANSparkMax leftMiddleMotor;
