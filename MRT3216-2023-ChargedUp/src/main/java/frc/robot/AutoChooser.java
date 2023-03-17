@@ -20,10 +20,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoCommands;
 import frc.robot.settings.Constants.Directories;
+import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 
 /** Add your docs here. */
-public class AutoChooser {
+public class AutoChooser implements Loggable {
 
 	private static AutoChooser instance;
 	private Dictionary<String, Trajectory> trajectories;
