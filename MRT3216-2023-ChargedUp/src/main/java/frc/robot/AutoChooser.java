@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Auto;
+import frc.robot.commands.AutoCommands;
 import frc.robot.settings.Constants.Directories;
 import io.github.oblarg.oblog.annotations.Config;
 
@@ -29,12 +29,12 @@ public class AutoChooser {
 	private Dictionary<String, Trajectory> trajectories;
 	@Config(name = "Auto Chooser", tabName = "Driver", rowIndex = 3, columnIndex = 0, width = 3, height = 1)
 	private SendableChooser<Supplier<Command>> chooser;
-	private Auto auto;
+	private AutoCommands auto;
 
 	private AutoChooser() {
 		chooser = new SendableChooser<>();
 		chooser.setDefaultOption("Do Nothing", () -> new WaitCommand(0));
-		auto = Auto.getInstance();
+		auto = AutoCommands.getInstance();
 	}
 
 	public static AutoChooser getInstance() {

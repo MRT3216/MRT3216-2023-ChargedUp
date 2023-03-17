@@ -279,8 +279,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #endregion
-
     // #region Command Factories
 
     // Score piece - needs piece and height

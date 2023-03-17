@@ -11,13 +11,13 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class Auto {
-    private static Auto instance;
+public class AutoCommands {
+    private static AutoCommands instance;
     private ArmSubsystem armSubsystem;
     private IntakeSubsystem intakeSubystem;
     private SwerveSubsystem swerveSubsystem;
 
-    public Auto() {
+    public AutoCommands() {
         armSubsystem = ArmSubsystem.getInstance();
         intakeSubystem = IntakeSubsystem.getInstance();
         swerveSubsystem = SwerveSubsystem.getInstance();
@@ -34,10 +34,10 @@ public class Auto {
         return swerveSubsystem.getFollowTrajectoryCommand(path, true);
     }
 
-    public static Auto getInstance() {
+    public static AutoCommands getInstance() {
         if (instance == null) {
             // if instance is null, initialize
-            instance = new Auto();
+            instance = new AutoCommands();
         }
         return instance;
     }
