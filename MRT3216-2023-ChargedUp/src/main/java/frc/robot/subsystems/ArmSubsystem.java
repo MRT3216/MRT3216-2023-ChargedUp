@@ -35,7 +35,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private NetworkTable streamDeckNT;
 
     // #region Arm Motors
-    @Config.PIDController(name = "Arm PID")
+    
+    @Config.PIDController
     private ProfiledPIDController armPidController;
     private CANSparkMax leftTopMotor;
     private CANSparkMax leftMiddleMotor;
