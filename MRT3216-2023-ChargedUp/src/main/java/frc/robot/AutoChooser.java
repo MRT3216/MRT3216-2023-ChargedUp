@@ -34,15 +34,28 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
 import frc.robot.subsystems.SwerveSubsystem;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 /** Add your docs here. */
-public class AutoChooser {
+public class AutoChooser implements Loggable {
 	private static AutoChooser instance;
 	private static HashMap<String, Command> eventMap;
 	private static SwerveAutoBuilder autoBuilder;
 	private Dictionary<String, Trajectory> trajectories;
 	private SendableChooser<Supplier<Command>> chooser;
+	@Log.Exclude
+	@Config.Exclude
 	private SwerveSubsystem swerveSubsystem;
+	@Log
+	private double maxTranslationError = 0;
+	@Log
+	private double maxRotationError = 0;
+	@Log
+	private double curentTranslationError = 0;
+	@Log
+	private double currentRotationError = 0;
 
 	private AutoChooser() {
 		swerveSubsystem = SwerveSubsystem.getInstance();
@@ -79,6 +92,11 @@ public class AutoChooser {
 					// Log setpoint ChassisSpeeds
 				},
 				(Translation2d translationError, Rotation2d rotationError) -> {
+					curentTranslationError = translationError.getNorm();
+					currentRotationError = rotationError.getDegrees();
+					maxTranslationError = Math.max(maxTranslationError, translationError.getNorm());
+					maxRotationError = Math.max(maxRotationError, rotationError.getDegrees());
+
 					// Log path following error
 					System.out.println("Translation Error: " + translationError.getNorm());
 					System.out.println("Rotation Error: " + rotationError.getDegrees());
@@ -107,7 +125,7 @@ public class AutoChooser {
 								Commands.print("Placing Hybrid Cube")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
 						Map.entry("intakeCone",
-								Commands.print("Intaking Cube")
+								Commands.print("Intaking Cone")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
 						Map.entry("intakeCube", Commands.print("Intaking Cube")
 								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing"))))));

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -34,6 +36,7 @@ public class Robot extends TimedRobot {
 		// Starts recording to data log
 		// TODO: Decide if this should be removed 
 		DataLogManager.start();
+		PathPlannerServer.startServer(5811);
 
 		// Instantiate our RobotContainer. This will perform all our button bindings,
 		// and put our autonomous chooser on the dashboard.

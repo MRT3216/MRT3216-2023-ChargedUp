@@ -30,7 +30,6 @@ import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -40,11 +39,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.settings.Constants;
-import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Drivetrain;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -72,11 +68,9 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private final SwerveModule[] swerveModules;
 
 	public final SwerveDrivePoseEstimator poseEstimator;
-	public final Field2d field2d;
+	// public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-	// private PIDController autoXYController;
-	// private PIDController autoThetaController;
 
 	private SwerveSubsystem() {
 		navx = new AHRS(SerialPort.Port.kUSB1);
@@ -145,13 +139,13 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
-		this.field2d = new Field2d();
+		//this.field2d = new Field2d();
 	}
 
 	@Override
 	public void periodic() {
 		this.poseEstimator.update(getGyroscopeRotation(), getPositions());
-		this.field2d.setRobotPose(poseEstimator.getEstimatedPosition());
+		//this.field2d.setRobotPose(poseEstimator.getEstimatedPosition());
 
 		final double zeroDeadzone = 0.001;
 
@@ -246,9 +240,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public void setCurrentRobotPose(Pose2d pose) {
 		this.poseEstimator
 				.resetPosition(getGyroscopeRotation(),
-						new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
+						new SwerveModulePosition[] {
+								this.frontLeftModule.getPosition(),
 								this.frontRightModule.getPosition(),
-								this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
+								this.backLeftModule.getPosition(),
+								this.backRightModule.getPosition() },
 						pose);
 	}
 
@@ -410,10 +406,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	// #endregion
 
-	@Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0, height = 4, width = 8)
-	public Field2d getField2D() {
-		return this.field2d;
-	}
+	// @Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0, height = 4, width = 8)
+	// public Field2d getField2D() {
+	// 	return this.field2d;
+	// }
 
 	// #endregion
 
