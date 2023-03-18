@@ -26,10 +26,10 @@ public final class Constants {
 		// public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
 		// public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.15);
 		// public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
-		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.66 + 180);
-		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(200.04 + 180);
-		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.51 + 180);
-		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(27.6 + 180);
+		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.31 + 180);
+		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(202.14 + 180);
+		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.33 + 180);
+		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(24.78 + 180);
 
 		public static final double WHEELBASE_METERS = Units.inchesToMeters(23.058); // 0.5461;
 		public static final double TRACKWIDTH_METERS = Units.inchesToMeters(18.914); // 0.5588;
@@ -357,13 +357,13 @@ public final class Constants {
 
 	public static final class AUTO {
 		// Proportional gain
-		public static final double kPositionP = 15;
+		public static final double kPositionP = 4;
 		// Integral gain
 		public static final double kPositionI = 0;
 		// Derivative gain
 		public static final double kPositionD = 0;
 		// Proportional gain
-		public static final double kThetaP = 0;
+		public static final double kThetaP = 13;
 		// Integral gain
 		public static final double kThetaI = 0;
 		// Derivative gain

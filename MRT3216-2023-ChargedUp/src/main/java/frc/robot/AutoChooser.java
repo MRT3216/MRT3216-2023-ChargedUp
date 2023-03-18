@@ -160,12 +160,19 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("Place Cube and Leave",
 				() -> Commands.runOnce(() -> swerveSubsystem.setModuleStatesStraight(), swerveSubsystem)
-						.andThen(() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeAndLeave",
-								new PathConstraints(4, 2.5), new PathConstraints(.5, 1)))));
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave")))));
 
 		chooser.addOption("Place Two Cubes",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
 						PathPlanner.getConstraintsFromPath("PlaceCubePickupCubePlaceCube"))));
+
+		chooser.addOption("Place High Cube Dock",
+						() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
+								new PathConstraints(4, 2.5), new PathConstraints(1, 1))));
+
+		chooser.addOption("Place Cone Cube and Leave",
+						() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConePlaceCubeLeave",
+								PathPlanner.getConstraintsFromPath("PlaceConePlaceCubeLeave"))));
 	}
 
 	public Command getAutoCommand() {
