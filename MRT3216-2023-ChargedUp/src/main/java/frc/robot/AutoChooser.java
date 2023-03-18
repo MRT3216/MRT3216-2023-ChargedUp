@@ -181,15 +181,15 @@ public class AutoChooser implements Loggable {
 				Commands.sequence(
 						Commands.run(
 								() -> swerveSubsystem.drive(new ChassisSpeeds(
-										-1.5,
+										0.5,
 										0, 0)),
-								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) >= 14.3),
+								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) <= -14),
 
 						Commands.run(
 								() -> swerveSubsystem
-										.drive(new ChassisSpeeds(-0.3,
+										.drive(new ChassisSpeeds(0.2,
 												0, 0)),
-								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) <= 12.5),
+								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) >= -9.5),
 						// Commands.run(swerveSubsystem::setX, this)),
 						Commands.waitSeconds(15)));
 	}
