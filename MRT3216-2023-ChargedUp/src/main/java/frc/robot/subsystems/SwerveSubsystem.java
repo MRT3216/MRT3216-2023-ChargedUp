@@ -209,7 +209,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public void zeroGyroscope() {
 		System.out.println("Zeroing Gyroscope");
 		this.navx.reset();
-		setCurrentRobotPose(new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
+		setCurrentRobotPose(poseEstimator.getEstimatedPosition());
 		/*
 		 * Lande - I can't remember why we had this last year, but I'm removing it for
 		 * now

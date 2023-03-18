@@ -13,6 +13,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
@@ -156,10 +157,12 @@ public class AutoChooser implements Loggable {
 		chooser.addOption("Place Cone and Leave",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeAndLeave",
 						PathPlanner.getConstraintsFromPath("PlaceConeAndLeave"))));
+
 		chooser.addOption("Place Cube and Leave",
 				() -> Commands.runOnce(() -> swerveSubsystem.setModuleStatesStraight(), swerveSubsystem)
-						.andThen(() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
-								PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave")))));
+						.andThen(() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeAndLeave",
+								new PathConstraints(4, 2.5), new PathConstraints(.5, 1)))));
+
 		chooser.addOption("Place Two Cubes",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
 						PathPlanner.getConstraintsFromPath("PlaceCubePickupCubePlaceCube"))));
