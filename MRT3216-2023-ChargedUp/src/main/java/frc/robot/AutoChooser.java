@@ -56,6 +56,10 @@ public class AutoChooser implements Loggable {
 	private double curentTranslationError = 0;
 	@Log
 	private double currentRotationError = 0;
+	@Log
+	private double translationSetpoint = 0;
+	@Log
+	private double rotationSetpoint = 0;
 
 	private AutoChooser() {
 		swerveSubsystem = SwerveSubsystem.getInstance();
@@ -87,6 +91,7 @@ public class AutoChooser implements Loggable {
 				},
 				(Pose2d targetPose) -> {
 					// Log target pose
+					rotationSetpoint = targetPose.getRotation().getDegrees();
 				},
 				(ChassisSpeeds setpointSpeeds) -> {
 					// Log setpoint ChassisSpeeds
@@ -98,8 +103,8 @@ public class AutoChooser implements Loggable {
 					maxRotationError = Math.max(maxRotationError, rotationError.getDegrees());
 
 					// Log path following error
-					System.out.println("Translation Error: " + translationError.getNorm());
-					System.out.println("Rotation Error: " + rotationError.getDegrees());
+					//System.out.println("Translation Error: " + translationError.getNorm());
+					//System.out.println("Rotation Error: " + rotationError.getDegrees());
 				});
 	}
 
