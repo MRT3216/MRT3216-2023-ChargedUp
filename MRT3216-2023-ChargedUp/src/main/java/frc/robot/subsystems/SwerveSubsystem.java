@@ -372,12 +372,12 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	@Log(name = "x-Position", rowIndex = 2, columnIndex = 6, height = 1, width = 1)
-	public double getYPos() {
+	public double getXPos() {
 		return this.poseEstimator.getEstimatedPosition().getY();
 	}
 
 	@Log(name = "y-Position", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
-	public double getXPos() {
+	public double getYPos() {
 		return this.poseEstimator.getEstimatedPosition().getX();
 	}
 
