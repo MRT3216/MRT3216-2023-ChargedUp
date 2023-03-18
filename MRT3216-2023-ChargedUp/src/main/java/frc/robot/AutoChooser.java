@@ -156,7 +156,7 @@ public class AutoChooser implements Loggable {
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeAndLeave",
 						PathPlanner.getConstraintsFromPath("PlaceConeAndLeave"))));
 		chooser.addOption("Place Cube and Leave",
-				() -> autoBuilder.followPath(PathPlanner.loadPath("PlaceCubeAndLeave",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
 						PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave"))));
 		chooser.addOption("Place Two Cubes",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
