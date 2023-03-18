@@ -57,7 +57,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 			new Translation2d(-TRACKWIDTH_METERS / 2.0, -WHEELBASE_METERS / 2.0));
 
 	// connected over USB
-	@Log
 	private final AHRS navx;
 
 	// These are our modules. We initialize them in the constructor.
@@ -282,6 +281,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						this.getGyroscopeRotation()));
 	}
 
+	@Log(name = "Pitch", rowIndex = 0, columnIndex = 7, height = 1, width = 1)
 	public double getPitch() {
 		return navx.getPitch();
 	}
