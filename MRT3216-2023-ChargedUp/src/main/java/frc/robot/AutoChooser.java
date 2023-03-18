@@ -64,6 +64,10 @@ public class AutoChooser implements Loggable {
 	private double currentXError = 0;
 	@Log
 	private double currentYError = 0;
+	@Log
+	private double xSetpoint = 0;
+	@Log
+	private double ySetpoint = 0;
 
 	private AutoChooser() {
 		swerveSubsystem = SwerveSubsystem.getInstance();
@@ -96,6 +100,8 @@ public class AutoChooser implements Loggable {
 				(Pose2d targetPose) -> {
 					// Log target pose
 					rotationSetpoint = targetPose.getRotation().getDegrees();
+					xSetpoint = targetPose.getX();
+					ySetpoint = targetPose.getY();
 				},
 				(ChassisSpeeds setpointSpeeds) -> {
 					// Log setpoint ChassisSpeeds
@@ -150,7 +156,7 @@ public class AutoChooser implements Loggable {
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeAndLeave",
 						PathPlanner.getConstraintsFromPath("PlaceConeAndLeave"))));
 		chooser.addOption("Place Cube and Leave",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
+				() -> autoBuilder.followPath(PathPlanner.loadPath("PlaceCubeAndLeave",
 						PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave"))));
 		chooser.addOption("Place Two Cubes",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
