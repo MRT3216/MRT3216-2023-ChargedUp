@@ -281,6 +281,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						this.getGyroscopeRotation()));
 	}
 
+	public double getPitch() {
+		return navx.getPitch();
+	}
+
 	/**
 	 * Returns the current state of the module.
 	 *

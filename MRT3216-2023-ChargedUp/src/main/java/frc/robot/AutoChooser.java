@@ -26,15 +26,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
+import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -173,6 +174,24 @@ public class AutoChooser implements Loggable {
 		chooser.addOption("Place Cone Cube and Leave",
 						() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConePlaceCubeLeave",
 								PathPlanner.getConstraintsFromPath("PlaceConePlaceCubeLeave"))));
+	}
+
+	public CommandBase autoBalance() {
+		return Commands.race(
+				Commands.sequence(
+						Commands.run(
+								() -> swerveSubsystem.drive(new ChassisSpeeds(
+										-1.5,
+										0, 0)),
+								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) >= 14.3),
+
+						Commands.run(
+								() -> swerveSubsystem
+										.drive(new ChassisSpeeds(-0.3,
+												0, 0)),
+								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) <= 12.5),
+						// Commands.run(swerveSubsystem::setX, this)),
+						Commands.waitSeconds(15)));
 	}
 
 	public Command getAutoCommand() {
