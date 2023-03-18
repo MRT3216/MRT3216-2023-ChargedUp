@@ -30,6 +30,7 @@ import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -39,8 +40,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants;
+import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Drivetrain;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -142,22 +146,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
 		this.field2d = new Field2d();
-		// autoThetaController = new PIDController(
-		// Constants.AUTO.kThetaP, Constants.AUTO.kThetaI, Constants.AUTO.kThetaD);
-		// autoThetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-		// autoXYController = new PIDController(AUTO.kPositionP, AUTO.kPositionI,
-		// AUTO.kPositionD);
-
-		// Shuffleboard.getTab("Auto")
-		// .add("XY PID", autoXYController)
-		// .withSize(1, 2) // make the widget 2x1
-		// .withPosition(0, 0); // place it in the top-left corner
-
-		// Shuffleboard.getTab("Auto")
-		// .add("Theta PID", autoThetaController)
-		// .withSize(1, 2) // make the widget 2x1
-		// .withPosition(1, 0); // place it in the top-left corner
 	}
 
 	@Override

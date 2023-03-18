@@ -13,21 +13,24 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.AutoCommands;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -39,12 +42,12 @@ public class AutoChooser {
 	private static SwerveAutoBuilder autoBuilder;
 	private Dictionary<String, Trajectory> trajectories;
 	private SendableChooser<Supplier<Command>> chooser;
-	private AutoCommands auto;
 	private SwerveSubsystem swerveSubsystem;
 
 	private AutoChooser() {
-		auto = AutoCommands.getInstance();
 		swerveSubsystem = SwerveSubsystem.getInstance();
+
+		this.populateAutoChooser();
 
 		Shuffleboard.getTab("Driver")
 				.add("Auto Mode", chooser)
@@ -62,25 +65,67 @@ public class AutoChooser {
 				new PIDConstants(AUTO.kThetaP, AUTO.kThetaI, AUTO.kThetaD),
 				swerveSubsystem::driveFieldRelative,
 				eventMap,
+				true,
 				swerveSubsystem);
 
-		this.populateAutoChooser();
+		PPSwerveControllerCommand.setLoggingCallbacks(
+				(PathPlannerTrajectory activeTrajectory) -> {
+					// Log current trajectory
+				},
+				(Pose2d targetPose) -> {
+					// Log target pose
+				},
+				(ChassisSpeeds setpointSpeeds) -> {
+					// Log setpoint ChassisSpeeds
+				},
+				(Translation2d translationError, Rotation2d rotationError) -> {
+					// Log path following error
+					System.out.println("Translation Error: " + translationError.getNorm());
+					System.out.println("Rotation Error: " + rotationError.getDegrees());
+				});
 	}
 
 	private static HashMap<String, Command> buildEventMap() {
 		return new HashMap<>(
 				Map.ofEntries(
-						Map.entry("placeHighCone", Commands.print("Placing High Cone")),
-						Map.entry("event2", Commands.print("event2"))));
+						Map.entry("placeHighCone",
+								Commands.print("Placing High Cone")
+										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("placeMidCone",
+								Commands.print("Placing Mid Cone")
+										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("placeHybridCone",
+								Commands.print("Placing Hybrid Cone")
+										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("placeHighCube",
+								Commands.print("Placing High Cube")
+										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("placeMidCube",
+								Commands.print("Placing Mid Cube")
+										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("placeHybridCube",
+								Commands.print("Placing Hybrid Cube")
+										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("intakeCone",
+								Commands.print("Intaking Cube")
+										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("intakeCube", Commands.print("Intaking Cube")
+								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing"))))));
 	}
 
 	private void populateAutoChooser() {
 		chooser = new SendableChooser<>();
 		chooser.setDefaultOption("Do Nothing", () -> new WaitCommand(0));
-		chooser.addOption("Drive Backwards",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("DriveBackwards", new PathConstraints(1, 1))));
 
-		SmartDashboard.putData(chooser);
+		chooser.addOption("Place Cone and Leave",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeAndLeave",
+						PathPlanner.getConstraintsFromPath("PlaceConeAndLeave"))));
+		chooser.addOption("Place Cube and Leave",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
+						PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave"))));
+		chooser.addOption("Place Two Cubes",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
+						PathPlanner.getConstraintsFromPath("PlaceCubePickupCubePlaceCube"))));
 	}
 
 	public Command getAutoCommand() {
