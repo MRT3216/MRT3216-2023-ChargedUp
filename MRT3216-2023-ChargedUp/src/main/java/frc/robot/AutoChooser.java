@@ -25,6 +25,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -115,8 +116,8 @@ public class AutoChooser implements Loggable {
 					currentYError = translationError.getY();
 
 					// Log path following error
-					//System.out.println("Translation Error: " + translationError.getNorm());
-					//System.out.println("Rotation Error: " + rotationError.getDegrees());
+					// System.out.println("Translation Error: " + translationError.getNorm());
+					// System.out.println("Rotation Error: " + rotationError.getDegrees());
 				});
 	}
 
@@ -156,8 +157,9 @@ public class AutoChooser implements Loggable {
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeAndLeave",
 						PathPlanner.getConstraintsFromPath("PlaceConeAndLeave"))));
 		chooser.addOption("Place Cube and Leave",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
-						PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave"))));
+				() -> Commands.runOnce(() -> swerveSubsystem.setModuleStatesStraight(), swerveSubsystem)
+						.andThen(() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
+								PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave")))));
 		chooser.addOption("Place Two Cubes",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
 						PathPlanner.getConstraintsFromPath("PlaceCubePickupCubePlaceCube"))));
