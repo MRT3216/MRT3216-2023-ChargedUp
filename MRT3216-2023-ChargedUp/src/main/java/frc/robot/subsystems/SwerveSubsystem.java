@@ -194,6 +194,13 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.backRightModule.set(brVoltage, states[3].angle.getRadians());
 	}
 
+	public void setModuleStatesStraight(){
+		this.frontLeftModule.set(0, 0);
+		this.frontRightModule.set(0, 0);
+		this.backLeftModule.set(0, 0);
+		this.backRightModule.set(0, 0);
+	}
+
 	/**
 	 * Sets the gyroscope angle to zero. This can be used to set the direction the
 	 * robot is currently
