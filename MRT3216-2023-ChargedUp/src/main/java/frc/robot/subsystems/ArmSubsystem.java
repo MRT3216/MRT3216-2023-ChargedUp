@@ -19,6 +19,7 @@ import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
+import frc.robot.settings.Constants.Substation;
 import frc.robot.settings.RobotMap.ROBOT;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -71,6 +72,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private GamePiece gp;
     private ScoringHeight sH;
+    private Substation sub;
 
     // #endregion
 
@@ -301,7 +303,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Substation pickup -- needs piece
     public Command getSubstationIntakeCommand() {
-        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Substation));
+        if (this.sub == Substation.Single) {
+            return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.SingleSubstation));
+        } else {
+            return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.DoubleSubstation));
+        }
     }
 
     public Command getStowedCommand() {
@@ -372,9 +378,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
         if (iP == ARM.IntakePosition.Ground) {
             return gP == ARM.GamePiece.Cone ? ARM.Position.GroundIntakeUprightCone : ARM.Position.GroundIntakeCube;
-        } else if (iP == ARM.IntakePosition.Substation) {
+        } else if (iP == ARM.IntakePosition.SingleSubstation) {
             return gP == ARM.GamePiece.Cone ? ARM.Position.SingleSubstationIntakeCone
                     : ARM.Position.SingleSubstationIntakeCube;
+        } else if (iP == ARM.IntakePosition.DoubleSubstation) {
+            return gP == ARM.GamePiece.Cone ? ARM.Position.DoubleSubstationIntakeCone
+                    : ARM.Position.DoubleSubstationIntakeCube;
         }
 
         return ARM.Position.Stowed;
@@ -546,6 +555,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config(name = "Arm Offset", tabName = "Driver", defaultValueNumeric = ARM.kZeroOffsetInDegrees, rowIndex = 2, columnIndex = 6, height = 1, width = 1)
     public void setArmOffsetInDegrees(double offset) {
         armOffset = calculateNativeUnitsFromDegrees(offset);
+    }
+
+    @Config.ToggleSwitch(name = "Double Substation?", tabName = "Driver", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
+    public void setSubstation(boolean isDouble) {
+        this.sub = isDouble ? Substation.Double : Substation.Single;
     }
 
     // #endregion

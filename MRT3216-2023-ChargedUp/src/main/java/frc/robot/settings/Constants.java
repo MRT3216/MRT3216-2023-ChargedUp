@@ -259,7 +259,8 @@ public final class Constants {
 
 		public enum IntakePosition {
 			Ground(0),
-			Substation(1);
+			SingleSubstation(1),
+			DoubleSubstation(2);
 
 			private int value;
 			private static Map<Integer, IntakePosition> map = new HashMap<>();
@@ -285,6 +286,35 @@ public final class Constants {
 
 		// #endregion
 	}
+
+	public enum Substation {
+		Single(0),
+		Double(1);
+
+		private int value;
+		private static Map<Integer, Substation> map = new HashMap<>();
+
+		private Substation(int value) {
+			this.value = value;
+		}
+
+		static {
+			for (Substation position : Substation.values()) {
+				map.put(position.value, position);
+			}
+		}
+
+		public static Substation valueOf(int position) {
+			return (Substation) map.get(position);
+		}
+
+		public int getValue() {
+			return value;
+		}
+	}
+
+	// #endregion
+
 
 	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
