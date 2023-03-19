@@ -90,10 +90,10 @@ public class RobotContainer {
 
 		// substationChooser.addOption("Single Substation", );
 
-		Shuffleboard.getTab("Driver")
-				.add("Substation Chooser", substationChooser)
-				.withSize(2, 1) // make the widget 2x1
-				.withPosition(7, 1); // place it in the top-right corner
+		// Shuffleboard.getTab("Driver")
+		// 		.add("Substation Chooser", substationChooser)
+		// 		.withSize(2, 1) // make the widget 2x1
+		// 		.withPosition(7, 1); // place it in the top-right corner
 	}
 
 	/**

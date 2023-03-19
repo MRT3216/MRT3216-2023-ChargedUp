@@ -87,6 +87,7 @@ public class AutoBalance implements Loggable {
             // drive forwards to approach station, exit when tilt is detected
             case 0:
                 System.out.println("Case 0: drive forwards to approach station, exit when tilt is detected");
+                System.out.println(robotSpeedFast);
                 if (getTilt() > onChargeStationDegree) {
                     debounceCount++;
                 }
