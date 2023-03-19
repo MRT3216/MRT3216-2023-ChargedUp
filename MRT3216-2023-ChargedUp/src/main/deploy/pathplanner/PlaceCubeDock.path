@@ -62,7 +62,7 @@
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 0.5,
+      "velOverride": null,
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
@@ -74,12 +74,12 @@
     },
     {
       "anchorPoint": {
-        "x": 3.45,
-        "y": 2.3
+        "x": 3.936682232338824,
+        "y": 2.306671963771279
       },
       "prevControl": {
-        "x": 4.006703869181453,
-        "y": 2.3
+        "x": 4.493386101520278,
+        "y": 2.306671963771279
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -89,14 +89,11 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "maxVelocity": 1.0,
-  "maxAcceleration": 1.0,
-  "isReversed": null,
   "markers": []
 }
