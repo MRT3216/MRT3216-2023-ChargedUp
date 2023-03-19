@@ -38,6 +38,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.Drivetrain;
@@ -199,6 +200,13 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.frontRightModule.set(0, 0);
 		this.backLeftModule.set(0, 0);
 		this.backRightModule.set(0, 0);
+	}
+
+	public void setModuleStatesHockeyStop() {
+		this.frontLeftModule.set(0, Units.degreesToRadians(-45));
+		this.frontRightModule.set(0, Units.degreesToRadians(45));
+		this.backLeftModule.set(0, Units.degreesToRadians(45));
+		this.backRightModule.set(0, Units.degreesToRadians(-45));
 	}
 
 	/**
