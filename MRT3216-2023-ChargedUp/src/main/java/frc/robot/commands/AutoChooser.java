@@ -43,6 +43,8 @@ import io.github.oblarg.oblog.annotations.Log;
 public class AutoChooser implements Loggable {
 	private static AutoChooser instance;
 	private static HashMap<String, Command> eventMap;
+	@Log.Exclude
+	@Config.Exclude
 	private static SwerveAutoBuilder autoBuilder;
 	private Dictionary<String, Trajectory> trajectories;
 	private SendableChooser<Supplier<Command>> chooser;

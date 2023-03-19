@@ -5,8 +5,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class AutoBalance {
+public class AutoBalance implements Loggable{
     private static AutoBalance instance;
     private int state;
     private int debounceCount;
@@ -15,6 +18,8 @@ public class AutoBalance {
     private double onChargeStationDegree;
     private double levelDegree;
     private double debounceTime;
+    @Log.Exclude
+    @Config.Exclude
     private SwerveSubsystem swerveSubsystem;
 
     private AutoBalance() {
@@ -66,6 +71,7 @@ public class AutoBalance {
 
     // returns the magnititude of the robot's tilt calculated by the root of
     // pitch^2 + roll^2, used to compensate for diagonally mounted rio
+    @Log
     public double getTilt() {
         double pitch = getPitch();
         double roll = getRoll();
