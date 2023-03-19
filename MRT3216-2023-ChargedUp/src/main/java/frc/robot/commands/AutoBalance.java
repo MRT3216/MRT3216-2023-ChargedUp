@@ -136,39 +136,39 @@ public class AutoBalance implements Loggable {
 
     // #region Logging
 
-    @Config
+    @Config(name = "Speed Slow", defaultValueNumeric = AUTO_BALANCE.kRobotSpeedSlow, rowIndex = 0, columnIndex = 0)
     public void setRobotSpeedSlow(double robotSpeedSlow) {
         this.robotSpeedSlow = robotSpeedSlow;
     }
 
-    @Config
+    @Config(name = "Speed Fast", defaultValueNumeric = AUTO_BALANCE.kRobotSpeedFast, rowIndex = 0, columnIndex = 1)
     public void setRobotSpeedFast(double robotSpeedFast) {
         this.robotSpeedFast = robotSpeedFast;
     }
 
-    @Config
+    @Config(name = "On Station Degree", defaultValueNumeric = AUTO_BALANCE.kOnChargeStationDegree, rowIndex = 1, columnIndex = 0)
     public void setOnChargeStationDegree(double onChargeStationDegree) {
         this.onChargeStationDegree = onChargeStationDegree;
     }
 
-    @Config
+    @Config(name = "Level Degree", defaultValueNumeric = AUTO_BALANCE.kLevelDegree, rowIndex = 1, columnIndex = 1)
     public void setLevelDegree(double levelDegree) {
         this.levelDegree = levelDegree;
     }
 
-    @Config
-    public void setDebounceTime(double debounceTime) {
-        this.debounceTime = debounceTime;
-    }
-
-    @Config
+    @Config(name = "F Correction", defaultValueNumeric = AUTO_BALANCE.kForwardCorrectionSpeed, rowIndex = 2, columnIndex = 0)
     public void setForwardCorrectionSpeed(double forwardCorrectionSpeed) {
         this.forwardCorrectionSpeed = forwardCorrectionSpeed;
     }
 
-    @Config
+    @Config(name = "R Correction", defaultValueNumeric = AUTO_BALANCE.kReverseCorrectionSpeed, rowIndex = 2, columnIndex = 1)
     public void setReverseCorrectionSpeed(double reverseCorrectionSpeed) {
         this.reverseCorrectionSpeed = reverseCorrectionSpeed;
+    }
+
+    @Config(name = "Debounce Time", defaultValueNumeric = AUTO_BALANCE.kDebounceTime, rowIndex = 3, columnIndex = 0)
+    public void setDebounceTime(double debounceTime) {
+        this.debounceTime = debounceTime;
     }
 
     // #endregion
