@@ -31,7 +31,7 @@ public class AutoBalance implements Loggable {
     private AutoBalance() {
         swerveSubsystem = SwerveSubsystem.getInstance();
 
-        robotSpeedSlow = AUTO_BALANCE.kRobotSpeedSlow;
+        robotSpeedSlow = .1;//AUTO_BALANCE.kRobotSpeedSlow;
         robotSpeedFast = AUTO_BALANCE.kRobotSpeedFast;
         onChargeStationDegree = AUTO_BALANCE.kOnChargeStationDegree;
         levelDegree = AUTO_BALANCE.kLevelDegree;
