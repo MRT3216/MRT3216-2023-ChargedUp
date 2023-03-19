@@ -3,13 +3,14 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.settings.Constants.AUTO_BALANCE;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class AutoBalance implements Loggable{
+public class AutoBalance implements Loggable {
     private static AutoBalance instance;
     private int state;
     private int debounceCount;
@@ -18,6 +19,10 @@ public class AutoBalance implements Loggable{
     private double onChargeStationDegree;
     private double levelDegree;
     private double debounceTime;
+    private double forwardCorrectionSpeed;
+    private double reverseCorrectionSpeed;
+    private boolean isFieldSide;
+    private int direction;
     @Log.Exclude
     @Config.Exclude
     private SwerveSubsystem swerveSubsystem;
@@ -25,44 +30,31 @@ public class AutoBalance implements Loggable{
     private AutoBalance() {
         swerveSubsystem = SwerveSubsystem.getInstance();
 
+        robotSpeedSlow = AUTO_BALANCE.kRobotSpeedSlow;
+        robotSpeedSlow = AUTO_BALANCE.kRobotSpeedFast;
+        onChargeStationDegree = AUTO_BALANCE.kOnChargeStationDegree;
+        levelDegree = AUTO_BALANCE.kLevelDegree;
+        debounceTime = AUTO_BALANCE.kDebounceTime;
+        forwardCorrectionSpeed = AUTO_BALANCE.kForwardCorrectionSpeed;
+        reverseCorrectionSpeed = AUTO_BALANCE.kReverseCorrectionSpeed;
         state = 0;
         debounceCount = 0;
-
-        /**********
-         * CONFIG *
-         **********/
-        // Speed the robot drived while scoring/approaching station, default = 0.4
-        robotSpeedFast = 0.2;
-
-        // Speed the robot drives while balancing itself on the charge station.
-        // Should be roughly half the fast speed, to make the robot more accurate,
-        // default = 0.2
-        robotSpeedSlow = 0.1;
-
-        // Angle where the robot knows it is on the charge station, default = 13.0
-        onChargeStationDegree = 11.0;
-
-        // Angle where the robot can assume it is level on the charging station
-        // Used for exiting the drive forward sequence as well as for auto balancing,
-        // default = 6.0
-        levelDegree = 4.0;
-
-        // Amount of time a sensor condition needs to be met before changing states in
-        // seconds
-        // Reduces the impact of sensor noice, but too high can make the auto run
-        // slower, default = 0.2
-        debounceTime = 0.05;
     }
 
-    public CommandBase getAutoBalanceCommand() {
+    public CommandBase getAutoBalanceCommand(boolean isFieldSide) {
+        this.isFieldSide = isFieldSide;
+        direction = isFieldSide ? 1 : -1;
+
         return Commands.run(
                 () -> swerveSubsystem.drive(
-                        new ChassisSpeeds(autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND, 0, 0)),
+                        new ChassisSpeeds(direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+                                0, 0)),
                 swerveSubsystem);
     }
 
     public double getPitch() {
-        return -swerveSubsystem.getPitch();
+        // Pitch has to be reversed when approaching from the field side
+        return isFieldSide ? -swerveSubsystem.getPitch() : swerveSubsystem.getPitch();
     }
 
     public double getRoll() {
@@ -105,7 +97,7 @@ public class AutoBalance implements Loggable{
                 return robotSpeedFast;
             // driving up charge station, drive slower, stopping when level
             case 1:
-            System.out.println("Case 1: driving up charge station, drive slower, stopping when level");
+                System.out.println("Case 1: driving up charge station, drive slower, stopping when level");
                 if (getTilt() < levelDegree) {
                     debounceCount++;
                 }
@@ -117,19 +109,18 @@ public class AutoBalance implements Loggable{
                 return robotSpeedSlow;
             // on charge station, stop motors and wait for end of auto
             case 2:
-            System.out.println("Case 2: on charge station, stop motors and wait for end of auto");
+                System.out.println("Case 2: on charge station, stop motors and wait for end of auto");
                 if (Math.abs(getTilt()) <= levelDegree / 2) {
                     debounceCount++;
                 }
                 if (debounceCount > secondsToTicks(debounceTime)) {
-                    //state = 4;
                     debounceCount = 0;
                     return 0;
                 }
                 if (getTilt() >= levelDegree) {
-                    return 0.1;
+                    return forwardCorrectionSpeed;
                 } else if (getTilt() <= -levelDegree) {
-                    return -0.1;
+                    return reverseCorrectionSpeed;
                 }
             case 3:
                 return 0;
@@ -137,9 +128,48 @@ public class AutoBalance implements Loggable{
         return 0;
     }
 
-    public void reset(){
+    public void reset() {
         state = 0;
     }
+
+    // #region Logging
+
+    @Config
+    public void setRobotSpeedSlow(double robotSpeedSlow) {
+        this.robotSpeedSlow = robotSpeedSlow;
+    }
+
+    @Config
+    public void setRobotSpeedFast(double robotSpeedFast) {
+        this.robotSpeedFast = robotSpeedFast;
+    }
+
+    @Config
+    public void setOnChargeStationDegree(double onChargeStationDegree) {
+        this.onChargeStationDegree = onChargeStationDegree;
+    }
+
+    @Config
+    public void setLevelDegree(double levelDegree) {
+        this.levelDegree = levelDegree;
+    }
+
+    @Config
+    public void setDebounceTime(double debounceTime) {
+        this.debounceTime = debounceTime;
+    }
+
+    @Config
+    public void setForwardCorrectionSpeed(double forwardCorrectionSpeed) {
+        this.forwardCorrectionSpeed = forwardCorrectionSpeed;
+    }
+
+    @Config
+    public void setReverseCorrectionSpeed(double reverseCorrectionSpeed) {
+        this.reverseCorrectionSpeed = reverseCorrectionSpeed;
+    }
+
+    // #endregion
 
     public static AutoBalance getInstance() {
         if (instance == null) {

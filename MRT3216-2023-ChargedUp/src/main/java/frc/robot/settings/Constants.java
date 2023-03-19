@@ -373,6 +373,38 @@ public final class Constants {
 		public static final double kBalanceTippingAngle = 9.5;
 	}
 
+	public static final class AUTO_BALANCE {
+		/**********
+		 * CONFIG *
+		 **********/
+		// Speed the robot drived while scoring/approaching station, default = 0.4
+		public static final double kRobotSpeedFast = 0.2;
+
+		// Speed the robot drives while balancing itself on the charge station.
+		// Should be roughly half the fast speed, to make the robot more accurate,
+		// default = 0.2
+		public static final double kRobotSpeedSlow = 0.1;
+
+		// Angle where the robot knows it is on the charge station, default = 13.0
+		public static final double kOnChargeStationDegree = 11.0;
+
+		// Angle where the robot can assume it is level on the charging station
+		// Used for exiting the drive forward sequence as well as for auto balancing,
+		// default = 6.0
+		public static final double kLevelDegree = 4.0;
+
+		// Amount of time a sensor condition needs to be met before changing states in
+		// seconds
+		// Reduces the impact of sensor noice, but too high can make the auto run
+		// slower, default = 0.2
+		public static final double kDebounceTime = 0.05;
+
+		// Speed at which the robot reverses once charge station tips forward
+		public static final double kReverseCorrectionSpeed = -0.1;
+		// Speed it goes the other way when it tips backs
+		public static final double kForwardCorrectionSpeed = 0.05;
+	}
+
 	public static final class OI {
 		public static final double kJoystickDeadband = 0.1;
 		public static final double kTranslationExpo = 75;

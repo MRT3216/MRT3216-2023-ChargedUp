@@ -156,13 +156,13 @@ public class AutoChooser implements Loggable {
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
 
 						Map.entry("intakeCube", Commands.print("Intaking Cube")
-								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing"))))));
 
-						Map.entry("stow", AutoBalance.getInstance().getAutoBalanceCommand()
-								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished stowing")))),
+						// Map.entry("stow", AutoBalance.getInstance().getAutoBalanceCommand()
+						// 		.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished stowing")))),
 
-						Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
-								.andThen(Commands.waitSeconds(0).andThen(Commands.print("Finished balancing"))))));
+						// Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
+						// 		.andThen(Commands.waitSeconds(0).andThen(Commands.print("Finished balancing"))))));
 	}
 	// TODO: Find a naming system and put the names of the files and tabs to that
 	// TODO: Look into not needing the ".andThen" for docking
@@ -186,7 +186,7 @@ public class AutoChooser implements Loggable {
 		chooser.addOption("Cable Place High Cube Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
 						new PathConstraints(4, 4), new PathConstraints(1, 1)))
-						.andThen(AutoBalance.getInstance().getAutoBalanceCommand()));
+						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
 
 		chooser.addOption("Place Cone Cube Pickup Cube and Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeCubePickupCubeandDock",
