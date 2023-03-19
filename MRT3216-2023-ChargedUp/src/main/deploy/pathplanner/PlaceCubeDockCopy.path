@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.8241361269047325,
-        "y": 0.44
+        "y": 1.0505634686483054
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.703412073490814,
-        "y": 1.141916813748157
+        "y": 0.7879226014862292
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -28,15 +28,15 @@
         "y": 0.8564376103111184
       },
       "prevControl": {
-        "x": 5.269675674733829,
-        "y": 0.8564376103111184
+        "x": 5.398335753936465,
+        "y": 0.3882517166743743
       },
       "nextControl": {
-        "x": 5.269675674733829,
-        "y": 0.8564376103111184
+        "x": 7.127410497686775,
+        "y": 1.3334792432578757
       },
       "holonomicAngle": 180.0,
-      "isReversal": true,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -49,20 +49,20 @@
     },
     {
       "anchorPoint": {
-        "x": 1.85,
-        "y": 1.05
+        "x": 5.683814957373505,
+        "y": 2.3
       },
       "prevControl": {
-        "x": 1.8638798994862926,
-        "y": 0.813665717730416
+        "x": 6.506312201222603,
+        "y": 2.3
       },
       "nextControl": {
-        "x": 1.7627827818048798,
-        "y": 2.53505532652091
+        "x": 4.692975902951365,
+        "y": 2.3
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 0.5,
+      "velOverride": null,
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
@@ -74,12 +74,12 @@
     },
     {
       "anchorPoint": {
-        "x": 3.8567480553764524,
-        "y": 2.1924802823964624
+        "x": 3.936682232338824,
+        "y": 2.306671963771279
       },
       "prevControl": {
-        "x": 3.3086279847773374,
-        "y": 2.1924802823964624
+        "x": 4.493386101520278,
+        "y": 2.306671963771279
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -88,17 +88,12 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "autoBalance"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "maxVelocity": 2.0,
-  "maxAcceleration": 2.0,
-  "isReversed": null,
   "markers": []
 }

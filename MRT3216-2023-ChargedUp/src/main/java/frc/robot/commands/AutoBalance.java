@@ -32,26 +32,26 @@ public class AutoBalance implements Loggable{
          * CONFIG *
          **********/
         // Speed the robot drived while scoring/approaching station, default = 0.4
-        robotSpeedFast = 0.4;
+        robotSpeedFast = 0.2;
 
         // Speed the robot drives while balancing itself on the charge station.
         // Should be roughly half the fast speed, to make the robot more accurate,
         // default = 0.2
-        robotSpeedSlow = 0.2;
+        robotSpeedSlow = 0.1;
 
         // Angle where the robot knows it is on the charge station, default = 13.0
-        onChargeStationDegree = 13.0;
+        onChargeStationDegree = 11.0;
 
         // Angle where the robot can assume it is level on the charging station
         // Used for exiting the drive forward sequence as well as for auto balancing,
         // default = 6.0
-        levelDegree = 6.0;
+        levelDegree = 4.0;
 
         // Amount of time a sensor condition needs to be met before changing states in
         // seconds
         // Reduces the impact of sensor noice, but too high can make the auto run
         // slower, default = 0.2
-        debounceTime = 0.2;
+        debounceTime = 0.05;
     }
 
     public CommandBase getAutoBalanceCommand() {
@@ -62,7 +62,7 @@ public class AutoBalance implements Loggable{
     }
 
     public double getPitch() {
-        return swerveSubsystem.getPitch();
+        return -swerveSubsystem.getPitch();
     }
 
     public double getRoll() {
@@ -93,6 +93,7 @@ public class AutoBalance implements Loggable{
         switch (state) {
             // drive forwards to approach station, exit when tilt is detected
             case 0:
+                System.out.println("Case 0: drive forwards to approach station, exit when tilt is detected");
                 if (getTilt() > onChargeStationDegree) {
                     debounceCount++;
                 }
@@ -104,6 +105,7 @@ public class AutoBalance implements Loggable{
                 return robotSpeedFast;
             // driving up charge station, drive slower, stopping when level
             case 1:
+            System.out.println("Case 1: driving up charge station, drive slower, stopping when level");
                 if (getTilt() < levelDegree) {
                     debounceCount++;
                 }
@@ -115,11 +117,12 @@ public class AutoBalance implements Loggable{
                 return robotSpeedSlow;
             // on charge station, stop motors and wait for end of auto
             case 2:
+            System.out.println("Case 2: on charge station, stop motors and wait for end of auto");
                 if (Math.abs(getTilt()) <= levelDegree / 2) {
                     debounceCount++;
                 }
                 if (debounceCount > secondsToTicks(debounceTime)) {
-                    state = 4;
+                    //state = 4;
                     debounceCount = 0;
                     return 0;
                 }
@@ -132,6 +135,10 @@ public class AutoBalance implements Loggable{
                 return 0;
         }
         return 0;
+    }
+
+    public void reset(){
+        state = 0;
     }
 
     public static AutoBalance getInstance() {

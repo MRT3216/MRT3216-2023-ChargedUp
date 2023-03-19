@@ -148,7 +148,9 @@ public class AutoChooser implements Loggable {
 								Commands.print("Intaking Cone")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
 						Map.entry("intakeCube", Commands.print("Intaking Cube")
-								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing"))))));
+								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+						Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
+	 							.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished balancing"))))));
 	}
 
 	private void populateAutoChooser() {
@@ -169,8 +171,8 @@ public class AutoChooser implements Loggable {
 						PathPlanner.getConstraintsFromPath("PlaceCubePickupCubePlaceCube"))));
 
 		chooser.addOption("Place High Cube Dock",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
-						new PathConstraints(4, 2.5), new PathConstraints(1, 1))));
+				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDockCopy",
+						new PathConstraints(4, 4), new PathConstraints(1, 1))).andThen(AutoBalance.getInstance().getAutoBalanceCommand()));
 
 		chooser.addOption("Place Cone Cube and Leave",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConePlaceCubeLeave",
@@ -178,7 +180,7 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("Place Cone Cube and Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceConeCubeDock",
-				new PathConstraints(2, 2), new PathConstraints(1, 1))));
+						new PathConstraints(2.5, 2.5), new PathConstraints(2, 2))));
 	}
 
 	public Command getAutoCommand() {
