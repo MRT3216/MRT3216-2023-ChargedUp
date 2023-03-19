@@ -10,6 +10,7 @@ package frc.robot.settings;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.PathConstraints;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
 import edu.wpi.first.math.util.Units;
@@ -403,6 +404,9 @@ public final class Constants {
 		public static final double kReverseCorrectionSpeed = -0.1;
 		// Speed it goes the other way when it tips backs
 		public static final double kForwardCorrectionSpeed = 0.05;
+
+		public static final PathConstraints kFastPath = new PathConstraints(4, 4);
+		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2.5);
 	}
 
 	public static final class OI {
