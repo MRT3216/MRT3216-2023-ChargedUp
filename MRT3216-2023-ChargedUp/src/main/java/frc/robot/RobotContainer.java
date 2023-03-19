@@ -133,7 +133,8 @@ public class RobotContainer {
 		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
 		// }));
 
-		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
+		//controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
+		controller.a().onTrue(autoChooser.autoBalance()).onFalse(Commands.runOnce(() -> driveSystem.stop(), driveSystem));
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
