@@ -35,7 +35,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
-import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -161,19 +160,20 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("Place Cube and Leave",
 				() -> Commands.runOnce(() -> swerveSubsystem.setModuleStatesStraight(), swerveSubsystem)
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave")))));
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
+								PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave")))));
 
 		chooser.addOption("Place Two Cubes",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
 						PathPlanner.getConstraintsFromPath("PlaceCubePickupCubePlaceCube"))));
 
 		chooser.addOption("Place High Cube Dock",
-						() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
-								new PathConstraints(4, 2.5), new PathConstraints(1, 1))));
+				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
+						new PathConstraints(4, 2.5), new PathConstraints(1, 1))));
 
 		chooser.addOption("Place Cone Cube and Leave",
-						() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConePlaceCubeLeave",
-								PathPlanner.getConstraintsFromPath("PlaceConePlaceCubeLeave"))));
+				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConePlaceCubeLeave",
+						PathPlanner.getConstraintsFromPath("PlaceConePlaceCubeLeave"))));
 	}
 
 	public CommandBase autoBalance() {
@@ -183,13 +183,13 @@ public class AutoChooser implements Loggable {
 								() -> swerveSubsystem.drive(new ChassisSpeeds(
 										0.5,
 										0, 0)),
-								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) >= -14),
+								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) >= AUTO.kBalanceClimbingAngle),
 
 						Commands.run(
 								() -> swerveSubsystem
 										.drive(new ChassisSpeeds(0.2,
 												0, 0)),
-								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) >= -9.5),
+								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) <= AUTO.kBalanceTippingAngle),
 						// Commands.run(swerveSubsystem::setX, this)),
 						Commands.waitSeconds(15)));
 	}

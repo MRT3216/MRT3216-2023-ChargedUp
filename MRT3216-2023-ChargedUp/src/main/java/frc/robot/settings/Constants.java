@@ -342,7 +342,6 @@ public final class Constants {
 		public static final int kSubstationIntakeCubeDegrees = 90;
 		public static final int kStowedDegrees = 46;
 		public static final int kStartDegrees = 0;
-
 	}
 
 	public static final class INTAKE {
@@ -369,29 +368,11 @@ public final class Constants {
 		// Derivative gain
 		public static final double kThetaD = 0;
 
-		public static final Gains kAutoPositionGains = new Gains(kPositionP, kPositionI, kThetaD);
-		public static final Gains kAutoThetaGains = new Gains(kThetaP, kThetaI, kThetaD);
-
-		public static final double kMaxTurnError = .1; // degrees
-		public static final double kMaxTurnRateError = 1; // Degrees per second
-
-		public static final double kMaxTurnErrorAuto = 5;
-		public static final double kMaxTurnRateErrorAuto = 5;
-
-		public static final int kMaxFetchVelocity = 1;
-		public static final int kMaxFetchAcc = kMaxFetchVelocity / 2;
-
-		public static final double kStartDelayTime = 2;
-		public static final double kDriveToPlaceDelay = 0; // seconds
+		public static final double kStartDelayTime = 0;
 		public static final double kMaxIntakeTime = 1.0; // seconds
 
-		public static final Constraints kThetaControllerConstraints = new Constraints(
-				Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-				Drivetrain.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND);
-
-		public static final PathConstraints pathConstraints = new PathConstraints(
-				Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-				Drivetrain.MAX_ACCELERATION_METERS_PER_SECONDS_SQUARED);
+		public static final double kBalanceClimbingAngle = 14;
+		public static final double kBalanceTippingAngle = 9.5;
 	}
 
 	public static final class OI {
