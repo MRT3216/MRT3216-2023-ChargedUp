@@ -49,7 +49,7 @@ public class AutoChooser implements Loggable {
 	private static SwerveAutoBuilder autoBuilder;
 	@Log.Exclude
 	@Config.Exclude
-	private ArmSubsystem armSubsystem;
+	private static ArmSubsystem armSubsystem;
 	private Dictionary<String, Trajectory> trajectories;
 	private SendableChooser<Supplier<Command>> chooser;
 	@Log.Exclude
@@ -162,15 +162,56 @@ public class AutoChooser implements Loggable {
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
 
 						Map.entry("intakeCube", Commands.print("Intaking Cube")
-								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing"))))));
+								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
 
-		// Map.entry("stow", AutoBalance.getInstance().getAutoBalanceCommand()
-		// .andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished
-		// stowing")))),
+						Map.entry("stow", Commands.print("Stowing arm")
+								.andThen(Commands.print("Finished stowing")))));
+	}
 
-		// Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
-		// .andThen(Commands.waitSeconds(0).andThen(Commands.print("Finished
-		// balancing"))))));
+	private static HashMap<String, Command> buildEventMapReal() {
+		return new HashMap<>(
+				Map.ofEntries(
+						Map.entry("placeHighCone",
+								Commands.print("Placing High Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone)
+												.andThen(Commands.print("Finished placing")))),
+
+						Map.entry("placeMidCone",
+								Commands.print("Placing Mid Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCone)
+												.andThen(Commands.print("Finished placing")))),
+
+						Map.entry("placeHybridCone",
+								Commands.print("Placing Hybrid Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid)
+												.andThen(Commands.print("Finished placing")))),
+
+						Map.entry("placeHighCube",
+								Commands.print("Placing High Cube")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCube)
+												.andThen(Commands.print("Finished placing")))),
+
+						Map.entry("placeMidCube",
+								Commands.print("Placing Mid Cube")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCube)
+												.andThen(Commands.print("Finished placing")))),
+
+						Map.entry("placeHybridCube",
+								Commands.print("Placing Hybrid Cube")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid)
+												.andThen(Commands.print("Finished placing")))),
+
+						Map.entry("intakeCone",
+								Commands.print("Intaking Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone)
+												.andThen(Commands.print("Finished intaking")))),
+
+						Map.entry("intakeCube", Commands.print("Intaking Cube")
+								.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeCube)
+										.andThen(Commands.print("Finished intaking")))),
+
+						Map.entry("stow", Commands.print("Stowing arm")
+								.andThen(Commands.print("Finished stowing")))));
 	}
 
 	// TODO: Find a naming system and put the names of the files and tabs to that
