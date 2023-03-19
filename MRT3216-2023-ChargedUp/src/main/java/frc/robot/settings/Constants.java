@@ -407,6 +407,7 @@ public final class Constants {
 
 		public static final PathConstraints kFastPath = new PathConstraints(4, 4);
 		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2.5);
+		public static final PathConstraints kSlowPath = new PathConstraints(1.5, 1.5);
 	}
 
 	public static final class OI {
