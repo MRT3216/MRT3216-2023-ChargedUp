@@ -179,29 +179,29 @@ public class AutoChooser implements Loggable {
 		chooser = new SendableChooser<>();
 
 		chooser.setDefaultOption("A-Cn-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("A-Cn-Leave", AUTO.kSlowPath))));
 
 		chooser.addOption("S-CnCb-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCb+Cb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb+Cb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
 		chooser.addOption("M-Cn+Cb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("M-Cn+Cb-Dock", AUTO.kMediumPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
 		chooser.addOption("C-CnCb-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("C-CnCb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 

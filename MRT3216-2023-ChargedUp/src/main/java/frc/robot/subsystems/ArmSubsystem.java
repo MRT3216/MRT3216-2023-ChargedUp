@@ -59,8 +59,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private int aGUprightCone = ARM.kGroundIntakeUprightConeDegrees;
     private int aGTippedCone = ARM.kGroundIntakeTippedConeDegrees;
     private int aGCube = ARM.kGroundIntakeCubeDegrees;
-    private int aSCone = ARM.kSubstationIntakeConeDegrees;
-    private int aSCube = ARM.kSubstationIntakeCubeDegrees;
+    private int aSSCone = ARM.kSingleSubstationIntakeConeDegrees;
+    private int aSSCube = ARM.kSingleSubstationIntakeCubeDegrees;
+    private int aDSCone = ARM.kDoubleSubstationIntakeConeDegrees;
+    private int aDSCube = ARM.kDoubleSubstationIntakeCubeDegrees;
     private int aStowed = ARM.kStowedDegrees;
     private int aStart = ARM.kStartDegrees;
     private static double armOffset = ARM.kZeroOffset;
@@ -262,10 +264,14 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 return this.aGTippedCone;
             case GroundIntakeCube:
                 return this.aGCube;
-            case SubstationIntakeCone:
-                return this.aSCone;
-            case SubstationIntakeCube:
-                return this.aSCube;
+            case SingleSubstationIntakeCone:
+                return this.aSSCone;
+            case SingleSubstationIntakeCube:
+                return this.aSSCube;
+            case DoubleSubstationIntakeCone:
+                return this.aDSCone;
+            case DoubleSubstationIntakeCube:
+                return this.aDSCube;
             case Start:
                 return this.aStart;
             // Stowed
@@ -307,19 +313,29 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getCommand(ARM.Position position) {
-        return getArmAndWristGotoCommand(getArmDegreesByPosition(position),
-                wristSubsystem.getWristDegreesByPosition(position));
+        return getCommand(position, false);
     }
 
-    private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees) {
-        return Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
+    public Command getCommand(ARM.Position position, boolean wait) {
+        return getArmAndWristGotoCommand(
+                getArmDegreesByPosition(position),
+                wristSubsystem.getWristDegreesByPosition(position), wait);
+    }
+
+    private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees, boolean wait) {
+        var command = Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
                 .andThen(Commands.runOnce(() -> {
                     setArmGoal(armDegrees);
                     wristSubsystem.setWristGoal(wristDegrees);
                     this.enable();
-                }, this))
-                .andThen(Commands.waitUntil(() -> armAtGoal() && wristSubsystem.wristAtGoal()))
-                .andThen(Commands.print("Arm and wrist at goal"));
+                }, this));
+
+        if (wait) {
+            command.andThen(Commands.waitUntil(() -> armAtGoal() && wristSubsystem.wristAtGoal()))
+                    .andThen(Commands.print("Arm and wrist at goal"));
+        }
+
+        return command;
     }
 
     public Command getWristGotoCommand(double wristDegrees) {
@@ -357,7 +373,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         if (iP == ARM.IntakePosition.Ground) {
             return gP == ARM.GamePiece.Cone ? ARM.Position.GroundIntakeUprightCone : ARM.Position.GroundIntakeCube;
         } else if (iP == ARM.IntakePosition.Substation) {
-            return gP == ARM.GamePiece.Cone ? ARM.Position.SubstationIntakeCone : ARM.Position.SubstationIntakeCube;
+            return gP == ARM.GamePiece.Cone ? ARM.Position.SingleSubstationIntakeCone
+                    : ARM.Position.SingleSubstationIntakeCube;
         }
 
         return ARM.Position.Stowed;
@@ -470,7 +487,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #endregion
 
     // #region Arm Pickup Positions Column 2
-    // Column 3, Rows 0-5
+    // Column 2, Rows 0-5
 
     @Config.NumberSlider(name = "A G Up Cone", defaultValue = ARM.kGroundIntakeUprightConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public void setAGUprightCone(int aGUprightCone) {
@@ -487,20 +504,20 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.aGCube = aGCube;
     }
 
-    @Config.NumberSlider(name = "A Sub Cone", defaultValue = ARM.kSubstationIntakeConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
-    public void setASCone(int aSCone) {
-        this.aSCone = aSCone;
+    @Config.NumberSlider(name = "A SSub Cone", defaultValue = ARM.kSingleSubstationIntakeConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
+    public void setASSCone(int aSSCone) {
+        this.aSSCone = aSSCone;
     }
 
-    @Config.NumberSlider(name = "A Sub Cube", defaultValue = ARM.kSubstationIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
-    public void setASCube(int aSCube) {
-        this.aSCube = aSCube;
+    @Config.NumberSlider(name = "A SSub Cube", defaultValue = ARM.kSingleSubstationIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
+    public void setASSCube(int aSSCube) {
+        this.aSSCube = aSSCube;
     }
 
     // #endregion
 
-    // #region Start and Stowed Positions Column 3
-    // Column 4, Rows 0
+    // #region Start and Stowed Positions and Double Substation Column 3
+    // Column 3, Rows 0-1, 3-4
 
     @Config.NumberSlider(name = "Arm Start", defaultValue = ARM.kStartDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setAStart(int aStart) {
@@ -510,6 +527,16 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
     public void setAStowed(int aStowed) {
         this.aStowed = aStowed;
+    }
+
+    @Config.NumberSlider(name = "A DSub Cone", defaultValue = ARM.kDoubleSubstationIntakeConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
+    public void setADSCone(int aDSCone) {
+        this.aDSCone = aDSCone;
+    }
+
+    @Config.NumberSlider(name = "A DSub Cube", defaultValue = ARM.kDoubleSubstationIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
+    public void setADSCube(int aDSCube) {
+        this.aDSCube = aDSCube;
     }
 
     // #endregion

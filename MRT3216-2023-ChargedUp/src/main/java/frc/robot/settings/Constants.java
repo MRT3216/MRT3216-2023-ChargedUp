@@ -157,8 +157,10 @@ public final class Constants {
 		public static final int kGroundIntakeUprightConeDegrees = 24;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 13;
-		public static final int kSubstationIntakeConeDegrees = 43;
-		public static final int kSubstationIntakeCubeDegrees = 43;
+		public static final int kSingleSubstationIntakeConeDegrees = 43;
+		public static final int kSingleSubstationIntakeCubeDegrees = 43;
+		public static final int kDoubleSubstationIntakeConeDegrees = 43;
+		public static final int kDoubleSubstationIntakeCubeDegrees = 43;
 		public static final int kStowedDegrees = 50;
 		public static final int kStartDegrees = 69;
 
@@ -173,10 +175,12 @@ public final class Constants {
 			GroundIntakeUprightCone(5),
 			GroundIntakeTippedCone(6),
 			GroundIntakeCube(7),
-			SubstationIntakeCone(8),
-			SubstationIntakeCube(9),
-			Stowed(10),
-			Start(11);
+			SingleSubstationIntakeCone(8),
+			SingleSubstationIntakeCube(9),
+			DoubleSubstationIntakeCone(10),
+			DoubleSubstationIntakeCube(11),
+			Stowed(12),
+			Start(13);
 
 			private int value;
 			private static Map<Integer, Position> map = new HashMap<>();
@@ -337,8 +341,10 @@ public final class Constants {
 		public static final int kGroundIntakeUprightConeDegrees = 30;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 25;
-		public static final int kSubstationIntakeConeDegrees = 110;
-		public static final int kSubstationIntakeCubeDegrees = 90;
+		public static final int kSingleSubstationIntakeConeDegrees = 110;
+		public static final int kSingleSubstationIntakeCubeDegrees = 90;
+		public static final int kDoubleSubstationIntakeConeDegrees = 110;
+		public static final int kDoubleSubstationIntakeCubeDegrees = 90;
 		public static final int kStowedDegrees = 46;
 		public static final int kStartDegrees = 0;
 	}

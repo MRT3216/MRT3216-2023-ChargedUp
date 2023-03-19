@@ -52,8 +52,10 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     private int wGUprightCone = WRIST.kGroundIntakeUprightConeDegrees;
     private int wGTippedCone = WRIST.kGroundIntakeTippedConeDegrees;
     private int wGCube = WRIST.kGroundIntakeCubeDegrees;
-    private int wSCone = WRIST.kSubstationIntakeConeDegrees;
-    private int wSCube = WRIST.kSubstationIntakeCubeDegrees;
+    private int wSSCone = WRIST.kSingleSubstationIntakeConeDegrees;
+    private int wSSCube = WRIST.kSingleSubstationIntakeCubeDegrees;
+    private int wDSCone = WRIST.kDoubleSubstationIntakeConeDegrees;
+    private int wDSCube = WRIST.kDoubleSubstationIntakeCubeDegrees;
     private int wStowed = WRIST.kStowedDegrees;
     private int wStart = WRIST.kStartDegrees;
 
@@ -223,10 +225,14 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
                 return this.wGTippedCone;
             case GroundIntakeCube:
                 return this.wGCube;
-            case SubstationIntakeCone:
-                return this.wSCone;
-            case SubstationIntakeCube:
-                return this.wSCube;
+            case SingleSubstationIntakeCone:
+                return this.wSSCone;
+            case SingleSubstationIntakeCube:
+                return this.wSSCube;
+            case DoubleSubstationIntakeCone:
+                return this.wDSCone;
+            case DoubleSubstationIntakeCube:
+                return this.wDSCube;
             case Start:
                 return this.wStart;
             // ARM.Positions.Stowed
@@ -323,7 +329,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     // #endregion
 
     // #region Wrist Pickup Positions Column 2
-    // Column 3, Rows
+    // Column 2, Rows
 
     @Config.NumberSlider(name = "W G Up Cone", defaultValue = WRIST.kGroundIntakeUprightConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public void setWGUprightCone(int wGUprightCone) {
@@ -340,20 +346,20 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         this.wGCube = wGCube;
     }
 
-    @Config.NumberSlider(name = "W Sub Cone", defaultValue = WRIST.kSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
-    public void setWSCone(int wSCone) {
-        this.wSCone = wSCone;
+    @Config.NumberSlider(name = "W SSub Cone", defaultValue = WRIST.kSingleSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
+    public void setWSCone(int wSSCone) {
+        this.wSSCone = wSSCone;
     }
 
-    @Config.NumberSlider(name = "W Sub Cube", defaultValue = WRIST.kSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
-    public void setWSCube(int wSCube) {
-        this.wSCube = wSCube;
+    @Config.NumberSlider(name = "W SSub Cube", defaultValue = WRIST.kSingleSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
+    public void setWSSCube(int wSSCube) {
+        this.wSSCube = wSSCube;
     }
 
     // #endregion
 
-    // #region Start and Stowed Positions Column 3
-    // Column 4, Rows 0-1
+    // #region Start and Stowed Positions and Double Substation Column 3
+    // Column 3, Rows 0-1, 3-4
 
     @Config.NumberSlider(name = "Wrist Start", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setWStart(int wStart) {
@@ -363,6 +369,16 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
+    }
+
+    @Config.NumberSlider(name = "W DSub Cone", defaultValue = WRIST.kSingleSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
+    public void setWDSCone(int wDSCone) {
+        this.wDSCone = wSSCone;
+    }
+
+    @Config.NumberSlider(name = "W DSub Cube", defaultValue = WRIST.kSingleSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
+    public void setWDSCube(int wDSCube) {
+        this.wDSCube = wDSCube;
     }
 
     // #endregion
