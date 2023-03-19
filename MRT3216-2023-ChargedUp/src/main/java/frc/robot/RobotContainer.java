@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
+import frc.robot.commands.AutoBalance;
+import frc.robot.commands.AutoChooser;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM.GamePiece;
@@ -39,6 +41,7 @@ public class RobotContainer {
 	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
 	private SwerveSubsystem driveSystem;
 	private AutoChooser autoChooser;
+	private AutoBalance autoBalance;
 	private double autoStartDelayTime;
 	private double translationExpo;
 	private double rotationExpo;
@@ -73,6 +76,7 @@ public class RobotContainer {
 	public void initSubsystems() {
 		this.driveSystem = SwerveSubsystem.getInstance();
 		this.autoChooser = AutoChooser.getInstance();
+		this.autoBalance = AutoBalance.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
 		this.wristSubsystem = WristSubsystem.getInstance();
 		this.intakeSystem = IntakeSubsystem.getInstance();
@@ -133,8 +137,9 @@ public class RobotContainer {
 		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
 		// }));
 
-		//controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		controller.a().onTrue(autoChooser.autoBalance()).onFalse(Commands.runOnce(() -> driveSystem.stop(), driveSystem));
+		// controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
+		controller.a().onTrue(autoBalance.getAutoBalanceCommand())
+				.onFalse(Commands.runOnce(() -> driveSystem.stop(), driveSystem));
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));

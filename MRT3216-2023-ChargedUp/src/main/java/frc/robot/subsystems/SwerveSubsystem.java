@@ -286,6 +286,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return navx.getPitch();
 	}
 
+	public double getRoll() {
+		return navx.getRoll();
+	}
+
 	/**
 	 * Returns the current state of the module.
 	 *

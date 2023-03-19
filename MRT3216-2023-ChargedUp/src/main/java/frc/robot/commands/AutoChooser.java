@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package frc.robot.commands;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.Constants.AUTO;
@@ -178,25 +177,6 @@ public class AutoChooser implements Loggable {
 		chooser.addOption("Place Cone Cube and Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceConeCubeDock",
 				new PathConstraints(2, 2), new PathConstraints(1, 1))));
-	}
-
-	public CommandBase autoBalance() {
-		return Commands.race(
-				Commands.sequence(
-						Commands.run(
-								() -> swerveSubsystem.drive(new ChassisSpeeds(
-										0.5,
-										0, 0)),
-								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) >= AUTO.kBalanceClimbingAngle),
-
-						Commands.run(
-								() -> swerveSubsystem
-										.drive(new ChassisSpeeds(0.2,
-												0, 0)),
-								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) <= AUTO.kBalanceTippingAngle),
-								Commands.runOnce(() -> swerveSubsystem.stop(), swerveSubsystem),
-						// Commands.run(swerveSubsystem::setX, this)),
-						Commands.waitSeconds(15)));
 	}
 
 	public Command getAutoCommand() {
