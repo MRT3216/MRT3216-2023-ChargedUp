@@ -85,7 +85,8 @@ public class RobotContainer {
 		this.intakeSystem = IntakeSubsystem.getInstance();
 
 		// substationChooser = new SendableChooser<>();
-		// substationChooser.setDefaultOption("Double Substation", () -> new WaitCommand(0));
+		// substationChooser.setDefaultOption("Double Substation", () -> new
+		// WaitCommand(0));
 
 		// substationChooser.addOption("Single Substation", );
 
@@ -158,7 +159,7 @@ public class RobotContainer {
 				}, driveSystem));
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
-		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
+		//controller.b().onTrue(Commands.runOnce(armSystem::getStowedCommand).asProxy());
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 		controller.start().onTrue(new ProxyCommand(armSystem::getStartCommand));

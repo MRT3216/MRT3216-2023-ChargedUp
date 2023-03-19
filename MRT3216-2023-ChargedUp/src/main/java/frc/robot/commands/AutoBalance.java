@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.settings.Constants.AUTO_BALANCE;
 import frc.robot.settings.Constants.Drivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -45,11 +46,8 @@ public class AutoBalance implements Loggable {
         this.isFieldSide = isFieldSide;
         direction = isFieldSide ? 1 : -1;
 
-        return Commands.run(
-                () -> swerveSubsystem.drive(
-                        new ChassisSpeeds(direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-                                0, 0)),
-                swerveSubsystem).asProxy();
+        return new ProxyCommand(() -> Commands.run(
+                this::getPitch));
     }
 
     public double getPitch() {
