@@ -50,7 +50,8 @@ public class AutoBalance implements Loggable {
         return Commands.run(
                 () -> swerveSubsystem.drive(
                         new ChassisSpeeds(direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-                                0, 0)));
+                                0, 0)),
+                swerveSubsystem);
     }
 
     public double getPitch() {
