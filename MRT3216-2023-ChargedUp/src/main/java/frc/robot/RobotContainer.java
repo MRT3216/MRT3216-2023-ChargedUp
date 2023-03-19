@@ -156,7 +156,7 @@ public class RobotContainer {
 				.onFalse(Commands.runOnce(() -> {
 					driveSystem.stop();
 					autoBalance.reset();
-				}));
+				}, driveSystem));
 
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));

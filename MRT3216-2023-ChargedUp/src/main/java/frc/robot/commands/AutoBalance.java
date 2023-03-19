@@ -47,12 +47,13 @@ public class AutoBalance implements Loggable {
         direction = isFieldSide ? 1 : -1;
 
         System.out.println("robotSpeedSlow: " + robotSpeedSlow);
-        return new ProxyCommand(Commands.run(
-                () -> swerveSubsystem.drive(
-                        new ChassisSpeeds(direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-                                0, 0)),
-                swerveSubsystem)
-                );
+        return new ProxyCommand(
+                () -> Commands.run(
+                        () -> swerveSubsystem.drive(
+                                new ChassisSpeeds(
+                                        direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+                                        0, 0)),
+                        swerveSubsystem));
     }
 
     public double getPitch() {
