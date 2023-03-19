@@ -105,6 +105,7 @@ public class RobotContainer {
 	 * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
+		System.out.println(Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
 		if (driveSystem != null && controller != null) {
 			driveSystem.setDefaultCommand(
 					new TeleDrive(

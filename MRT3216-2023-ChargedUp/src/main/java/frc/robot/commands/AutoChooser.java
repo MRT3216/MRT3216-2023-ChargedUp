@@ -189,7 +189,7 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("Cable Place High Cube Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
-						new PathConstraints(4, 4), new PathConstraints(1, 1)))
+						new PathConstraints(4, 4)))
 						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
 
 		chooser.addOption("Place Cone Cube Pickup Cube and Dock",
@@ -198,7 +198,8 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("Cable Place Cone Cube and Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceConeCubeDock",
-						new PathConstraints(2.5, 2.5), new PathConstraints(2, 2))));
+						new PathConstraints(3, 3)))
+						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
 		chooser.addOption("Place Cone Cube and Intake",
 				() -> autoBuilder

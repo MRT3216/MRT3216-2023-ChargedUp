@@ -55,7 +55,7 @@ public final class Constants {
 		 * <p>
 		 * This is a measure of how fast the robot should be able to drive in a straight
 		 * line.
-		 */
+		 */	//4.578870701248506
 		public static final double MAX_VELOCITY_METERS_PER_SECOND = 5880.0
 				/ 60.0
 				* SdsModuleConfigurations.MK4I_L2.getDriveReduction()
@@ -378,12 +378,12 @@ public final class Constants {
 		 * CONFIG *
 		 **********/
 		// Speed the robot drived while scoring/approaching station, default = 0.4
-		public static final double kRobotSpeedFast = 0.2;
+		public static final double kRobotSpeedFast = 0.3;
 
 		// Speed the robot drives while balancing itself on the charge station.
 		// Should be roughly half the fast speed, to make the robot more accurate,
 		// default = 0.2
-		public static final double kRobotSpeedSlow = 0.1;
+		public static final double kRobotSpeedSlow = 0.2;
 
 		// Angle where the robot knows it is on the charge station, default = 13.0
 		public static final double kOnChargeStationDegree = 11.0;
