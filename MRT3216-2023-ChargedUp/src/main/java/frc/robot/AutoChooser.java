@@ -174,6 +174,10 @@ public class AutoChooser implements Loggable {
 		chooser.addOption("Place Cone Cube and Leave",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConePlaceCubeLeave",
 						PathPlanner.getConstraintsFromPath("PlaceConePlaceCubeLeave"))));
+
+		chooser.addOption("Place Cone Cube and Dock",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceConeCubeDock",
+				new PathConstraints(2, 2), new PathConstraints(1, 1))));
 	}
 
 	public CommandBase autoBalance() {
@@ -190,6 +194,7 @@ public class AutoChooser implements Loggable {
 										.drive(new ChassisSpeeds(0.2,
 												0, 0)),
 								swerveSubsystem).until(() -> Math.abs(swerveSubsystem.getPitch()) <= AUTO.kBalanceTippingAngle),
+								Commands.runOnce(() -> swerveSubsystem.stop(), swerveSubsystem),
 						// Commands.run(swerveSubsystem::setX, this)),
 						Commands.waitSeconds(15)));
 	}

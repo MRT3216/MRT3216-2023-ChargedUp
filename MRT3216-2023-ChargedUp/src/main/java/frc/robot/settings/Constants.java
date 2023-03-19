@@ -371,7 +371,7 @@ public final class Constants {
 		public static final double kStartDelayTime = 0;
 		public static final double kMaxIntakeTime = 1.0; // seconds
 
-		public static final double kBalanceClimbingAngle = 14;
+		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;
 	}
 
