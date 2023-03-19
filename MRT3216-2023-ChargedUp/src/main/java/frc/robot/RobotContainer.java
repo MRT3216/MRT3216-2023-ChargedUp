@@ -1,7 +1,11 @@
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
@@ -47,6 +51,7 @@ public class RobotContainer {
 	private ArmSubsystem armSystem;
 	private WristSubsystem wristSubsystem;
 	private IntakeSubsystem intakeSystem;
+	private SendableChooser<Supplier<Command>> substationChooser;
 
 	// #endregion
 
@@ -78,6 +83,16 @@ public class RobotContainer {
 		this.armSystem = ArmSubsystem.getInstance();
 		this.wristSubsystem = WristSubsystem.getInstance();
 		this.intakeSystem = IntakeSubsystem.getInstance();
+
+		// substationChooser = new SendableChooser<>();
+		// substationChooser.setDefaultOption("Double Substation", () -> new WaitCommand(0));
+
+		// substationChooser.addOption("Single Substation", );
+
+		Shuffleboard.getTab("Driver")
+				.add("Substation Chooser", substationChooser)
+				.withSize(2, 1) // make the widget 2x1
+				.withPosition(7, 1); // place it in the top-right corner
 	}
 
 	/**
