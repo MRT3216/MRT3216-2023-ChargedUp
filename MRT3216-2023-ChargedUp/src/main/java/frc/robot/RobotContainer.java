@@ -23,8 +23,6 @@ import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
-// endregion
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -139,7 +137,10 @@ public class RobotContainer {
 
 		// controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
 		controller.a().onTrue(autoBalance.getAutoBalanceCommand(true))
-				.onFalse(Commands.runOnce(() -> {driveSystem.stop(); autoBalance.reset();}, driveSystem));
+				.onFalse(Commands.runOnce(() -> {
+					driveSystem.stop();
+					autoBalance.reset();
+				}, driveSystem));
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
@@ -169,6 +170,7 @@ public class RobotContainer {
 	}
 
 	public void disablePIDSubsystems() {
+		// This will disable both the arm and wrist
 		armSystem.disable();
 	}
 
@@ -192,6 +194,8 @@ public class RobotContainer {
 	public SwerveSubsystem getDriveSystem() {
 		return driveSystem;
 	}
+
+	// #region Logging
 
 	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = AUTO.kStartDelayTime, methodTypes = {
 			double.class }, rowIndex = 1, columnIndex = 0)
@@ -237,4 +241,6 @@ public class RobotContainer {
 	public boolean isWristZeroed() {
 		return this.wristSubsystem.isWristZeroed();
 	}
+
+	// #endregion
 }

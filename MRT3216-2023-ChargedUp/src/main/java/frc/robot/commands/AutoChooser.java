@@ -122,6 +122,7 @@ public class AutoChooser implements Loggable {
 					// System.out.println("Rotation Error: " + rotationError.getDegrees());
 				});
 	}
+
 	// TODO: Add all of the keys into the map
 	// TODO: Add the commands for controlling the systems
 	private static HashMap<String, Command> buildEventMap() {
@@ -158,12 +159,15 @@ public class AutoChooser implements Loggable {
 						Map.entry("intakeCube", Commands.print("Intaking Cube")
 								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing"))))));
 
-						// Map.entry("stow", AutoBalance.getInstance().getAutoBalanceCommand()
-						// 		.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished stowing")))),
+		// Map.entry("stow", AutoBalance.getInstance().getAutoBalanceCommand()
+		// .andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished
+		// stowing")))),
 
-						// Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
-						// 		.andThen(Commands.waitSeconds(0).andThen(Commands.print("Finished balancing"))))));
+		// Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
+		// .andThen(Commands.waitSeconds(0).andThen(Commands.print("Finished
+		// balancing"))))));
 	}
+
 	// TODO: Find a naming system and put the names of the files and tabs to that
 	// TODO: Look into not needing the ".andThen" for docking
 	private void populateAutoChooser() {

@@ -166,6 +166,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     /** Enables the PID control. Resets the controller. */
+    /** Also enables the wrist subsystem */
     public void enable() {
         enabled = true;
         armPidController.reset(getArmDegrees());
