@@ -122,66 +122,88 @@ public class AutoChooser implements Loggable {
 					// System.out.println("Rotation Error: " + rotationError.getDegrees());
 				});
 	}
-
+	// TODO: Add all of the keys into the map
+	// TODO: Add the commands for controlling the systems
 	private static HashMap<String, Command> buildEventMap() {
 		return new HashMap<>(
 				Map.ofEntries(
 						Map.entry("placeHighCone",
 								Commands.print("Placing High Cone")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+
 						Map.entry("placeMidCone",
 								Commands.print("Placing Mid Cone")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+
 						Map.entry("placeHybridCone",
 								Commands.print("Placing Hybrid Cone")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+
 						Map.entry("placeHighCube",
 								Commands.print("Placing High Cube")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+
 						Map.entry("placeMidCube",
 								Commands.print("Placing Mid Cube")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+
 						Map.entry("placeHybridCube",
 								Commands.print("Placing Hybrid Cube")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+
 						Map.entry("intakeCone",
 								Commands.print("Intaking Cone")
 										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
+
 						Map.entry("intakeCube", Commands.print("Intaking Cube")
 								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-						Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
-	 							.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished balancing"))))));
-	}
 
+						Map.entry("stow", AutoBalance.getInstance().getAutoBalanceCommand()
+								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished stowing")))),
+
+						Map.entry("autoBalance", AutoBalance.getInstance().getAutoBalanceCommand()
+								.andThen(Commands.waitSeconds(0).andThen(Commands.print("Finished balancing"))))));
+	}
+	// TODO: Find a naming system and put the names of the files and tabs to that
+	// TODO: Look into not needing the ".andThen" for docking
 	private void populateAutoChooser() {
 		chooser = new SendableChooser<>();
 		chooser.setDefaultOption("Do Nothing", () -> new WaitCommand(0));
 
-		chooser.addOption("Place Cone and Leave",
+		chooser.addOption("Cable Place Cone and Leave",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeAndLeave",
 						PathPlanner.getConstraintsFromPath("PlaceConeAndLeave"))));
 
-		chooser.addOption("Place Cube and Leave",
+		chooser.addOption("Cable Place Cube and Leave",
 				() -> Commands.runOnce(() -> swerveSubsystem.setModuleStatesStraight(), swerveSubsystem)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
 								PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave")))));
 
-		chooser.addOption("Place Two Cubes",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubePickupCubePlaceCube",
-						PathPlanner.getConstraintsFromPath("PlaceCubePickupCubePlaceCube"))));
+		chooser.addOption("Cable Place Cone Cube Leave",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeCubeLeave",
+						PathPlanner.getConstraintsFromPath("PlaceConeCubeLeave"))));
 
-		chooser.addOption("Place High Cube Dock",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDockCopy",
-						new PathConstraints(4, 4), new PathConstraints(1, 1))).andThen(AutoBalance.getInstance().getAutoBalanceCommand()));
+		chooser.addOption("Cable Place High Cube Dock",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
+						new PathConstraints(4, 4), new PathConstraints(1, 1)))
+						.andThen(AutoBalance.getInstance().getAutoBalanceCommand()));
 
-		chooser.addOption("Place Cone Cube and Leave",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConePlaceCubeLeave",
-						PathPlanner.getConstraintsFromPath("PlaceConePlaceCubeLeave"))));
+		chooser.addOption("Place Cone Cube Pickup Cube and Dock",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeCubePickupCubeandDock",
+						PathPlanner.getConstraintsFromPath("PlaceConeCubePickupCubeandDock"))));
 
-		chooser.addOption("Place Cone Cube and Dock",
+		chooser.addOption("Cable Place Cone Cube and Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceConeCubeDock",
 						new PathConstraints(2.5, 2.5), new PathConstraints(2, 2))));
-	}
+
+		chooser.addOption("Place Cone Cube and Intake",
+				() -> autoBuilder
+						.fullAuto(PathPlanner.loadPath("PlaceConeCubeCubeAndLeave", new PathConstraints(4, 3))));
+
+		chooser.addOption("Center Place Cone Pickup Cone and Dock",
+				() -> autoBuilder
+						.fullAuto(PathPlanner.loadPath("CenterPlaceConePickupConeandDock", new PathConstraints(2, 2))));
+	} //
 
 	public Command getAutoCommand() {
 		return chooser.getSelected().get();
