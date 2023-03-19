@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
+import frc.robot.commands.AutoChooser;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM.GamePiece;
