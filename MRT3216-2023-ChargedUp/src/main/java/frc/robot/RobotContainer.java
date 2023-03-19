@@ -152,15 +152,15 @@ public class RobotContainer {
 		// }));
 
 		// controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		controller.a().onTrue(autoBalance.getAutoBalanceCommand(true))
+		controller.a().onTrue(new ProxyCommand(autoBalance.getAutoBalanceCommand(true)))
 				.onFalse(Commands.runOnce(() -> {
 					driveSystem.stop();
 					autoBalance.reset();
 				}, driveSystem));
-				
+
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
-		//controller.b().onTrue(new ProxyCommand(() -> Commands.runOnce(armSystem.getStowedCommand())));
+		//controller.b().onTrue(new ProxyCommand(() -> Commands.runOnce(armSystem.getStowedCommand(), armSystem)));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 		controller.start().onTrue(new ProxyCommand(armSystem::getStartCommand));

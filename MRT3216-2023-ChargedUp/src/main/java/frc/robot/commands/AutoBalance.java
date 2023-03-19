@@ -31,7 +31,7 @@ public class AutoBalance implements Loggable {
     private AutoBalance() {
         swerveSubsystem = SwerveSubsystem.getInstance();
 
-        robotSpeedSlow = .1;//AUTO_BALANCE.kRobotSpeedSlow;
+        robotSpeedSlow = .1;// AUTO_BALANCE.kRobotSpeedSlow;
         robotSpeedFast = AUTO_BALANCE.kRobotSpeedFast;
         onChargeStationDegree = AUTO_BALANCE.kOnChargeStationDegree;
         levelDegree = AUTO_BALANCE.kLevelDegree;
@@ -47,10 +47,10 @@ public class AutoBalance implements Loggable {
         direction = isFieldSide ? 1 : -1;
 
         System.out.println("robotSpeedSlow: " + robotSpeedSlow);
-        return new ProxyCommand(() -> Commands.run(
+        return Commands.run(
                 () -> swerveSubsystem.drive(
                         new ChassisSpeeds(direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-                                0, 0))));
+                                0, 0)));
     }
 
     public double getPitch() {
