@@ -159,7 +159,7 @@ public class RobotContainer {
 				}, driveSystem));
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
-		//controller.b().onTrue(Commands.runOnce(armSystem::getStowedCommand).asProxy());
+		//controller.b().onTrue(new ProxyCommand(() -> Commands.runOnce(armSystem.getStowedCommand())));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 		controller.start().onTrue(new ProxyCommand(armSystem::getStartCommand));
