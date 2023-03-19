@@ -372,6 +372,10 @@ public final class Constants {
 
 		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;
+
+		public static final PathConstraints kFastPath = new PathConstraints(4, 4);
+		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2.5);
+		public static final PathConstraints kSlowPath = new PathConstraints(1.5, 1.5);
 	}
 
 	public static final class AUTO_BALANCE {
@@ -404,10 +408,6 @@ public final class Constants {
 		public static final double kReverseCorrectionSpeed = -0.1;
 		// Speed it goes the other way when it tips backs
 		public static final double kForwardCorrectionSpeed = 0.05;
-
-		public static final PathConstraints kFastPath = new PathConstraints(4, 4);
-		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2.5);
-		public static final PathConstraints kSlowPath = new PathConstraints(1.5, 1.5);
 	}
 
 	public static final class OI {

@@ -34,6 +34,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
+import frc.robot.settings.Constants.ARM.Position;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -46,6 +48,7 @@ public class AutoChooser implements Loggable {
 	@Log.Exclude
 	@Config.Exclude
 	private static SwerveAutoBuilder autoBuilder;
+	private ArmSubsystem armSubsystem;
 	private Dictionary<String, Trajectory> trajectories;
 	private SendableChooser<Supplier<Command>> chooser;
 	@Log.Exclude
@@ -74,6 +77,7 @@ public class AutoChooser implements Loggable {
 
 	private AutoChooser() {
 		swerveSubsystem = SwerveSubsystem.getInstance();
+		armSubsystem = ArmSubsystem.getInstance();
 
 		this.populateAutoChooser();
 
@@ -172,43 +176,39 @@ public class AutoChooser implements Loggable {
 	// TODO: Look into not needing the ".andThen" for docking
 	private void populateAutoChooser() {
 		chooser = new SendableChooser<>();
-		chooser.setDefaultOption("Do Nothing", () -> new WaitCommand(0));
 
-		chooser.addOption("Cable Place Cone and Leave",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeAndLeave",
-						PathPlanner.getConstraintsFromPath("PlaceConeAndLeave"))));
+		chooser.setDefaultOption("A-Cn-Leave",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("A-Cn-Leave", AUTO.kSlowPath))));
 
-		chooser.addOption("Cable Place Cube and Leave",
-				() -> Commands.runOnce(() -> swerveSubsystem.setModuleStatesStraight(), swerveSubsystem)
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("PlaceCubeAndLeave",
-								PathPlanner.getConstraintsFromPath("PlaceCubeAndLeave")))));
+		chooser.addOption("S-CnCb-Leave",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb-Leave", AUTO.kFastPath))));
 
-		chooser.addOption("Cable Place Cone Cube Leave",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeCubeLeave",
-						PathPlanner.getConstraintsFromPath("PlaceConeCubeLeave"))));
+		chooser.addOption("S-CnCb+Cb-Dock",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb+Cb-Dock", AUTO.kFastPath))
+								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
-		chooser.addOption("Cable Place High Cube Dock",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceCubeDock",
-						new PathConstraints(4, 4)))
-						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
+		chooser.addOption("M-Cn+Cb-Dock",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("M-Cn+Cb-Dock", AUTO.kMediumPath))
+								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
-		chooser.addOption("Place Cone Cube Pickup Cube and Dock",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPath("PlaceConeCubePickupCubeandDock",
-						PathPlanner.getConstraintsFromPath("PlaceConeCubePickupCubeandDock"))));
+		chooser.addOption("C-CnCb-Leave",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Leave", AUTO.kFastPath))));
 
-		chooser.addOption("Cable Place Cone Cube and Dock",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("PlaceConeCubeDock",
+		chooser.addOption("C-CnCb-Dock",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone)
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Dock", AUTO.kFastPath))
+								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
+
+		chooser.addOption("C-Test-Dock",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",
 						new PathConstraints(3, 3)))
 						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false)));
-
-		chooser.addOption("Place Cone Cube and Intake",
-				() -> autoBuilder
-						.fullAuto(PathPlanner.loadPath("PlaceConeCubeCubeAndLeave", new PathConstraints(4, 3))));
-
-		chooser.addOption("Center Place Cone Pickup Cone and Dock",
-				() -> autoBuilder
-						.fullAuto(PathPlanner.loadPath("CenterPlaceConePickupConeandDock", new PathConstraints(2, 2))));
-	} //
+	}
 
 	public Command getAutoCommand() {
 		return chooser.getSelected().get();
