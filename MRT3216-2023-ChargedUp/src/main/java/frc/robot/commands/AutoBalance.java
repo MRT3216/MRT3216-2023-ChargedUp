@@ -45,9 +45,10 @@ public class AutoBalance implements Loggable {
     public CommandBase getAutoBalanceCommand(boolean isFieldSide) {
         this.isFieldSide = isFieldSide;
         direction = isFieldSide ? 1 : -1;
-
         return new ProxyCommand(() -> Commands.run(
-                this::getPitch));
+                () -> swerveSubsystem.drive(
+                        new ChassisSpeeds(direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+                                0, 0))));
     }
 
     public double getPitch() {
