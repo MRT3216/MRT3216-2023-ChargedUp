@@ -241,8 +241,6 @@ public class AutoChooser implements Loggable {
 										.andThen(Commands.print("Finished stowing")))));
 	}
 
-	// TODO: Find a naming system and put the names of the files and tabs to that
-	// TODO: Look into not needing the ".andThen" for docking
 	private void populateAutoChooser() {
 		chooser = new SendableChooser<>();
 
