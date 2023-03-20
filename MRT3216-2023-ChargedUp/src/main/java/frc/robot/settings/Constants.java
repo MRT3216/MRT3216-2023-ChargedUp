@@ -405,10 +405,9 @@ public final class Constants {
 		public static final double kThetaD = 0;
 
 		public static final double kStartDelayTime = 0;
-		public static final double kMaxIntakeTime = 1.0; // seconds
 
-		public static final double kIntakeTime = 3;
-		public static final double kOuttakeTime = 1;
+		public static final double kMaxIntakeTime = 3;
+		public static final double kMaxOuttakeTime = 1;
 
 		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;

@@ -31,9 +31,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.Position;
-import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
 import frc.robot.subsystems.ArmSubsystem;
@@ -60,7 +58,7 @@ public class AutoChooser implements Loggable {
 	private SwerveSubsystem swerveSubsystem;
 	@Log.Exclude
 	@Config.Exclude
-	private IntakeSubsystem intakeSubsystem;
+	private static IntakeSubsystem intakeSubsystem;
 	@Log
 	private double maxTranslationError = 0;
 	@Log
@@ -178,47 +176,69 @@ public class AutoChooser implements Loggable {
 	private static HashMap<String, Command> buildEventMapReal() {
 		return new HashMap<>(
 				Map.ofEntries(
-						Map.entry("placeHighCone",
-								Commands.print("Placing High Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone)
-												.andThen(Commands.print("Finished placing")))),
+						Map.entry("armToHighCone",
+								Commands.print("Moving arm to High Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+												.andThen(Commands.print("Finished moving arm")))),
 
-						Map.entry("placeMidCone",
-								Commands.print("Placing Mid Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCone)
-												.andThen(Commands.print("Finished placing")))),
+						Map.entry("armToMidCone",
+								Commands.print("Moving arm to Mid Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCone, true)
+												.andThen(Commands.print("Finished moving arm")))),
 
-						Map.entry("placeHybridCone",
-								Commands.print("Placing Hybrid Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid)
-												.andThen(Commands.print("Finished placing")))),
+						Map.entry("armToHybridCone",
+								Commands.print("Moving arm to Hybrid Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid, true)
+												.andThen(Commands.print("Finished moving arm")))),
 
-						Map.entry("placeHighCube",
-								Commands.print("Placing High Cube")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCube)
-												.andThen(Commands.print("Finished placing")))),
+						Map.entry("armToHighCube",
+								Commands.print("Moving arm to High Cube")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCube, true)
+												.andThen(Commands.print("Finished moving arm")))),
 
-						Map.entry("placeMidCube",
-								Commands.print("Placing Mid Cube")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCube)
-												.andThen(Commands.print("Finished placing")))),
+						Map.entry("armToMidCube",
+								Commands.print("Moving arm to Mid Cube")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCube, true)
+												.andThen(Commands.print("Finished moving arm")))),
 
-						Map.entry("placeHybridCube",
-								Commands.print("Placing Hybrid Cube")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid)
-												.andThen(Commands.print("Finished placing")))),
+						Map.entry("armToHybridCube",
+								Commands.print("Moving arm to Hybrid Cube")
+										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid, true)
+												.andThen(Commands.print("Finished moving arm")))),
+
+						Map.entry("armToIntakeCone",
+								Commands.print("Moving arm to Intake Cone")
+										.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone, true)
+												.andThen(Commands.print("Finished moving arm")))),
+
+						Map.entry("armToIntakeCube",
+								Commands.print("Moving arm to Intake Cube")
+										.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeCube, true)
+												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("intakeCone",
 								Commands.print("Intaking Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone)
+										.andThen(() -> intakeSubsystem.getAutoConeCommand(true)
 												.andThen(Commands.print("Finished intaking")))),
 
-						Map.entry("intakeCube", Commands.print("Intaking Cube")
-								.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeCube)
-										.andThen(Commands.print("Finished intaking")))),
+						Map.entry("intakeCube",
+								Commands.print("Intaking Cube")
+										.andThen(() -> intakeSubsystem.getAutoCubeCommand(true)
+												.andThen(Commands.print("Finished intaking")))),
 
-						Map.entry("stow", Commands.print("Stowing arm")
-								.andThen(Commands.print("Finished stowing")))));
+						Map.entry("ejectCone",
+								Commands.print("Ejecting Cone")
+										.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
+												.andThen(Commands.print("Finished ejecting")))),
+
+						Map.entry("ejectCube",
+								Commands.print("Eject Cube")
+										.andThen(() -> intakeSubsystem.getAutoCubeCommand(false)
+												.andThen(Commands.print("Finished ejecting")))),
+
+						Map.entry("stow",
+								Commands.print("Stowing arm")
+										.andThen(Commands.print("Finished stowing")))));
 	}
 
 	// TODO: Find a naming system and put the names of the files and tabs to that
@@ -227,31 +247,29 @@ public class AutoChooser implements Loggable {
 		chooser = new SendableChooser<>();
 
 		chooser.setDefaultOption("A-Cn-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(() -> intakeSubsystem.getCommand(false, GamePiece.Cone, ScoringHeight.High)
-								.withTimeout(AUTO.kOuttakeTime))
+				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("A-Cn-Leave", AUTO.kSlowPath))));
 
 		chooser.addOption("S-CnCb-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCb+Cb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb+Cb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
 		chooser.addOption("M-Cn+Cb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("M-Cn+Cb-Dock", AUTO.kSlowPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
 		chooser.addOption("C-CnCb-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("C-CnCb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true))));
 
@@ -259,6 +277,13 @@ public class AutoChooser implements Loggable {
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",
 						new PathConstraints(3, 3)))
 						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
+	}
+
+	private Command getScoreHighConeCommand() {
+		return Commands.print("Scoring high cone")
+				.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
+								.andThen(Commands.print("Finished stowing"))));
 	}
 
 	public Command getAutoCommand() {
