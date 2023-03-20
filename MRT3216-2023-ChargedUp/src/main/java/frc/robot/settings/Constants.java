@@ -389,6 +389,8 @@ public final class Constants {
 	}
 
 	public static final class AUTO {
+		public static final boolean usePhotonVision = false;
+
 		// Proportional gain
 		public static final double kPositionP = 4;
 		// Integral gain
