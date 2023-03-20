@@ -257,7 +257,7 @@ public class AutoChooser implements Loggable {
 		chooser.addOption("S-CnCb+Cb-Dock",
 				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb+Cb-Dock", AUTO.kFastPath))
-								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
+								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true))));
 
 		chooser.addOption("M-Cn+Cb-Dock",
 				() -> getScoreHighConeCommand()
@@ -281,7 +281,7 @@ public class AutoChooser implements Loggable {
 
 	private Command getScoreHighConeCommand() {
 		return Commands.print("Scoring high cone")
-				.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, false)
 						.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
 								.andThen(Commands.print("Finished stowing"))));
 	}

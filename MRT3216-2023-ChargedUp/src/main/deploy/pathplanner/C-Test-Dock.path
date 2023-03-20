@@ -39,7 +39,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
@@ -73,5 +73,12 @@
   "maxVelocity": null,
   "maxAcceleration": 4.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 1.0,
+      "names": [
+        "intakeCube"
+      ]
+    }
+  ]
 }
