@@ -91,9 +91,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command getAutoCubeCommand(boolean intake) {
         return new ProxyCommand(
-                () -> new ParallelRaceGroup(
-                        Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed)),
-                        Commands.waitSeconds(intake ? AUTO.kMaxIntakeTime : AUTO.kMaxOuttakeTime))
+                () -> Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed))
+                        .withTimeout(intake ? AUTO.kMaxIntakeTime : AUTO.kMaxOuttakeTime)
                         .finallyDo((end) -> motor.set(0)));
     }
 
