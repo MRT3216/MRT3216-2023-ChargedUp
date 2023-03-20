@@ -241,8 +241,6 @@ public class AutoChooser implements Loggable {
 										.andThen(Commands.print("Finished stowing")))));
 	}
 
-	// TODO: Find a naming system and put the names of the files and tabs to that
-	// TODO: Look into not needing the ".andThen" for docking
 	private void populateAutoChooser() {
 		chooser = new SendableChooser<>();
 
@@ -282,7 +280,7 @@ public class AutoChooser implements Loggable {
 	private Command getScoreHighConeCommand() {
 		return Commands.print("Scoring high cone")
 				.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, false)
-						.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
+						.andThen(() -> intakeSubsystem.getAutoConeCommand(false)// TODO: Change this to true so the robot will wait for arm
 								.andThen(Commands.print("Finished stowing"))));
 	}
 

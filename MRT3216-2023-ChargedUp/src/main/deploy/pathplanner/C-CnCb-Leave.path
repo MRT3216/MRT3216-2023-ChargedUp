@@ -72,8 +72,8 @@
           "intakeCube"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "minimum",
+        "waitTime": 2.0
       }
     },
     {
