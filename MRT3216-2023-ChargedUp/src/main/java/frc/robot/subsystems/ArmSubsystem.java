@@ -19,7 +19,7 @@ import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
-import frc.robot.settings.Constants.Substation;
+import frc.robot.settings.Constants.ARM.Substation;
 import frc.robot.settings.RobotMap.ROBOT;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -559,7 +559,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     @Config.ToggleSwitch(name = "Double Substation?", tabName = "Driver", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
     public void setSubstation(boolean isDouble) {
-        this.sub = isDouble ? Substation.Double : Substation.Single;
+        this.sub = isDouble ? ARM.Substation.Double : ARM.Substation.Single;
     }
 
     // #endregion

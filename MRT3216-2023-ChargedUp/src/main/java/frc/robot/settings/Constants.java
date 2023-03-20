@@ -56,7 +56,7 @@ public final class Constants {
 		 * <p>
 		 * This is a measure of how fast the robot should be able to drive in a straight
 		 * line.
-		 */	//4.578870701248506
+		 */ // 4.578870701248506
 		public static final double MAX_VELOCITY_METERS_PER_SECOND = 5880.0
 				/ 60.0
 				* SdsModuleConfigurations.MK4I_L2.getDriveReduction()
@@ -284,37 +284,36 @@ public final class Constants {
 			}
 		}
 
-		// #endregion
-	}
+		public enum Substation {
+			Single(0),
+			Double(1);
 
-	public enum Substation {
-		Single(0),
-		Double(1);
+			private int value;
+			private static Map<Integer, Substation> map = new HashMap<>();
 
-		private int value;
-		private static Map<Integer, Substation> map = new HashMap<>();
+			private Substation(int value) {
+				this.value = value;
+			}
 
-		private Substation(int value) {
-			this.value = value;
-		}
+			static {
+				for (Substation position : Substation.values()) {
+					map.put(position.value, position);
+				}
+			}
 
-		static {
-			for (Substation position : Substation.values()) {
-				map.put(position.value, position);
+			public static Substation valueOf(int position) {
+				return (Substation) map.get(position);
+			}
+
+			public int getValue() {
+				return value;
 			}
 		}
 
-		public static Substation valueOf(int position) {
-			return (Substation) map.get(position);
-		}
-
-		public int getValue() {
-			return value;
-		}
+		// #endregion
 	}
 
 	// #endregion
-
 
 	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
