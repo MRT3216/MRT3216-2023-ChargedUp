@@ -17,9 +17,9 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "PlaceHighCone"
+          "intakeCube"
         ],
-        "executionBehavior": "sequential",
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -90,7 +90,9 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "intakeCube"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -100,5 +102,18 @@
   "maxVelocity": 4.0,
   "maxAcceleration": 4.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 2.0,
+      "names": [
+        "placeHighCube"
+      ]
+    },
+    {
+      "position": 2.01,
+      "names": [
+        "intakeCube"
+      ]
+    }
+  ]
 }

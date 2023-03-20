@@ -410,7 +410,7 @@ public final class Constants {
 
 		public static final PathConstraints kFastPath = new PathConstraints(2, 2);
 		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2.5);
-		public static final PathConstraints kSlowPath = new PathConstraints(1.5, 1.5);
+		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
 	}
 
 	public static final class AUTO_BALANCE {
