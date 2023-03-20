@@ -264,7 +264,7 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("C-CnCb-Leave",
 				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Leave", AUTO.kFastPath))));
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("C-CnCb-Dock",
 				() -> getScoreHighConeCommand()
