@@ -1,11 +1,7 @@
 package frc.robot;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
@@ -18,7 +14,7 @@ import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.settings.Constants.AUTO;
-import frc.robot.settings.Constants.Drivetrain;
+import frc.robot.settings.Constants.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -41,7 +37,7 @@ public class RobotContainer {
 
 	private static RobotContainer instance;
 	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
-	private SwerveSubsystem driveSystem;
+	private SwerveSubsystem swerveSubsystem;
 	private AutoChooser autoChooser;
 	private AutoBalance autoBalance;
 	private double autoStartDelayTime;
@@ -50,7 +46,7 @@ public class RobotContainer {
 	private CommandXboxController controller;
 	private ArmSubsystem armSystem;
 	private WristSubsystem wristSubsystem;
-	private IntakeSubsystem intakeSystem;
+	private IntakeSubsystem intakeSubsystem;
 
 	// #endregion
 
@@ -76,12 +72,12 @@ public class RobotContainer {
 	}
 
 	public void initSubsystems() {
-		this.driveSystem = SwerveSubsystem.getInstance();
+		this.swerveSubsystem = SwerveSubsystem.getInstance();
 		this.autoChooser = AutoChooser.getInstance();
 		this.autoBalance = AutoBalance.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
 		this.wristSubsystem = WristSubsystem.getInstance();
-		this.intakeSystem = IntakeSubsystem.getInstance();
+		this.intakeSubsystem = IntakeSubsystem.getInstance();
 	}
 
 	/**
@@ -93,17 +89,17 @@ public class RobotContainer {
 	 * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
-		System.out.println(Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
-		if (driveSystem != null && controller != null) {
-			driveSystem.setDefaultCommand(
+		System.out.println(DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND);
+		if (swerveSubsystem != null && controller != null) {
+			swerveSubsystem.setDefaultCommand(
 					new TeleDrive(
-							driveSystem,
+							swerveSubsystem,
 							() -> OIUtils.modifyAxis(controller.getLeftY(), this.translationExpo)
-									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+									* DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND,
 							() -> OIUtils.modifyAxis(controller.getLeftX(), this.translationExpo)
-									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+									* DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND,
 							() -> OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
-									* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+									* DRIVETRAIN.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}
 
@@ -143,9 +139,9 @@ public class RobotContainer {
 		// controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
 		controller.a().onTrue(autoBalance.getAutoBalanceCommand(false))
 				.onFalse(Commands.runOnce(() -> {
-					driveSystem.stop();
+					swerveSubsystem.stop();
 					autoBalance.reset();
-				}, driveSystem));
+				}, swerveSubsystem));
 
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
@@ -168,11 +164,11 @@ public class RobotContainer {
 		// Place piece
 		controller.leftBumper()
 				.whileTrue(new ProxyCommand(
-						() -> intakeSystem.getCommand(false, armSystem.getGamePiece(), armSystem.getScoringHeight())));
+						() -> intakeSubsystem.getCommand(false, armSystem.getGamePiece(), armSystem.getScoringHeight())));
 		// Intake
 		controller.rightBumper()
 				.whileTrue(new ProxyCommand(
-						() -> intakeSystem.getCommand(true, armSystem.getGamePiece(), armSystem.getScoringHeight())));
+						() -> intakeSubsystem.getCommand(true, armSystem.getGamePiece(), armSystem.getScoringHeight())));
 	}
 
 	public void disablePIDSubsystems() {
@@ -197,8 +193,8 @@ public class RobotContainer {
 		return instance;
 	}
 
-	public SwerveSubsystem getDriveSystem() {
-		return driveSystem;
+	public SwerveSubsystem getSwerveSubsystem() {
+		return swerveSubsystem;
 	}
 
 	// #region Logging

@@ -6,17 +6,17 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.settings.Constants.LimeLight;
-import frc.robot.settings.Constants.LimeLight.CameraMode;
-import frc.robot.settings.Constants.LimeLight.CameraStream;
-import frc.robot.settings.Constants.LimeLight.LEDMode;
+import frc.robot.settings.Constants.LIMELIGHT;
+import frc.robot.settings.Constants.LIMELIGHT.CameraMode;
+import frc.robot.settings.Constants.LIMELIGHT.CameraStream;
+import frc.robot.settings.Constants.LIMELIGHT.LEDMode;
 
 public class LimelightSubsystem extends SubsystemBase {
 	private static LimelightSubsystem instance;
 	private final NetworkTable limelightNT;
 
 	private LimelightSubsystem() {
-		NetworkTable table = NetworkTableInstance.getDefault().getTable(LimeLight.NTtable);
+		NetworkTable table = NetworkTableInstance.getDefault().getTable(LIMELIGHT.NTtable);
 		this.limelightNT = table;
 		// this.setLEDMode(LimeLight.LEDMode.OFF);
 		this.setStream(CameraStream.PiPMain);

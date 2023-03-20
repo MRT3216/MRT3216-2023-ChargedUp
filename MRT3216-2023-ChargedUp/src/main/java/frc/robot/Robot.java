@@ -43,8 +43,8 @@ public class Robot extends TimedRobot {
 		// and put our autonomous chooser on the dashboard.
 		robotContainer = RobotContainer.getInstance();
 		AutoChooser.getInstance().init();
-		robotContainer.getDriveSystem().calibrateGyroscope();
-		robotContainer.getDriveSystem().zeroGyroscope();
+		robotContainer.getSwerveSubsystem().calibrateGyroscope();
+		robotContainer.getSwerveSubsystem().zeroGyroscope();
 		PowerDistribution pdh = new PowerDistribution();
 		pdh.clearStickyFaults();
 		pdh.close();
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		// LimelightSubsystem.getInstance().setLEDMode(LEDMode.ON);
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
-		if (robotContainer.getDriveSystem() != null) {
+		if (robotContainer.getSwerveSubsystem() != null) {
 			// schedule the autonomous command
 			if (m_autonomousCommand != null) {
 				m_autonomousCommand.schedule();

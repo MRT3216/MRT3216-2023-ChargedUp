@@ -13,13 +13,16 @@ import java.util.Map;
 import com.pathplanner.lib.PathConstraints;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public final class Constants {
-	public static final class Drivetrain {
+	public static final class DRIVETRAIN {
 		// TODO: set these values
 		// public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54);
 		// public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
@@ -77,42 +80,6 @@ public final class Constants {
 				/ Math.hypot(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0);
 
 		public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
-	}
-
-	public static final class LimeLight {
-		public static final String NTtable = "limelight";
-
-		// modes:
-		// 0 = use the LED Mode set in the current pipeline
-		// 1 = force off
-		// 2 = force blink
-		// 3 = force on
-		public enum LEDMode {
-			PIPELINE,
-			OFF,
-			BLINK,
-			ON
-		}
-
-		// modes:
-		// 0 = vision processor
-		// 1 = driver camera
-		public enum CameraMode {
-			VISION,
-			DRIVER
-		}
-
-		// Set stream:
-		// 0 = Standard - Side-by-side streams if a webcam is attached to Limelight
-		// 1 = PiP Main - The secondary camera stream is placed in the lower-right
-		// corner of the primary camera stream
-		// 2 = PiP Secondary - The primary camera stream is placed in the lower-right
-		// corner of the secondary camera stream
-		public enum CameraStream {
-			Standard,
-			PiPMain,
-			PiPSecondary
-		}
 	}
 
 	public static final class ARM {
@@ -313,8 +280,6 @@ public final class Constants {
 		// #endregion
 	}
 
-	// #endregion
-
 	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
 		public static final float kForwardLimit = -1f;
@@ -447,6 +412,62 @@ public final class Constants {
 		public static final double kReverseCorrectionSpeed = -0.1;
 		// Speed it goes the other way when it tips backs
 		public static final double kForwardCorrectionSpeed = 0.05;
+	}
+
+	public static final class LIMELIGHT {
+		public static final String NTtable = "limelight";
+
+		// modes:
+		// 0 = use the LED Mode set in the current pipeline
+		// 1 = force off
+		// 2 = force blink
+		// 3 = force on
+		public enum LEDMode {
+			PIPELINE,
+			OFF,
+			BLINK,
+			ON
+		}
+
+		// modes:
+		// 0 = vision processor
+		// 1 = driver camera
+		public enum CameraMode {
+			VISION,
+			DRIVER
+		}
+
+		// Set stream:
+		// 0 = Standard - Side-by-side streams if a webcam is attached to Limelight
+		// 1 = PiP Main - The secondary camera stream is placed in the lower-right
+		// corner of the primary camera stream
+		// 2 = PiP Secondary - The primary camera stream is placed in the lower-right
+		// corner of the secondary camera stream
+		public enum CameraStream {
+			Standard,
+			PiPMain,
+			PiPSecondary
+		}
+	}
+
+	public static final class PHOTONVISION {
+		// TODO: Set these to our robot
+		static final Transform3d robotToLeftCam = new Transform3d(
+				new Translation3d(0.5, 0.0, 0.5),
+				new Rotation3d(
+						0, 0,
+						0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+								// from center.
+		static final Transform3d robotToRighttCam = new Transform3d(
+				new Translation3d(0.5, 0.0, 0.5),
+				new Rotation3d(
+						0, 0,
+						0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+								// from center.
+
+		// TODO: Fill in camera names from PhotonVision
+		static final String leftCameraName = "YOUR CAMERA NAME";
+		static final String rightCameraName = "YOUR CAMERA NAME";
 	}
 
 	public static final class OI {

@@ -4,12 +4,12 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.settings.Constants.Drivetrain.LEFT_FRONT_STEER_OFFSET;
-import static frc.robot.settings.Constants.Drivetrain.LEFT_REAR_STEER_OFFSET;
-import static frc.robot.settings.Constants.Drivetrain.RIGHT_FRONT_STEER_OFFSET;
-import static frc.robot.settings.Constants.Drivetrain.RIGHT_REAR_STEER_OFFSET;
-import static frc.robot.settings.Constants.Drivetrain.TRACKWIDTH_METERS;
-import static frc.robot.settings.Constants.Drivetrain.WHEELBASE_METERS;
+import static frc.robot.settings.Constants.DRIVETRAIN.LEFT_FRONT_STEER_OFFSET;
+import static frc.robot.settings.Constants.DRIVETRAIN.LEFT_REAR_STEER_OFFSET;
+import static frc.robot.settings.Constants.DRIVETRAIN.RIGHT_FRONT_STEER_OFFSET;
+import static frc.robot.settings.Constants.DRIVETRAIN.RIGHT_REAR_STEER_OFFSET;
+import static frc.robot.settings.Constants.DRIVETRAIN.TRACKWIDTH_METERS;
+import static frc.robot.settings.Constants.DRIVETRAIN.WHEELBASE_METERS;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.LEFT_FRONT_ANGLE;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.LEFT_FRONT_CANCODER;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.LEFT_FRONT_DRIVE;
@@ -41,7 +41,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.settings.Constants.Drivetrain;
+import frc.robot.settings.Constants.DRIVETRAIN;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -172,7 +172,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	public void setModuleStates(SwerveModuleState[] states) {
-		SwerveDriveKinematics.desaturateWheelSpeeds(states, Drivetrain.MAX_VELOCITY_METERS_PER_SECOND);
+		SwerveDriveKinematics.desaturateWheelSpeeds(states, DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND);
 
 		SwerveModulePosition[] positions = getPositions();
 		for (int i = 0; i < states.length; i++) {
@@ -184,10 +184,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		double blVoltage = states[2].speedMetersPerSecond;
 		double brVoltage = states[3].speedMetersPerSecond;
 
-		flVoltage = flVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		frVoltage = frVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		blVoltage = blVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
-		brVoltage = brVoltage / Drivetrain.MAX_VELOCITY_METERS_PER_SECOND * Drivetrain.MAX_VOLTAGE;
+		flVoltage = flVoltage / DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND * DRIVETRAIN.MAX_VOLTAGE;
+		frVoltage = frVoltage / DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND * DRIVETRAIN.MAX_VOLTAGE;
+		blVoltage = blVoltage / DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND * DRIVETRAIN.MAX_VOLTAGE;
+		brVoltage = brVoltage / DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND * DRIVETRAIN.MAX_VOLTAGE;
 
 		this.frontLeftModule.set(flVoltage, states[0].angle.getRadians());
 		this.frontRightModule.set(frVoltage, states[1].angle.getRadians());

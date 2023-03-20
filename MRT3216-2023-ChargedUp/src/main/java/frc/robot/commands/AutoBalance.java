@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.settings.Constants.AUTO_BALANCE;
-import frc.robot.settings.Constants.Drivetrain;
+import frc.robot.settings.Constants.DRIVETRAIN;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -51,7 +51,7 @@ public class AutoBalance implements Loggable {
                 () -> Commands.run(
                         () -> swerveSubsystem.drive(
                                 new ChassisSpeeds(
-                                        direction * autoBalanceRoutine() * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+                                        direction * autoBalanceRoutine() * DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND,
                                         0, 0)),
                         swerveSubsystem))
                 .andThen(swerveSubsystem::setModuleStatesHockeyStop, swerveSubsystem);
