@@ -20,6 +20,7 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
@@ -56,7 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
         // This method will be called once per scheduler
         if (limitSwitch.isPressed()) {
             wristSubsystem.resetWristEncoderPosition();
-            //System.out.println("Encoder position reset by limit switch");
+            // System.out.println("Encoder position reset by limit switch");
         }
     }
 
@@ -81,15 +82,19 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command getAutoConeCommand(boolean intake) {
-        return new ParallelRaceGroup(
-                Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
-                Commands.waitSeconds(AUTO.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
+        return new ProxyCommand(
+                () -> new ParallelRaceGroup(
+                        Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
+                        Commands.waitSeconds(intake ? AUTO.kMaxIntakeTime : AUTO.kMaxOuttakeTime))
+                        .finallyDo((end) -> motor.set(0)));
     }
 
     public Command getAutoCubeCommand(boolean intake) {
-        return new ParallelRaceGroup(
-                Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed)),
-                Commands.waitSeconds(AUTO.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
+        return new ProxyCommand(
+                () -> new ParallelRaceGroup(
+                        Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed)),
+                        Commands.waitSeconds(intake ? AUTO.kMaxIntakeTime : AUTO.kMaxOuttakeTime))
+                        .finallyDo((end) -> motor.set(0)));
     }
 
     public static IntakeSubsystem getInstance() {
