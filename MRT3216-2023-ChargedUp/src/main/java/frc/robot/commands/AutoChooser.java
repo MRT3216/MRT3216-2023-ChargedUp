@@ -234,7 +234,7 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("M-Cn+Cb-Dock",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("M-Cn+Cb-Dock", AUTO.kMediumPath))
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("M-Cn+Cb-Dock", AUTO.kSlowPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
 		chooser.addOption("C-CnCb-Leave",
@@ -244,12 +244,12 @@ public class AutoChooser implements Loggable {
 		chooser.addOption("C-CnCb-Dock",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Dock", AUTO.kFastPath))
-								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
+								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true))));
 
 		chooser.addOption("C-Test-Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",
 						new PathConstraints(3, 3)))
-						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false)));
+						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
 	}
 
 	public Command getAutoCommand() {
