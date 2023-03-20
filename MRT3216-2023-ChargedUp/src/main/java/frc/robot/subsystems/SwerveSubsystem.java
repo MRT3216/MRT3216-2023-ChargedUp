@@ -23,6 +23,10 @@ import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_ANGLE;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_CANCODER;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_DRIVE;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.MkModuleConfiguration;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
@@ -40,7 +44,11 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.DRIVETRAIN;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -70,7 +78,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private final SwerveModule[] swerveModules;
 
 	public final SwerveDrivePoseEstimator poseEstimator;
-	// public final Field2d field2d;
+	public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 	private PhotonCameraWrapper photonCameraWrapper;
@@ -146,13 +154,15 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
-		// this.field2d = new Field2d();
+		this.field2d = new Field2d();
 	}
 
 	@Override
 	public void periodic() {
 		this.poseEstimator.update(getGyroscopeRotation(), getPositions());
-		// this.field2d.setRobotPose(poseEstimator.getEstimatedPosition());
+		if (AUTO.usePhotonVision) {
+			this.updatePoseWithVision();
+		}
 
 		final double zeroDeadzone = 0.001;
 
@@ -163,15 +173,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		if (Math.abs(this.chassisSpeeds.vyMetersPerSecond) < zeroDeadzone) {
 			this.chassisSpeeds.vyMetersPerSecond = 0;
 		}
-
-		// Hockey-lock if stopped by setting rotation to realllly low number
-		/*
-		 * if (this.chassisSpeeds.vxMetersPerSecond == 0 &&
-		 * this.chassisSpeeds.vyMetersPerSecond == 0 &&
-		 * Math.abs(this.chassisSpeeds.omegaRadiansPerSecond) < zeroDeadzone) {
-		 * this.chassisSpeeds.omegaRadiansPerSecond = 0.00001;
-		 * }
-		 */
 
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
@@ -275,6 +276,36 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 								this.backLeftModule.getPosition(),
 								this.backRightModule.getPosition() },
 						pose);
+	}
+
+	private void updatePoseWithVision() {
+		Optional<EstimatedRobotPose> leftResult = photonCameraWrapper
+				.getEstimatedGlobalPoseFromLeftCam(poseEstimator.getEstimatedPosition());
+
+		if (leftResult.isPresent()) {
+			EstimatedRobotPose leftCamPose = leftResult.get();
+			poseEstimator.addVisionMeasurement(
+					leftCamPose.estimatedPose.toPose2d(), leftCamPose.timestampSeconds);
+			field2d.getObject("Left Cam Est Pos").setPose(leftCamPose.estimatedPose.toPose2d());
+		} else {
+			// move it way off the screen to make it disappear
+			field2d.getObject("Left Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+		}
+
+		Optional<EstimatedRobotPose> rightResult = photonCameraWrapper
+				.getEstimatedGlobalPoseFromRightCam(poseEstimator.getEstimatedPosition());
+
+		if (rightResult.isPresent()) {
+			EstimatedRobotPose rightCamPose = rightResult.get();
+			poseEstimator.addVisionMeasurement(
+					rightCamPose.estimatedPose.toPose2d(), rightCamPose.timestampSeconds);
+			field2d.getObject("Right Cam Est Pos").setPose(rightCamPose.estimatedPose.toPose2d());
+		} else {
+			// move it way off the screen to make it disappear
+			field2d.getObject("Right Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+		}
+
+		field2d.setRobotPose(this.poseEstimator.getEstimatedPosition());
 	}
 
 	// #endregion
@@ -454,11 +485,10 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 	// #endregion
 
-	// @Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex =
-	// 0, height = 4, width = 8)
-	// public Field2d getField2D() {
-	// return this.field2d;
-	// }
+	@Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0, height = 4, width = 8)
+	public Field2d getField2D() {
+		return this.field2d;
+	}
 
 	// #endregion
 
