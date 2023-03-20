@@ -31,10 +31,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.Position;
+import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -55,6 +58,9 @@ public class AutoChooser implements Loggable {
 	@Log.Exclude
 	@Config.Exclude
 	private SwerveSubsystem swerveSubsystem;
+	@Log.Exclude
+	@Config.Exclude
+	private IntakeSubsystem intakeSubsystem;
 	@Log
 	private double maxTranslationError = 0;
 	@Log
@@ -79,6 +85,7 @@ public class AutoChooser implements Loggable {
 	private AutoChooser() {
 		swerveSubsystem = SwerveSubsystem.getInstance();
 		armSubsystem = ArmSubsystem.getInstance();
+		intakeSubsystem = IntakeSubsystem.getInstance();
 
 		this.populateAutoChooser();
 
@@ -221,6 +228,8 @@ public class AutoChooser implements Loggable {
 
 		chooser.setDefaultOption("A-Cn-Leave",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(() -> intakeSubsystem.getCommand(false, GamePiece.Cone, ScoringHeight.High)
+								.withTimeout(AUTO.kOuttakeTime))
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("A-Cn-Leave", AUTO.kSlowPath))));
 
 		chooser.addOption("S-CnCb-Leave",
