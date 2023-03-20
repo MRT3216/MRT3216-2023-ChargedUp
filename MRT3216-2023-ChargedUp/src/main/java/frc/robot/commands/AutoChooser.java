@@ -283,7 +283,7 @@ public class AutoChooser implements Loggable {
 		return Commands.print("Scoring high cone")
 				.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, false)
 						.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
-								.andThen(Commands.print("Finished stowing"))));
+								.andThen(Commands.print("Finished scoring"))));
 	}
 
 	public Command getAutoCommand() {
