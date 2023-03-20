@@ -329,23 +329,15 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees, boolean wait) {
-        if (wait) {
-            return Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
-                    .andThen(Commands.runOnce(() -> {
-                        setArmGoal(armDegrees);
-                        wristSubsystem.setWristGoal(wristDegrees);
-                        this.enable();
-                    }, this)
-                            .andThen(Commands.waitUntil(() -> armAtGoal() && wristSubsystem.wristAtGoal())
-                                    .andThen(Commands.print("Arm and wrist at goal"))));
-        } else {
-            return Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
-                    .andThen(Commands.runOnce(() -> {
-                        setArmGoal(armDegrees);
-                        wristSubsystem.setWristGoal(wristDegrees);
-                        this.enable();
-                    }, this));
-        }
+        return Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
+                .andThen(Commands.runOnce(() -> {
+                    setArmGoal(armDegrees);
+                    wristSubsystem.setWristGoal(wristDegrees);
+                    this.enable();
+                }, this)
+                        .andThen(Commands.waitUntil(() -> armAtGoal() && wristSubsystem.wristAtGoal())
+                                .andThen(Commands.print("Arm and wrist at goal")))
+                        .unless(() -> !wait));
     }
 
     public Command getWristGotoCommand(double wristDegrees) {
