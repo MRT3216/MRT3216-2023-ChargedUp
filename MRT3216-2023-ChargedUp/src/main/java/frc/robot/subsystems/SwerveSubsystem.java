@@ -46,6 +46,8 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class SwerveSubsystem extends SubsystemBase implements Loggable {
+	// #region Fields
+
 	private static SwerveSubsystem instance;
 	private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
 			// Front left
@@ -71,6 +73,9 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	// public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+	private PhotonCameraWrapper photonCameraWrapper;
+
+	// #endregion
 
 	private SwerveSubsystem() {
 		navx = new AHRS(SerialPort.Port.kUSB1);
@@ -136,6 +141,8 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				this.frontLeftModule, this.frontRightModule, this.backLeftModule, this.backRightModule
 		};
 
+		this.photonCameraWrapper = PhotonCameraWrapper.getInstance();
+
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
@@ -169,6 +176,46 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(this.chassisSpeeds);
 
 		setModuleStates(states);
+	}
+
+	// #region Drive
+
+	public void drive(ChassisSpeeds chassisSpeeds) {
+		this.chassisSpeeds = chassisSpeeds;
+	}
+
+	public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
+		this.drive(
+				ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds,
+						this.getGyroscopeRotation()));
+	}
+
+	public void stop() {
+		for (SwerveModule swerveModule : this.swerveModules) {
+			swerveModule.set(0, swerveModule.getSteerAngle());
+		}
+	}
+
+	// #endregion
+
+	// #region Module States
+
+	public SwerveModulePosition[] getPositions() {
+		return new SwerveModulePosition[] {
+				this.frontLeftModule.getPosition(),
+				this.frontRightModule.getPosition(),
+				this.backLeftModule.getPosition(),
+				this.backRightModule.getPosition()
+		};
+	}
+
+	/**
+	 * Returns the current state of the module.
+	 *
+	 * @return The current state of the module.
+	 */
+	public SwerveModuleState getState(SwerveModule module) {
+		return new SwerveModuleState(module.getDriveVelocity(), new Rotation2d(module.getSteerAngle()));
 	}
 
 	public void setModuleStates(SwerveModuleState[] states) {
@@ -209,6 +256,31 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		this.backRightModule.set(0, Units.degreesToRadians(-45));
 	}
 
+	// #endregion
+
+	// #region Pose
+
+	public Pose2d getCurrentRobotPose() {
+		return this.poseEstimator.getEstimatedPosition();
+	}
+
+	public void setCurrentRobotPose(Pose2d pose) {
+		System.out.println("Setting Pose: " + pose.getRotation().getDegrees());
+
+		this.poseEstimator
+				.resetPosition(getGyroscopeRotation(),
+						new SwerveModulePosition[] {
+								this.frontLeftModule.getPosition(),
+								this.frontRightModule.getPosition(),
+								this.backLeftModule.getPosition(),
+								this.backRightModule.getPosition() },
+						pose);
+	}
+
+	// #endregion
+
+	// #region Gyro
+
 	/**
 	 * Sets the gyroscope angle to zero. This can be used to set the direction the
 	 * robot is currently
@@ -247,48 +319,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return Rotation2d.fromDegrees(-this.navx.getYaw());
 	};
 
-	public Pose2d getCurrentRobotPose() {
-		return this.poseEstimator.getEstimatedPosition();
-	}
-
-	public void setCurrentRobotPose(Pose2d pose) {
-		System.out.println("Setting Pose: " + pose.getRotation().getDegrees());
-
-		this.poseEstimator
-				.resetPosition(getGyroscopeRotation(),
-						new SwerveModulePosition[] {
-								this.frontLeftModule.getPosition(),
-								this.frontRightModule.getPosition(),
-								this.backLeftModule.getPosition(),
-								this.backRightModule.getPosition() },
-						pose);
-	}
-
-	public void stop() {
-		for (SwerveModule swerveModule : this.swerveModules) {
-			swerveModule.set(0, swerveModule.getSteerAngle());
-		}
-	}
-
-	public SwerveModulePosition[] getPositions() {
-		return new SwerveModulePosition[] {
-				this.frontLeftModule.getPosition(),
-				this.frontRightModule.getPosition(),
-				this.backLeftModule.getPosition(),
-				this.backRightModule.getPosition()
-		};
-	}
-
-	public void drive(ChassisSpeeds chassisSpeeds) {
-		this.chassisSpeeds = chassisSpeeds;
-	}
-
-	public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-		this.drive(
-				ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds,
-						this.getGyroscopeRotation()));
-	}
-
 	@Log(name = "Pitch", rowIndex = 0, columnIndex = 7, height = 1, width = 1)
 	public double getPitch() {
 		return navx.getPitch();
@@ -298,18 +328,11 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		return navx.getRoll();
 	}
 
-	/**
-	 * Returns the current state of the module.
-	 *
-	 * @return The current state of the module.
-	 */
-	public SwerveModuleState getState(SwerveModule module) {
-		return new SwerveModuleState(module.getDriveVelocity(), new Rotation2d(module.getSteerAngle()));
-	}
-
 	public boolean gyroConnected() {
 		return this.navx.isConnected();
 	}
+
+	// #endregion
 
 	// #region Logging
 

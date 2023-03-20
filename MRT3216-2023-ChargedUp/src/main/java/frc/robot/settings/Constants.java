@@ -452,13 +452,13 @@ public final class Constants {
 
 	public static final class PHOTONVISION {
 		// TODO: Set these to our robot
-		static final Transform3d robotToLeftCam = new Transform3d(
+		public static final Transform3d robotToLeftCam = new Transform3d(
 				new Translation3d(0.5, 0.0, 0.5),
 				new Rotation3d(
 						0, 0,
 						0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
 								// from center.
-		static final Transform3d robotToRighttCam = new Transform3d(
+		public static final Transform3d robotToRighttCam = new Transform3d(
 				new Translation3d(0.5, 0.0, 0.5),
 				new Rotation3d(
 						0, 0,
@@ -466,8 +466,8 @@ public final class Constants {
 								// from center.
 
 		// TODO: Fill in camera names from PhotonVision
-		static final String leftCameraName = "YOUR CAMERA NAME";
-		static final String rightCameraName = "YOUR CAMERA NAME";
+		public static final String leftCameraName = "YOUR CAMERA NAME";
+		public static final String rightCameraName = "YOUR CAMERA NAME";
 	}
 
 	public static final class OI {
