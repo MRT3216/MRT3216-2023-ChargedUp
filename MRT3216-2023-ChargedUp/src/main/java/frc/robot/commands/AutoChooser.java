@@ -246,20 +246,20 @@ public class AutoChooser implements Loggable {
 
 		chooser.setDefaultOption("A-Cn-Leave",
 				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("A-Cn-Leave", AUTO.kSlowPath))));
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave", AUTO.kSlowPath))));
 
 		chooser.addOption("S-CnCb-Leave",
 				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb-Leave", AUTO.kFastPath))));
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCb+Cb-Dock",
 				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("S-CnCb+Cb-Dock", AUTO.kFastPath))
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true))));
 
 		chooser.addOption("M-Cn+Cb-Dock",
 				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("M-Cn+Cb-Dock", AUTO.kSlowPath))
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Dock", AUTO.kSlowPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
 		chooser.addOption("C-CnCb-Leave",
@@ -268,8 +268,8 @@ public class AutoChooser implements Loggable {
 
 		chooser.addOption("C-CnCb-Dock",
 				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPath("C-CnCb-Dock", AUTO.kFastPath))
-								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true))));
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock", AUTO.kFastPath))
+								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
 
 		chooser.addOption("C-Test-Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",

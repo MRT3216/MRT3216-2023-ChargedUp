@@ -319,7 +319,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getCommand(ARM.Position position) {
-        return getCommand(position, false);
+        return getCommand(position, true);
     }
 
     public Command getCommand(ARM.Position position, boolean wait) {

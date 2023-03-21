@@ -98,7 +98,7 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * PID Constants
 		 */
-		public static final double kArmKp = .2;
+		public static final double kArmKp = 0.2;
 		public static final double kArmKi = 0;
 		public static final double kArmKd = 0;
 		public static final double kArmPositionTolerance = 2;
@@ -129,7 +129,7 @@ public final class Constants {
 		public static final int kDoubleSubstationIntakeConeDegrees = 43;
 		public static final int kDoubleSubstationIntakeCubeDegrees = 43;
 		public static final int kStowedDegrees = 50;
-		public static final int kStartDegrees = 69;
+		public static final int kStartDegrees = 62;
 
 		// #region Enums
 
@@ -377,8 +377,8 @@ public final class Constants {
 		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;
 
-		public static final PathConstraints kFastPath = new PathConstraints(2, 2);
-		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2.5);
+		public static final PathConstraints kFastPath = new PathConstraints(1.5, 1.5);
+		public static final PathConstraints kMediumPath = new PathConstraints(1.5, 1.5);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
 	}
 

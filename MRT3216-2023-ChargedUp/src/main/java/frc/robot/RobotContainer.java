@@ -136,12 +136,12 @@ public class RobotContainer {
 		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
 		// }));
 
-		// controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		controller.a().onTrue(autoBalance.getAutoBalanceCommand(false))
-				.onFalse(Commands.runOnce(() -> {
-					swerveSubsystem.stop();
-					autoBalance.reset();
-				}, swerveSubsystem));
+		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
+		// controller.a().onTrue(autoBalance.getAutoBalanceCommand(false))
+		// 		.onFalse(Commands.runOnce(() -> {
+		// 			swerveSubsystem.stop();
+		// 			autoBalance.reset();
+		// 		}, swerveSubsystem));
 
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
