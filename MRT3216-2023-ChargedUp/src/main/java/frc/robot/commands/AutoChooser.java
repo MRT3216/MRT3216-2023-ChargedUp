@@ -238,7 +238,8 @@ public class AutoChooser implements Loggable {
 
 						Map.entry("stow",
 								Commands.print("Stowing arm")
-										.andThen(Commands.print("Finished stowing")))));
+										.andThen(() -> armSubsystem.getCommand(Position.Stowed, false)
+												.andThen(Commands.print("Finished stowing"))))));
 	}
 
 	private void populateAutoChooser() {
@@ -270,6 +271,10 @@ public class AutoChooser implements Loggable {
 				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
+		// TODO: Add the speed constraints to this option to make the speed change over the cable
+		chooser.addOption("C-CnCb-LeaveCopy",
+				() -> getScoreHighConeCommand()
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("C-Test-Dock",
 				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",
