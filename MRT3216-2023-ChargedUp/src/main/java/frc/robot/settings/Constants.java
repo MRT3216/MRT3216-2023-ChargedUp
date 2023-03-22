@@ -19,7 +19,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 
 public final class Constants {
 	public static final class DRIVETRAIN {
@@ -85,8 +84,8 @@ public final class Constants {
 	public static final class ARM {
 		public static final boolean kLeftMotorsInverted = true;
 		public static final boolean kRightMotorsInverted = false;
-		public static final float kReverseLimit = .02f;
-		public static final float kForwardLimit = .74f;
+		public static final float kReverseLimit = .01f;
+		public static final float kForwardLimit = .65f;
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
@@ -108,9 +107,8 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kArmMaxVelocity = 150; // degrees/s
-		public static final double kArmMaxAcceleration = 50; // degrees/s^2
-		public static final double kArmStartingPos = 80; // 60 degrees wrt hortizontal
+		public static final double kArmMaxVelocity = 175; // degrees/s
+		public static final double kArmMaxAcceleration = 125; // degrees/s^2
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -121,9 +119,9 @@ public final class Constants {
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridDegrees = 30;
-		public static final int kGroundIntakeUprightConeDegrees = 24;
+		public static final int kGroundIntakeUprightConeDegrees = 22;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 13;
+		public static final int kGroundIntakeCubeDegrees = 5;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
 		public static final int kDoubleSubstationIntakeConeDegrees = 43;
@@ -282,15 +280,17 @@ public final class Constants {
 
 	public static final class WRIST {
 		// TODO add in actual limits for manipulator encoder
-		public static final float kForwardLimit = -1f;
-		public static final float kReverseLimit = .35f;
+		// public static final float kForwardLimit = -1f;
+		// public static final float kReverseLimit = .35f;
 
 		public static final int kMotorCurrentLimit = 40;
 
 		public static final boolean kMotorInverted = false;
 
-		public static final double kReverseLimitDegrees = WristSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
-		public static final double kForwardLimitDegrees = WristSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
+		// public static final double kReverseLimitDegrees =
+		// WristSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
+		// public static final double kForwardLimitDegrees =
+		// WristSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
 
 		public static final double kZeroOffset = 0;
 		public static final double kScaleFactor = 180;
@@ -308,20 +308,20 @@ public final class Constants {
 		public static final double kWristVelocityTolerance = 20;
 
 		// Feed-Forward from SysID
-		public static final double kWristKs = 0.29522;
-		public static final double kWristKv = 0.0095926;
-		public static final double kWristKa = 0.0032297;
-		public static final double kWristKg = 0.52135 * 3;
+		// public static final double kWristKs = 0.29522;
+		// public static final double kWristKv = 0.0095926;
+		// public static final double kWristKa = 0.0032297;
+		// public static final double kWristKg = 0.52135 * 3;
 
-		public static final double kVVoltSecondPerRad = 0.5;
+		// public static final double kVVoltSecondPerRad = 0.5;
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kWristMaxVelocity = 180; // degrees/s
-		public static final double kWristMaxAcceleration = 120; // degrees/s^2
-		public static final double kWristStartingPos = 0; // 60 degrees wrt arm
+		public static final double kWristMaxVelocity = 200; // degrees/s
+		public static final double kWristMaxAcceleration = 150; // degrees/s^2
+		// public static final double kWristStartingPos = 0; // 60 degrees wrt arm
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -332,24 +332,24 @@ public final class Constants {
 		public static final int kScoringMidConeDegrees = -80;
 		public static final int kScoringMidCubeDegrees = -90;
 		public static final int kScoringHybridDegrees = 43;
-		public static final int kGroundIntakeUprightConeDegrees = 30;
+		public static final int kGroundIntakeUprightConeDegrees = 65;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 25;
 		public static final int kSingleSubstationIntakeConeDegrees = 110;
 		public static final int kSingleSubstationIntakeCubeDegrees = 90;
 		public static final int kDoubleSubstationIntakeConeDegrees = 110;
 		public static final int kDoubleSubstationIntakeCubeDegrees = 90;
-		public static final int kStowedDegrees = 46;
+		public static final int kStowedDegrees = 0;
 		public static final int kStartDegrees = 0;
 	}
 
 	public static final class INTAKE {
 		public static final boolean kMotorInverted = true;
 		public static final int kMotorCurrentLimit = 30;
-		public static final double kConeIntakeSpeed = .7;
-		public static final double kConeOuttakeSpeed = -0.53;
-		public static final double kCubeIntakeSpeed = -0.5;
-		public static final double kCubeOuttakeSpeed = 0.52;
+		public static final double kConeIntakeSpeed = -.7;
+		public static final double kConeOuttakeSpeed = 0.53;
+		public static final double kCubeIntakeSpeed = 0.5;
+		public static final double kCubeOuttakeSpeed = -0.52;
 		public static final double kCubeShootSpeed = 1.0;
 	}
 

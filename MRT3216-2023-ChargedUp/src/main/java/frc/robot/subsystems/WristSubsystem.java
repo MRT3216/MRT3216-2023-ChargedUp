@@ -366,7 +366,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         this.wStart = wStart;
     }
 
-    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Stowed", defaultValue = WRIST.kStowedDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
     }

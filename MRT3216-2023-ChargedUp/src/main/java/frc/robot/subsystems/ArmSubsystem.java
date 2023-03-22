@@ -553,7 +553,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         armOffset = calculateNativeUnitsFromDegrees(offset);
     }
 
-    @Config.ToggleSwitch(name = "Double Substation?", tabName = "Driver", rowIndex = 3, columnIndex = 6, height = 1, width = 1)
+    @Config.ToggleSwitch(name = "Double Substation?", tabName = "Driver", rowIndex = 1, columnIndex = 7, height = 1, width = 2)
     public void setSubstation(boolean isDouble) {
         this.sub = isDouble ? ARM.Substation.Double : ARM.Substation.Single;
     }
