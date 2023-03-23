@@ -16,9 +16,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "placeHighCone"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
@@ -51,16 +49,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.85,
-        "y": 1.05
+        "x": 1.8325046394872375,
+        "y": 1.0818771521533774
       },
       "prevControl": {
-        "x": 1.8638798994862926,
-        "y": 0.813665717730416
+        "x": 1.7613691494102008,
+        "y": 0.6550642116911565
       },
       "nextControl": {
-        "x": 1.7627827818048798,
-        "y": 2.53505532652091
+        "x": 1.9036401295642769,
+        "y": 1.5086900926156002
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -78,12 +76,12 @@
     },
     {
       "anchorPoint": {
-        "x": 2.366546613435107,
-        "y": 2.215318618671426
+        "x": 2.3314064261539196,
+        "y": 2.4250742701021375
       },
       "prevControl": {
-        "x": 2.2295165957853285,
-        "y": 2.10112693729661
+        "x": 2.1299268584616056,
+        "y": 2.2331889675380285
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -104,5 +102,30 @@
   "maxVelocity": 3.0,
   "maxAcceleration": 3.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.043636363636361156,
+      "names": [
+        "armToIntakeCube"
+      ]
+    },
+    {
+      "position": 0.8945454545454159,
+      "names": [
+        "intakeCube"
+      ]
+    },
+    {
+      "position": 1.0909090909090728,
+      "names": [
+        "armToHighCube"
+      ]
+    },
+    {
+      "position": 2.050909090908995,
+      "names": [
+        "stow"
+      ]
+    }
+  ]
 }

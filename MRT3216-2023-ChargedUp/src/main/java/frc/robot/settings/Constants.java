@@ -364,7 +364,7 @@ public final class Constants {
 		// Derivative gain
 		public static final double kPositionD = 0;
 		// Proportional gain
-		public static final double kThetaP = 13;
+		public static final double kThetaP = 8;
 		// Integral gain
 		public static final double kThetaI = 0;
 		// Derivative gain
