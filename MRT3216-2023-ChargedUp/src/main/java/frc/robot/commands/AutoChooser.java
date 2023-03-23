@@ -179,57 +179,65 @@ public class AutoChooser implements Loggable {
 				Map.ofEntries(
 						Map.entry("armToHighCone",
 								Commands.print("Moving arm to High Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.ScoringHighCone, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToMidCone",
 								Commands.print("Moving arm to Mid Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCone, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.ScoringMidCone, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToHybridCone",
 								Commands.print("Moving arm to Hybrid Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.ScoringHybrid, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToHighCube",
 								Commands.print("Moving arm to High Cube")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCube, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.ScoringHighCube, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToMidCube",
 								Commands.print("Moving arm to Mid Cube")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringMidCube, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.ScoringMidCube, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToHybridCube",
 								Commands.print("Moving arm to Hybrid Cube")
-										.andThen(() -> armSubsystem.getCommand(Position.ScoringHybrid, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.ScoringHybrid, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToIntakeCone",
 								Commands.print("Moving arm to Intake Cone")
-										.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToIntakeCube",
 								Commands.print("Moving arm to Intake Cube")
-										.andThen(() -> armSubsystem.getCommand(Position.GroundIntakeCube, true)
+										.andThen(new ProxyCommand(
+												() -> armSubsystem.getCommand(Position.GroundIntakeCube, true))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("intakeCone",
 								Commands.print("Intaking Cone")
-										.andThen(() -> intakeSubsystem.getAutoConeCommand(true)
+										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoConeCommand(true))
 												.andThen(Commands.print("Finished intaking")))),
 
 						Map.entry("intakeCube",
 								Commands.print("Intaking Cube")
-										.andThen(() -> intakeSubsystem.getAutoCubeCommand(true)
+										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoCubeCommand(true))
 												.andThen(Commands.print("Finished intaking")))),
 
 						Map.entry("ejectCone",
 								Commands.print("Ejecting Cone")
-										.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
+										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoConeCommand(false))
 												.andThen(Commands.print("Finished ejecting")))),
 
 						Map.entry("ejectCube",
