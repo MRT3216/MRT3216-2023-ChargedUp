@@ -236,11 +236,6 @@ public class AutoChooser implements Loggable {
 										.andThen(() -> intakeSubsystem.getAutoCubeCommand(false)
 												.andThen(Commands.print("Finished ejecting")))),
 
-						Map.entry("scoreHighCone",
-								Commands.print("Scoring High Cone")
-										.andThen(() -> intakeSubsystem.getAutoCubeCommand(false)
-												.andThen(Commands.print("Finished scoring")))),
-
 						Map.entry("stow",
 								Commands.print("Stowing arm")
 										.andThen(() -> armSubsystem.getCommand(Position.Stowed, false)
@@ -251,7 +246,8 @@ public class AutoChooser implements Loggable {
 		chooser = new SendableChooser<>();
 
 		chooser.setDefaultOption("A-Cn-Leave",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave", AUTO.kFastPath)));
+				() -> getScoreHighConeCommand()
+						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave", AUTO.kSlowPath))));
 
 		chooser.addOption("S-CnCb-Leave",
 				() -> getScoreHighConeCommand()
@@ -275,8 +271,7 @@ public class AutoChooser implements Loggable {
 				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
-		// TODO: Add the speed constraints to this option to make the speed change over
-		// the cable
+		// TODO: Add the speed constraints to this option to make the speed change over the cable
 		chooser.addOption("C-CnCb-LeaveCopy",
 				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave", AUTO.kFastPath))));
@@ -288,7 +283,10 @@ public class AutoChooser implements Loggable {
 	}
 
 	private Command getScoreHighConeCommand() {
-		return Commands.run(() -> intakeSubsystem.getAutoConeCommand(false));
+		return Commands.print("Scoring high cone")
+				.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, false)
+						.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
+								.andThen(Commands.print("Finished scoring"))));
 	}
 
 	public Command getAutoCommand() {

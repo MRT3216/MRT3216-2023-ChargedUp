@@ -128,7 +128,7 @@ public final class Constants {
 		public static final int kDoubleSubstationIntakeConeDegrees = 55;
 		public static final int kDoubleSubstationIntakeCubeDegrees = 55;
 		public static final int kStowedDegrees = 50;
-		public static final int kStartDegrees = 65;
+		public static final int kStartDegrees = 62;
 
 		// #region Enums
 
@@ -320,8 +320,8 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kWristMaxVelocity = 225; // degrees/s
-		public static final double kWristMaxAcceleration = 225; // degrees/s^2
+		public static final double kWristMaxVelocity = 200; // degrees/s
+		public static final double kWristMaxAcceleration = 200; // degrees/s^2
 		// public static final double kWristStartingPos = 0; // 60 degrees wrt arm
 
 		/*
@@ -341,7 +341,7 @@ public final class Constants {
 		public static final int kDoubleSubstationIntakeConeDegrees = 110;
 		public static final int kDoubleSubstationIntakeCubeDegrees = -20;
 		public static final int kStowedDegrees = 0;
-		public static final int kStartDegrees = 20;
+		public static final int kStartDegrees = 0;
 	}
 
 	public static final class INTAKE {
@@ -373,7 +373,7 @@ public final class Constants {
 		public static final double kStartDelayTime = 0;
 
 		public static final double kMaxIntakeTime = 3;
-		public static final double kMaxOuttakeTime = 0.25;
+		public static final double kMaxOuttakeTime = 1;
 
 		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;
