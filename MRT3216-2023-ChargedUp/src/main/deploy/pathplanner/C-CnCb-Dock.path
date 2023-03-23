@@ -28,12 +28,12 @@
         "y": 0.8564376103111184
       },
       "prevControl": {
-        "x": 5.269675674733829,
-        "y": 0.8564376103111184
+        "x": 5.392626169867724,
+        "y": 0.8450184421736366
       },
       "nextControl": {
-        "x": 5.269675674733829,
-        "y": 0.8564376103111184
+        "x": 5.392626169867724,
+        "y": 0.8450184421736366
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -49,16 +49,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.8325046394872375,
+        "x": 1.8708817000000588,
         "y": 1.0818771521533774
       },
       "prevControl": {
-        "x": 1.7613691494102008,
-        "y": 0.6550642116911565
+        "x": 1.7243176866253258,
+        "y": 0.6747548927791209
       },
       "nextControl": {
-        "x": 1.9036401295642769,
-        "y": 1.5086900926156002
+        "x": 2.076426726474729,
+        "y": 1.6528355590274575
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -67,7 +67,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "placeHighCube"
+          "ejectCube"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -76,23 +76,21 @@
     },
     {
       "anchorPoint": {
-        "x": 2.3314064261539196,
-        "y": 2.4250742701021375
+        "x": 2.45789995853496,
+        "y": 2.1924802823964624
       },
       "prevControl": {
-        "x": 2.1299268584616056,
-        "y": 2.2331889675380285
+        "x": 2.256420390842646,
+        "y": 2.0005949798323535
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 1.37,
+      "velOverride": 1.0,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "autoBalance"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
@@ -116,13 +114,13 @@
       ]
     },
     {
-      "position": 1.0909090909090728,
+      "position": 1.3527272727272277,
       "names": [
         "armToHighCube"
       ]
     },
     {
-      "position": 2.050909090908995,
+      "position": 2.290909090909079,
       "names": [
         "stow"
       ]
