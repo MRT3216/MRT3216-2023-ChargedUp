@@ -290,7 +290,7 @@ public class AutoChooser implements Loggable {
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock", AUTO.kSlowPath)),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock", AUTO.kMediumSlowPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 		// TODO: Add the speed constraints to this option to make the speed change over
 		// the cable
