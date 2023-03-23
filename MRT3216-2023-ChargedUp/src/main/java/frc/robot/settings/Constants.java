@@ -92,6 +92,7 @@ public final class Constants {
 		public static final double kZeroOffset = 0.0;
 		public static final double kZeroOffsetInDegrees = 0.0;
 		public static final double kScaleFactor = 192.86;
+		public static final double kLimitSwitchOffset = 0.3170284;
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -114,8 +115,8 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = 110;
-		public static final int kScoringHighCubeDegrees = 110;
+		public static final int kScoringHighConeDegrees = 120;
+		public static final int kScoringHighCubeDegrees = 115;
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridDegrees = 30;
@@ -124,8 +125,8 @@ public final class Constants {
 		public static final int kGroundIntakeCubeDegrees = 5;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
-		public static final int kDoubleSubstationIntakeConeDegrees = 43;
-		public static final int kDoubleSubstationIntakeCubeDegrees = 43;
+		public static final int kDoubleSubstationIntakeConeDegrees = 55;
+		public static final int kDoubleSubstationIntakeCubeDegrees = 55;
 		public static final int kStowedDegrees = 50;
 		public static final int kStartDegrees = 62;
 
@@ -327,10 +328,10 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = -175;
-		public static final int kScoringHighCubeDegrees = -175;
-		public static final int kScoringMidConeDegrees = -80;
-		public static final int kScoringMidCubeDegrees = -90;
+		public static final int kScoringHighConeDegrees = -135;
+		public static final int kScoringHighCubeDegrees = -190;
+		public static final int kScoringMidConeDegrees = -70;
+		public static final int kScoringMidCubeDegrees = -115;
 		public static final int kScoringHybridDegrees = 43;
 		public static final int kGroundIntakeUprightConeDegrees = 65;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
@@ -338,7 +339,7 @@ public final class Constants {
 		public static final int kSingleSubstationIntakeConeDegrees = 110;
 		public static final int kSingleSubstationIntakeCubeDegrees = 90;
 		public static final int kDoubleSubstationIntakeConeDegrees = 110;
-		public static final int kDoubleSubstationIntakeCubeDegrees = 90;
+		public static final int kDoubleSubstationIntakeCubeDegrees = -20;
 		public static final int kStowedDegrees = 0;
 		public static final int kStartDegrees = 0;
 	}

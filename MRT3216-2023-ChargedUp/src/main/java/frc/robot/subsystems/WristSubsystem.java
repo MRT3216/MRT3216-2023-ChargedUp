@@ -371,12 +371,12 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         this.wStowed = wStowed;
     }
 
-    @Config.NumberSlider(name = "W DSub Cone", defaultValue = WRIST.kSingleSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "W DSub Cone", defaultValue = WRIST.kDoubleSubstationIntakeConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
     public void setWDSCone(int wDSCone) {
         this.wDSCone = wSSCone;
     }
 
-    @Config.NumberSlider(name = "W DSub Cube", defaultValue = WRIST.kSingleSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
+    @Config.NumberSlider(name = "W DSub Cube", defaultValue = WRIST.kDoubleSubstationIntakeCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
     public void setWDSCube(int wDSCube) {
         this.wDSCube = wDSCube;
     }

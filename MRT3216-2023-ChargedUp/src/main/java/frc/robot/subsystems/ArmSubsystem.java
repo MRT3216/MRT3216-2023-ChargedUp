@@ -35,6 +35,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private WristSubsystem wristSubsystem;
     protected boolean enabled;
     private NetworkTable streamDeckNT;
+    private boolean isArmZeroed;
 
     // #region Arm Motors
 
@@ -80,6 +81,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private ArmSubsystem() {
         this.enabled = false;
+        this.isArmZeroed = false;
         this.wristSubsystem = WristSubsystem.getInstance();
         NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
         this.streamDeckNT = table;
@@ -280,6 +282,18 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             default:
                 return this.aStowed;
         }
+    }
+
+    public void resetArmEncoderPosition() {
+        armEncoder.setZeroOffset(ARM.kLimitSwitchOffset);
+
+        if (!isArmZeroed) {
+            isArmZeroed = true;
+        }
+    }
+
+    public boolean isArmZeroed() {
+        return isArmZeroed;
     }
 
     // #endregion

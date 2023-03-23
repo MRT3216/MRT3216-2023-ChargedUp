@@ -244,5 +244,10 @@ public class RobotContainer {
 		return this.wristSubsystem.isWristZeroed();
 	}
 
+	@Log.BooleanBox(name = "Arm Zeroed", tabName = "Driver", rowIndex = 0, columnIndex = 9, height = 1, width = 1)
+	public boolean isArmZeroed() {
+		return this.armSystem.isArmZeroed();
+	}
+
 	// #endregion
 }
