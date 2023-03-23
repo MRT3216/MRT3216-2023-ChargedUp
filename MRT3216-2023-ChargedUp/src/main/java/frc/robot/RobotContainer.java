@@ -137,12 +137,6 @@ public class RobotContainer {
 		// }));
 
 		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		// controller.a().onTrue(autoBalance.getAutoBalanceCommand(false))
-		// 		.onFalse(Commands.runOnce(() -> {
-		// 			swerveSubsystem.stop();
-		// 			autoBalance.reset();
-		// 		}, swerveSubsystem));
-
 		// controller.b().onTrue(new
 		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
@@ -164,11 +158,13 @@ public class RobotContainer {
 		// Place piece
 		controller.leftBumper()
 				.whileTrue(new ProxyCommand(
-						() -> intakeSubsystem.getCommand(false, armSystem.getGamePiece(), armSystem.getScoringHeight())));
+						() -> intakeSubsystem.getCommand(false, armSystem.getGamePiece(),
+								armSystem.getScoringHeight())));
 		// Intake
 		controller.rightBumper()
 				.whileTrue(new ProxyCommand(
-						() -> intakeSubsystem.getCommand(true, armSystem.getGamePiece(), armSystem.getScoringHeight())));
+						() -> intakeSubsystem.getCommand(true, armSystem.getGamePiece(),
+								armSystem.getScoringHeight())));
 	}
 
 	public void disablePIDSubsystems() {

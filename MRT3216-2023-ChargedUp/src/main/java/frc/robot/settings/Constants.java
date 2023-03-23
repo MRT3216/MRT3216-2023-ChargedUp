@@ -321,7 +321,7 @@ public final class Constants {
 		 * Constraint Constants
 		 */
 		public static final double kWristMaxVelocity = 200; // degrees/s
-		public static final double kWristMaxAcceleration = 150; // degrees/s^2
+		public static final double kWristMaxAcceleration = 200; // degrees/s^2
 		// public static final double kWristStartingPos = 0; // 60 degrees wrt arm
 
 		/*
@@ -347,10 +347,10 @@ public final class Constants {
 	public static final class INTAKE {
 		public static final boolean kMotorInverted = true;
 		public static final int kMotorCurrentLimit = 30;
-		public static final double kConeIntakeSpeed = -.7;
-		public static final double kConeOuttakeSpeed = 0.53;
-		public static final double kCubeIntakeSpeed = 0.5;
-		public static final double kCubeOuttakeSpeed = -0.52;
+		public static final double kConeIntakeSpeed = -.53;
+		public static final double kConeOuttakeSpeed = 0.7;
+		public static final double kCubeIntakeSpeed = 0.52;
+		public static final double kCubeOuttakeSpeed = -0.5;
 		public static final double kCubeShootSpeed = 1.0;
 	}
 
