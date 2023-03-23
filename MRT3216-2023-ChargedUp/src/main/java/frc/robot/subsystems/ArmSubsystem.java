@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
@@ -344,15 +345,16 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees, boolean wait) {
         System.out.println("SLDKFJ:S:DLKFJS:KLDJF:LSDKJF:LSDJKF:LKDJ");
-        return Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
-                .andThen(Commands.runOnce(() -> {
-                    setArmGoal(armDegrees);
-                    wristSubsystem.setWristGoal(wristDegrees);
-                    this.enable();
-                }, this),
-                        Commands.waitUntil(() -> armAtGoal() && wristSubsystem.wristAtGoal())
-                                .unless(() -> !wait),
-                        Commands.print("Arm and wrist at goal"));
+        return new ProxyCommand(
+                () -> Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
+                        .andThen(Commands.runOnce(() -> {
+                            setArmGoal(armDegrees);
+                            wristSubsystem.setWristGoal(wristDegrees);
+                            this.enable();
+                        }, this),
+                                Commands.waitUntil(() -> (armAtGoal() && wristSubsystem.wristAtGoal()))
+                                        .unless(() -> !wait),
+                                Commands.print("Arm and wrist at goal")));
     }
 
     public Command getWristGotoCommand(double wristDegrees) {

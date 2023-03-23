@@ -216,7 +216,7 @@ public class AutoChooser implements Loggable {
 						Map.entry("armToIntakeCone",
 								Commands.print("Moving arm to Intake Cone")
 										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone, true))
+												() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone, false))
 												.andThen(Commands.print("Finished moving arm")))),
 
 						Map.entry("armToIntakeCube",
@@ -242,12 +242,12 @@ public class AutoChooser implements Loggable {
 
 						Map.entry("ejectCube",
 								Commands.print("Eject Cube")
-										.andThen(() -> intakeSubsystem.getAutoCubeCommand(false)
+										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoCubeCommand(false))
 												.andThen(Commands.print("Finished ejecting")))),
 
 						Map.entry("stow",
 								Commands.print("Stowing arm")
-										.andThen(new ProxyCommand(armSubsystem::getStowedCommand)
+										.andThen(() -> armSubsystem.getStowedCommand()
 												.andThen(Commands.print("Finished stowing"))))));
 	}
 
@@ -256,9 +256,12 @@ public class AutoChooser implements Loggable {
 
 		chooser.setDefaultOption("A-Cn-Leave",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(intakeSubsystem.getAutoConeCommand(false)
-								.andThen(autoBuilder
-										.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave", AUTO.kSlowPath)))));
+						.andThen(Commands.print("Arm moved into scoring position")
+								.andThen(intakeSubsystem.getAutoConeCommand(false)
+										.andThen(Commands.print("We shoots, we scores...")
+												.andThen(autoBuilder
+														.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
+																AUTO.kSlowPath)))))));
 
 		chooser.addOption("S-CnCb-Leave",
 				() -> getScoreHighConeCommand()
