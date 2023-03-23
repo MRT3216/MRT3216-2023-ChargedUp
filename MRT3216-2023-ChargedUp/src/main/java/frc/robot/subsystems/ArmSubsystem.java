@@ -307,7 +307,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Ground intake - needs piece
     public Command getGroundIntakeCommand() {
-        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground));
+        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground), false);
     }
 
     // // Ground tipped cone intake - needs nothing
@@ -325,7 +325,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getStowedCommand() {
-        return getCommand(ARM.Position.Stowed);
+        return getCommand(ARM.Position.Stowed, false);
     }
 
     public Command getStartCommand() {
