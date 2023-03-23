@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.settings.Constants.ARM.Position;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
@@ -94,7 +95,7 @@ public class AutoChooser implements Loggable {
 	}
 
 	public void init() {
-		eventMap = buildEventMap();
+		eventMap = buildEventMapReal();
 
 		autoBuilder = new SwerveAutoBuilder(
 				swerveSubsystem::getCurrentRobotPose,
@@ -135,7 +136,7 @@ public class AutoChooser implements Loggable {
 
 	// TODO: Add all of the keys into the map
 	// TODO: Add the commands for controlling the systems
-	private static HashMap<String, Command> buildEventMap() {
+	private static HashMap<String, Command> buildEventMapTest() {
 		return new HashMap<>(
 				Map.ofEntries(
 						Map.entry("placeHighCone",
@@ -238,7 +239,7 @@ public class AutoChooser implements Loggable {
 
 						Map.entry("stow",
 								Commands.print("Stowing arm")
-										.andThen(() -> armSubsystem.getCommand(Position.Stowed, false)
+										.andThen(new ProxyCommand(armSubsystem::getStowedCommand)
 												.andThen(Commands.print("Finished stowing"))))));
 	}
 
@@ -246,8 +247,10 @@ public class AutoChooser implements Loggable {
 		chooser = new SendableChooser<>();
 
 		chooser.setDefaultOption("A-Cn-Leave",
-				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave", AUTO.kSlowPath))));
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(intakeSubsystem.getAutoConeCommand(false)
+								.andThen(autoBuilder
+										.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave", AUTO.kSlowPath)))));
 
 		chooser.addOption("S-CnCb-Leave",
 				() -> getScoreHighConeCommand()
@@ -271,7 +274,8 @@ public class AutoChooser implements Loggable {
 				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock", AUTO.kFastPath))
 								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
-		// TODO: Add the speed constraints to this option to make the speed change over the cable
+		// TODO: Add the speed constraints to this option to make the speed change over
+		// the cable
 		chooser.addOption("C-CnCb-LeaveCopy",
 				() -> getScoreHighConeCommand()
 						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave", AUTO.kFastPath))));
@@ -285,7 +289,7 @@ public class AutoChooser implements Loggable {
 	private Command getScoreHighConeCommand() {
 		return Commands.print("Scoring high cone")
 				.andThen(() -> armSubsystem.getCommand(Position.ScoringHighCone, false)
-						.andThen(() -> intakeSubsystem.getAutoConeCommand(false)
+						.andThen(intakeSubsystem.getAutoConeCommand(false)
 								.andThen(Commands.print("Finished scoring"))));
 	}
 

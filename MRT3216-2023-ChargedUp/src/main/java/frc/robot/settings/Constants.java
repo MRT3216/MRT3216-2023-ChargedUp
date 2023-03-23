@@ -101,7 +101,7 @@ public final class Constants {
 		public static final double kArmKp = 0.2;
 		public static final double kArmKi = 0;
 		public static final double kArmKd = 0;
-		public static final double kArmPositionTolerance = 2;
+		public static final double kArmPositionTolerance = 4;
 		public static final double kArmVelocityTolerance = 20;
 
 		/*
@@ -305,7 +305,7 @@ public final class Constants {
 		public static final double kWristKp = .25;
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
-		public static final double kWristPositionTolerance = 2;
+		public static final double kWristPositionTolerance = 4;
 		public static final double kWristVelocityTolerance = 20;
 
 		// Feed-Forward from SysID
