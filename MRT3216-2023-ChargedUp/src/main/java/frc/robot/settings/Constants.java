@@ -122,7 +122,7 @@ public final class Constants {
 		public static final int kScoringHybridDegrees = 30;
 		public static final int kGroundIntakeUprightConeDegrees = 22;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 5;
+		public static final int kGroundIntakeCubeDegrees = 7;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
 		public static final int kDoubleSubstationIntakeConeDegrees = 55;
@@ -372,14 +372,14 @@ public final class Constants {
 
 		public static final double kStartDelayTime = 0;
 
-		public static final double kMaxIntakeTime = 3;
+		public static final double kMaxIntakeTime = 1;
 		public static final double kMaxOuttakeTime = 0.25;
 
 		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;
 
-		public static final PathConstraints kFastPath = new PathConstraints(1.5, 1.5);
-		public static final PathConstraints kMediumPath = new PathConstraints(1.5, 1.5);
+		public static final PathConstraints kFastPath = new PathConstraints(3.0, 3);
+		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
 	}
 

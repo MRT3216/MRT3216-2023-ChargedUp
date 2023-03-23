@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.settings.Constants.ARM.Position;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
@@ -179,76 +178,70 @@ public class AutoChooser implements Loggable {
 				Map.ofEntries(
 						Map.entry("armToHighCone",
 								Commands.print("Moving arm to High Cone")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.ScoringHighCone, true))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(armSubsystem.getCommand(Position.ScoringHighCone, false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToMidCone",
 								Commands.print("Moving arm to Mid Cone")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.ScoringMidCone, true))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(armSubsystem.getCommand(Position.ScoringMidCone, false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToHybridCone",
 								Commands.print("Moving arm to Hybrid Cone")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.ScoringHybrid, true))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(armSubsystem.getCommand(Position.ScoringHybrid, false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToHighCube",
 								Commands.print("Moving arm to High Cube")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.ScoringHighCube, true))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(armSubsystem.getCommand(Position.ScoringHighCube, false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToMidCube",
 								Commands.print("Moving arm to Mid Cube")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.ScoringMidCube, true))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(armSubsystem.getCommand(Position.ScoringMidCube, false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToHybridCube",
 								Commands.print("Moving arm to Hybrid Cube")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.ScoringHybrid, true))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(armSubsystem.getCommand(Position.ScoringHybrid, false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToIntakeCone",
 								Commands.print("Moving arm to Intake Cone")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.GroundIntakeUprightCone, false))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(
+												armSubsystem.getCommand(Position.GroundIntakeUprightCone,
+														false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToIntakeCube",
 								Commands.print("Moving arm to Intake Cube")
-										.andThen(new ProxyCommand(
-												() -> armSubsystem.getCommand(Position.GroundIntakeCube, true))
-												.andThen(Commands.print("Finished moving arm")))),
+										.andThen(armSubsystem.getCommand(Position.GroundIntakeCube, false),
+												Commands.print("Finished moving arm"))),
 
 						Map.entry("intakeCone",
 								Commands.print("Intaking Cone")
-										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoConeCommand(true))
-												.andThen(Commands.print("Finished intaking")))),
+										.andThen(intakeSubsystem.getAutoConeCommand(true),
+												Commands.print("Finished intaking"))),
 
 						Map.entry("intakeCube",
 								Commands.print("Intaking Cube")
-										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoCubeCommand(true))
-												.andThen(Commands.print("Finished intaking")))),
+										.andThen(intakeSubsystem.getAutoCubeCommand(true),
+												Commands.print("Finished intaking"))),
 
 						Map.entry("ejectCone",
 								Commands.print("Ejecting Cone")
-										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoConeCommand(false))
-												.andThen(Commands.print("Finished ejecting")))),
+										.andThen(intakeSubsystem.getAutoConeCommand(false),
+												Commands.print("Finished ejecting"))),
 
 						Map.entry("ejectCube",
 								Commands.print("Eject Cube")
-										.andThen(new ProxyCommand(() -> intakeSubsystem.getAutoCubeCommand(false))
-												.andThen(Commands.print("Finished ejecting")))),
+										.andThen(intakeSubsystem.getAutoCubeCommand(false),
+												Commands.print("Finished ejecting"))),
 
 						Map.entry("stow",
 								Commands.print("Stowing arm")
-										.andThen(() -> armSubsystem.getStowedCommand()
-												.andThen(Commands.print("Finished stowing"))))));
+										.andThen(armSubsystem.getStowedCommand(),
+												Commands.print("Finished stowing")))));
 	}
 
 	private void populateAutoChooser() {
@@ -256,26 +249,30 @@ public class AutoChooser implements Loggable {
 
 		chooser.setDefaultOption("A-Cn-Leave",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(Commands.print("Arm moved into scoring position")
-								.andThen(intakeSubsystem.getAutoConeCommand(false)
-										.andThen(Commands.print("We shoots, we scores...")
-												.andThen(autoBuilder
-														.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
-																AUTO.kSlowPath)))))));
+						.andThen(
+								intakeSubsystem.getAutoConeCommand(false),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
+										AUTO.kSlowPath))));
 
-		chooser.addOption("S-CnCb-Leave",
-				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave", AUTO.kFastPath))));
+		chooser.addOption("S-CnCb+Cb",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(
+								intakeSubsystem.getAutoConeCommand(false),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCb+Cb-Dock",
-				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb-Dock", AUTO.kFastPath))
-								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true))));
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(
+								intakeSubsystem.getAutoConeCommand(false),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb-Dock", AUTO.kMediumPath)),
+								AutoBalance.getInstance().getAutoBalanceCommand(true)));
 
 		chooser.addOption("M-Cn+Cb-Dock",
-				() -> getScoreHighConeCommand()
-						.andThen(autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Dock", AUTO.kSlowPath))
-								.andThen(AutoBalance.getInstance().getAutoBalanceCommand(false))));
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(
+								intakeSubsystem.getAutoConeCommand(false),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Dock", AUTO.kSlowPath)),
+								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
 		chooser.addOption("C-CnCb-Leave",
 				() -> getScoreHighConeCommand()
