@@ -108,9 +108,12 @@
         "x": 6.283321284591287,
         "y": 4.122319697630848
       },
-      "nextControl": null,
+      "nextControl": {
+        "x": 6.283321284591287,
+        "y": 4.122319697630848
+      },
       "holonomicAngle": 140.19442890773476,
-      "isReversal": false,
+      "isReversal": true,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -118,6 +121,28 @@
         "names": [
           "stow"
         ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.1838399232354018,
+        "y": 4.419218069205369
+      },
+      "prevControl": {
+        "x": 6.180548771353951,
+        "y": 4.921661467254559
+      },
+      "nextControl": null,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -162,6 +187,18 @@
       "position": 3.549090909090831,
       "names": [
         "intakeCube"
+      ]
+    },
+    {
+      "position": 4.0727272727272785,
+      "names": [
+        "armToHybridCube"
+      ]
+    },
+    {
+      "position": 4.872727272727113,
+      "names": [
+        "ejectCube"
       ]
     }
   ]

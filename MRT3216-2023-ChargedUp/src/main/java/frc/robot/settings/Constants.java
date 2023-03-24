@@ -383,6 +383,7 @@ public final class Constants {
 
 		public static final PathConstraints kFastPath = new PathConstraints(3.0, 3);
 		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2);
+		public static final PathConstraints kMedium3Piece = new PathConstraints(2.75, 2.25);
 		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kNotAsSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);

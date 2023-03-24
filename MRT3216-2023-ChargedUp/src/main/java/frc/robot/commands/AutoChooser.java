@@ -239,7 +239,7 @@ public class AutoChooser implements Loggable {
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kMediumSlowPath))));
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kMedium3Piece))));
 
 		chooser.addOption("S-CnCb-Dock",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
