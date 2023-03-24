@@ -169,7 +169,7 @@ public class AutoChooser implements Loggable {
 						Map.entry("armToIntakeCone",
 								Commands.print("Moving arm to Intake Cone")
 										.andThen(
-												armSubsystem.getCommand(Position.GroundIntakeUprightCone,
+												armSubsystem.getCommand(Position.GroundIntakeTippedCone,
 														false),
 												Commands.print("Finished moving arm"))),
 
@@ -245,6 +245,13 @@ public class AutoChooser implements Loggable {
 						.andThen(
 								intakeSubsystem.getEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kMedium3Piece))));
+
+		// chooser.addOption("S-CnCnCb",
+		// 		() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+		// 				.andThen(
+		// 						intakeSubsystem.getEjectConeCommand(),
+		// 						autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCnCb", AUTO.kSlowPath,
+		// 								AUTO.kMedium3CnCnCbPiece))));
 
 		chooser.addOption("S-CnCb-Balance",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)

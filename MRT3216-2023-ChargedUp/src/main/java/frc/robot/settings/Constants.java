@@ -122,7 +122,7 @@ public final class Constants {
 		public static final int kScoringHybridConeDegrees = 30;
 		public static final int kScoringHybridCubeDegrees = 45;
 		public static final int kGroundIntakeUprightConeDegrees = 22;
-		public static final int kGroundIntakeTippedConeDegrees = 15;
+		public static final int kGroundIntakeTippedConeDegrees = 9;
 		public static final int kGroundIntakeCubeDegrees = 7;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
@@ -337,7 +337,7 @@ public final class Constants {
 		public static final int kScoringHybridConeDegrees = 43;
 		public static final int kScoringHybridCubeDegrees = -150;
 		public static final int kGroundIntakeUprightConeDegrees = 65;
-		public static final int kGroundIntakeTippedConeDegrees = 15;
+		public static final int kGroundIntakeTippedConeDegrees = 140;
 		public static final int kGroundIntakeCubeDegrees = 25;
 		public static final int kSingleSubstationIntakeConeDegrees = 110;
 		public static final int kSingleSubstationIntakeCubeDegrees = 90;
@@ -358,7 +358,7 @@ public final class Constants {
 	}
 
 	public static final class AUTO {
-		public static final boolean usePhotonVision = false;
+		public static final boolean usePhotonVision = true;
 
 		// Proportional gain
 		public static final double kPositionP = 4;
@@ -384,6 +384,7 @@ public final class Constants {
 		public static final PathConstraints kFastPath = new PathConstraints(3.0, 3);
 		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2);
 		public static final PathConstraints kMedium3Piece = new PathConstraints(3, 2.25);
+		public static final PathConstraints kMedium3CnCnCbPiece = new PathConstraints(2.5, 2.25);
 		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kNotAsSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
@@ -461,21 +462,20 @@ public final class Constants {
 	public static final class PHOTONVISION {
 		// TODO: Set these to our robot
 		public static final Transform3d robotToLeftCam = new Transform3d(
-				new Translation3d(0.5, 0.0, 0.5),
+				new Translation3d(-0.11, 0.25, 0.39),
 				new Rotation3d(
 						0, 0,
-						0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-								// from center.
+						0.261799)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+		// from center.
 		public static final Transform3d robotToRighttCam = new Transform3d(
-				new Translation3d(0.5, 0.0, 0.5),
+				new Translation3d(-0.11, -0.25, 0.39),
 				new Rotation3d(
 						0, 0,
-						0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-								// from center.
+						-0.261799)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+		// from center.
 
-		// TODO: Fill in camera names from PhotonVision
-		public static final String leftCameraName = "YOUR CAMERA NAME";
-		public static final String rightCameraName = "YOUR CAMERA NAME";
+		public static final String leftCameraName = "MRT3216-LeftCam";
+		public static final String rightCameraName = "MRT3216-RightCam";
 	}
 
 	public static final class OI {
