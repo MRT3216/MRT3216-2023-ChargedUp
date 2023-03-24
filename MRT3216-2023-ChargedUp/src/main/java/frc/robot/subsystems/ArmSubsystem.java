@@ -347,7 +347,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     private Command getArmAndWristGotoCommand(double armDegrees, double wristDegrees, boolean wait) {
-        System.out.println("SLDKFJ:S:DLKFJS:KLDJF:LSDKJF:LSDJKF:LKDJ");
         return new ProxyCommand(
                 () -> Commands.print("Setting arm goal - arm: " + armDegrees + " wrist: " + wristDegrees)
                         .andThen(Commands.runOnce(() -> {

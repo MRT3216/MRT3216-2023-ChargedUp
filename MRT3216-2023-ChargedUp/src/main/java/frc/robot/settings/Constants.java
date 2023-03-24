@@ -383,8 +383,10 @@ public final class Constants {
 
 		public static final PathConstraints kFastPath = new PathConstraints(3.0, 3);
 		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2);
-		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 2);
+		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 1.75);
+		public static final PathConstraints kNotAsSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
+		public static final PathConstraints kReallySlowPath = new PathConstraints(.5, .5);
 	}
 
 	public static final class AUTO_BALANCE {
@@ -392,12 +394,12 @@ public final class Constants {
 		 * CONFIG *
 		 **********/
 		// Speed the robot drived while scoring/approaching station, default = 0.4
-		public static final double kRobotSpeedFast = 0.3;
+		public static final double kRobotSpeedFast = 0.25;
 
 		// Speed the robot drives while balancing itself on the charge station.
 		// Should be roughly half the fast speed, to make the robot more accurate,
 		// default = 0.2
-		public static final double kRobotSpeedSlow = 0.2;
+		public static final double kRobotSpeedSlow = 0.15;
 
 		// Angle where the robot knows it is on the charge station, default = 13.0
 		public static final double kOnChargeStationDegree = 11.0;
@@ -414,7 +416,7 @@ public final class Constants {
 		public static final double kDebounceTime = 0.05;
 
 		// Speed at which the robot reverses once charge station tips forward
-		public static final double kReverseCorrectionSpeed = -0.1;
+		public static final double kReverseCorrectionSpeed = -0.07;
 		// Speed it goes the other way when it tips backs
 		public static final double kForwardCorrectionSpeed = 0.05;
 	}
