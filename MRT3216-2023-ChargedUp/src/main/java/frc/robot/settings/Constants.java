@@ -120,7 +120,7 @@ public final class Constants {
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridConeDegrees = 30;
-		public static final int kScoringHybridCubeDegrees = 30;
+		public static final int kScoringHybridCubeDegrees = 40;
 		public static final int kGroundIntakeUprightConeDegrees = 22;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 7;
@@ -335,7 +335,7 @@ public final class Constants {
 		public static final int kScoringMidConeDegrees = -70;
 		public static final int kScoringMidCubeDegrees = -115;
 		public static final int kScoringHybridConeDegrees = 43;
-		public static final int kScoringHybridCubeDegrees = -130;
+		public static final int kScoringHybridCubeDegrees = -150;
 		public static final int kGroundIntakeUprightConeDegrees = 65;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 25;
@@ -386,7 +386,7 @@ public final class Constants {
 		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kNotAsSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
-		public static final PathConstraints kReallySlowPath = new PathConstraints(.5, .5);
+		public static final PathConstraints kReallySlowPath = new PathConstraints(.75, .75);
 	}
 
 	public static final class AUTO_BALANCE {
