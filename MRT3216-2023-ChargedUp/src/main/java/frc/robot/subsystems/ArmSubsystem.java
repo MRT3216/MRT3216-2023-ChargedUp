@@ -312,9 +312,9 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     // // Ground tipped cone intake - needs nothing
-    // public Command getGroundTippedConeIntakeCommand() {
-    // return getArmAndWristGotoCommand(this.aGTippedCone, this.wGTippedCone);
-    // }
+    public Command getGroundTippedConeIntakeCommand() {
+        return this.getCommand(ARM.Position.GroundIntakeTippedCone, false);
+    }
 
     // Substation pickup -- needs piece
     public Command getSubstationIntakeCommand() {
