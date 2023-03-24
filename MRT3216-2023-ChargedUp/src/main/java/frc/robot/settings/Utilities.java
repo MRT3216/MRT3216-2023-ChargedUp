@@ -8,4 +8,8 @@ public class Utilities {
 	public static double convertRPMsToUnitsPer100ms(double rpm, double unitsPerRotation) {
 		return rpm * unitsPerRotation / 600.0;
 	}
+
+	public static double convertVelocityInMetersPerSecondToPercentage(double mPerSecond) {
+		return mPerSecond / Constants.DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND;
+	}
 }

@@ -133,46 +133,6 @@ public class AutoChooser implements Loggable {
 				});
 	}
 
-	// TODO: Add all of the keys into the map
-	// TODO: Add the commands for controlling the systems
-	private static HashMap<String, Command> buildEventMapTest() {
-		return new HashMap<>(
-				Map.ofEntries(
-						Map.entry("placeHighCone",
-								Commands.print("Placing High Cone")
-										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("placeMidCone",
-								Commands.print("Placing Mid Cone")
-										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("placeHybridCone",
-								Commands.print("Placing Hybrid Cone")
-										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("placeHighCube",
-								Commands.print("Placing High Cube")
-										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("placeMidCube",
-								Commands.print("Placing Mid Cube")
-										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("placeHybridCube",
-								Commands.print("Placing Hybrid Cube")
-										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("intakeCone",
-								Commands.print("Intaking Cone")
-										.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("intakeCube", Commands.print("Intaking Cube")
-								.andThen(Commands.waitSeconds(1).andThen(Commands.print("Finished placing")))),
-
-						Map.entry("stow", Commands.print("Stowing arm")
-								.andThen(Commands.print("Finished stowing")))));
-	}
-
 	private static HashMap<String, Command> buildEventMapReal() {
 		return new HashMap<>(
 				Map.ofEntries(
@@ -254,25 +214,6 @@ public class AutoChooser implements Loggable {
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
 										AUTO.kSlowPath))));
 
-		chooser.addOption("S-CnCb+Cb",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(
-								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kMediumPath))));
-
-		chooser.addOption("S-CnCbCb",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(
-								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kFastPath))));
-
-		chooser.addOption("S-CnCb+Cb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(
-								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb-Dock", AUTO.kMediumPath)),
-								AutoBalance.getInstance().getAutoBalanceCommand(true)));
-
 		chooser.addOption("M-Cn+Cb-Dock",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
@@ -280,30 +221,69 @@ public class AutoChooser implements Loggable {
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Dock", AUTO.kSlowPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(true)));
 
+		chooser.addOption("C-Cn+Cb-Dock",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(
+								intakeSubsystem.getAutoConeCommand(false),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Cn+Cb-Dock", AUTO.kMediumSlowPath)),
+								AutoBalance.getInstance().getAutoBalanceCommand(false)));
+
 		chooser.addOption("C-CnCb-Leave",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getAutoConeCommand(false),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Leave", AUTO.kFastPath))));
 
-		chooser.addOption("C-CnCb-Dock",
+		chooser.addOption("S-CnCb+Cb",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock", AUTO.kMediumSlowPath)),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kMediumPath))));
+
+		chooser.addOption("S-CnCb-Dock",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(
+								intakeSubsystem.getAutoConeCommand(false),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kMediumPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false)));
+
+		// TODO: These are stretch goals if the others work fine
+		// chooser.addOption("S-CnCbCb",
+		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+		// .andThen(
+		// intakeSubsystem.getAutoConeCommand(false),
+		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb",
+		// AUTO.kFastPath))));
+
+		// chooser.addOption("S-CnCb+Cb-Dock",
+		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+		// .andThen(
+		// intakeSubsystem.getAutoConeCommand(false),
+		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb-Dock",
+		// AUTO.kMediumPath)),
+		// AutoBalance.getInstance().getAutoBalanceCommand(true)));
+
+		// chooser.addOption("C-CnCb-Dock",
+		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+		// .andThen(
+		// intakeSubsystem.getAutoConeCommand(false),
+		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock",
+		// AUTO.kMediumSlowPath)),
+		// AutoBalance.getInstance().getAutoBalanceCommand(false)));
+
 		// TODO: Add the speed constraints to this option to make the speed change over
 		// the cable
-		chooser.addOption("C-CnCb-LeaveCopy",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(
-								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave", AUTO.kFastPath))));
+		// chooser.addOption("C-CnCb-LeaveCopy",
+		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+		// .andThen(
+		// intakeSubsystem.getAutoConeCommand(false),
+		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave",
+		// AUTO.kFastPath))));
 
-		chooser.addOption("C-Test-Dock",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",
-						new PathConstraints(3, 3)))
-						.andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
+		// chooser.addOption("C-Test-Dock",
+		// () -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",
+		// new PathConstraints(3, 3)))
+		// .andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
 	}
 
 	public Command getAutoCommand() {
