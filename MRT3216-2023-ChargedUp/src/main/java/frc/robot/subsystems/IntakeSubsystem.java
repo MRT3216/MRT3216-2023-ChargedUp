@@ -87,6 +87,13 @@ public class IntakeSubsystem extends SubsystemBase {
                         .finallyDo((end) -> motor.set(0)));
     }
 
+    public Command getEjectConeCommand() {
+        return new ProxyCommand(
+                () -> Commands.run(() -> motor.set(kConeOuttakeSpeed))
+                        .withTimeout(AUTO.kMaxOuttakeTime)
+                        .finallyDo((end) -> motor.set(0)));
+    }
+
     public Command getAutoCubeCommand(boolean intake) {
         return new ProxyCommand(
                 () -> Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed))

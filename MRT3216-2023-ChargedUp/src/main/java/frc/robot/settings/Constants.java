@@ -120,7 +120,7 @@ public final class Constants {
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridConeDegrees = 30;
-		public static final int kScoringHybridCubeDegrees = 40;
+		public static final int kScoringHybridCubeDegrees = 45;
 		public static final int kGroundIntakeUprightConeDegrees = 22;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 7;
@@ -383,7 +383,7 @@ public final class Constants {
 
 		public static final PathConstraints kFastPath = new PathConstraints(3.0, 3);
 		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2);
-		public static final PathConstraints kMedium3Piece = new PathConstraints(2.75, 2.25);
+		public static final PathConstraints kMedium3Piece = new PathConstraints(3, 2.25);
 		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kNotAsSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);

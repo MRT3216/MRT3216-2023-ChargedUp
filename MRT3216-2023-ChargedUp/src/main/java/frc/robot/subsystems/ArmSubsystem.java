@@ -122,10 +122,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         armEncoder.setInverted(true);
         leadMotor.getPIDController().setFeedbackDevice(armEncoder);
 
-        leadMotor.setSoftLimit(SoftLimitDirection.kReverse, ARM.kReverseLimit);
-        leadMotor.setSoftLimit(SoftLimitDirection.kForward, ARM.kForwardLimit);
-        leadMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        // leadMotor.setSoftLimit(SoftLimitDirection.kReverse, ARM.kReverseLimit);
+        // leadMotor.setSoftLimit(SoftLimitDirection.kForward, ARM.kForwardLimit);
+        // leadMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        // leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         leadMotor.setSmartCurrentLimit(ARM.kMotorCurrentLimit);
 
         leadMotor.burnFlash();

@@ -198,6 +198,11 @@ public class AutoChooser implements Loggable {
 										.andThen(intakeSubsystem.getAutoCubeCommand(false),
 												Commands.print("Finished ejecting"))),
 
+						Map.entry("start",
+								Commands.print("Arm to Start")
+										.andThen(armSubsystem.getStartCommand(),
+												Commands.print("Finished to start"))),
+
 						Map.entry("stow",
 								Commands.print("Stowing arm")
 										.andThen(armSubsystem.getStowedCommand(),
@@ -235,17 +240,17 @@ public class AutoChooser implements Loggable {
 								intakeSubsystem.getAutoConeCommand(false),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Leave", AUTO.kFastPath))));
 
-		chooser.addOption("S-CnCb+Cb",
+		chooser.addOption("S-CnCbCb",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
-								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kMedium3Piece))));
+								intakeSubsystem.getEjectConeCommand(),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kMedium3Piece))));
 
-		chooser.addOption("S-CnCb-Dock",
+		chooser.addOption("S-CnCb-Balance",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
-								intakeSubsystem.getAutoConeCommand(false),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb", AUTO.kMediumPath)),
+								intakeSubsystem.getEjectConeCommand(),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Balance", AUTO.kMedium3Piece)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
 		// TODO: These are stretch goals if the others work fine
