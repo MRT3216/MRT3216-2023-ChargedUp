@@ -58,7 +58,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private int aHCube = ARM.kScoringHighCubeDegrees;
     private int aMCone = ARM.kScoringMidConeDegrees;
     private int aMCube = ARM.kScoringMidCubeDegrees;
-    private int aHybrid = ARM.kScoringHybridDegrees;
+    private int aHyCone = ARM.kScoringHybridConeDegrees;
+    private int aHyCube = ARM.kScoringHybridCubeDegrees;
     private int aGUprightCone = ARM.kGroundIntakeUprightConeDegrees;
     private int aGTippedCone = ARM.kGroundIntakeTippedConeDegrees;
     private int aGCube = ARM.kGroundIntakeCubeDegrees;
@@ -261,8 +262,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 return this.aMCone;
             case ScoringMidCube:
                 return this.aMCube;
-            case ScoringHybrid:
-                return this.aHybrid;
+            case ScoringHybridCone:
+                return this.aHyCone;
+                case ScoringHybridCube:
+                return this.aHyCube;
             case GroundIntakeUprightCone:
                 return this.aGUprightCone;
             case GroundIntakeTippedCone:
@@ -380,7 +383,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         } else if (sH == ARM.ScoringHeight.Mid) {
             return gP == ARM.GamePiece.Cone ? ARM.Position.ScoringMidCone : ARM.Position.ScoringMidCube;
         } else if (sH == ARM.ScoringHeight.Hybrid) {
-            return ARM.Position.ScoringHybrid;
+            return gP == ARM.GamePiece.Cone ? ARM.Position.ScoringHybridCone : ARM.Position.ScoringHybridCube;
         }
 
         return ARM.Position.Stowed;
@@ -501,9 +504,14 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.aMCube = aMCube;
     }
 
-    @Config.NumberSlider(name = "Arm Hybrid", defaultValue = ARM.kScoringHybridDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
-    public void setAHybrid(int aHybrid) {
-        this.aHybrid = aHybrid;
+    @Config.NumberSlider(name = "Arm Hy Cone", defaultValue = ARM.kScoringHybridConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    public void setAHyCone(int aHyCone) {
+        this.aHyCone = aHyCone;
+    }
+
+    @Config.NumberSlider(name = "Arm Hy Cube", defaultValue = ARM.kScoringHybridCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
+    public void setAHyCube(int aHyCube) {
+        this.aHyCube = aHyCube;
     }
 
     // #endregion

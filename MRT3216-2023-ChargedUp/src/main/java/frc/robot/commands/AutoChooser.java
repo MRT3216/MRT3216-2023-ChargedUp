@@ -148,7 +148,7 @@ public class AutoChooser implements Loggable {
 
 						Map.entry("armToHybridCone",
 								Commands.print("Moving arm to Hybrid Cone")
-										.andThen(armSubsystem.getCommand(Position.ScoringHybrid, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringHybridCone, false),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToHighCube",
@@ -163,7 +163,7 @@ public class AutoChooser implements Loggable {
 
 						Map.entry("armToHybridCube",
 								Commands.print("Moving arm to Hybrid Cube")
-										.andThen(armSubsystem.getCommand(Position.ScoringHybrid, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringHybridCube, false),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToIntakeCone",

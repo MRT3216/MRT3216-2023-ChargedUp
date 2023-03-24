@@ -48,7 +48,8 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     private int wHCube = WRIST.kScoringHighCubeDegrees;
     private int wMCone = WRIST.kScoringMidConeDegrees;
     private int wMCube = WRIST.kScoringMidCubeDegrees;
-    private int wHybrid = WRIST.kScoringHybridDegrees;
+    private int wHyCone = WRIST.kScoringHybridConeDegrees;
+    private int wHyCube = WRIST.kScoringHybridCubeDegrees;
     private int wGUprightCone = WRIST.kGroundIntakeUprightConeDegrees;
     private int wGTippedCone = WRIST.kGroundIntakeTippedConeDegrees;
     private int wGCube = WRIST.kGroundIntakeCubeDegrees;
@@ -217,8 +218,10 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
                 return this.wMCone;
             case ScoringMidCube:
                 return this.wMCube;
-            case ScoringHybrid:
-                return this.wHybrid;
+            case ScoringHybridCone:
+                return this.wHyCone;
+            case ScoringHybridCube:
+                return this.wHyCube;
             case GroundIntakeUprightCone:
                 return this.wGUprightCone;
             case GroundIntakeTippedCone:
@@ -321,9 +324,14 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         this.wMCube = wMCube;
     }
 
-    @Config.NumberSlider(name = "Wrist Hybrid", defaultValue = WRIST.kScoringHybridDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
-    public void setWHybrid(int wHybrid) {
-        this.wHybrid = wHybrid;
+    @Config.NumberSlider(name = "Wrist Hy Cone", defaultValue = WRIST.kScoringHybridCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    public void setWHyCone(int wHyCone) {
+        this.wHyCone = wHyCone;
+    }
+
+    @Config.NumberSlider(name = "Wrist Hy Cone", defaultValue = WRIST.kScoringHybridCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
+    public void setWHyCube(int wHyCube) {
+        this.wHyCube = wHyCube;
     }
 
     // #endregion

@@ -119,7 +119,8 @@ public final class Constants {
 		public static final int kScoringHighCubeDegrees = 115;
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
-		public static final int kScoringHybridDegrees = 30;
+		public static final int kScoringHybridConeDegrees = 30;
+		public static final int kScoringHybridCubeDegrees = 30;
 		public static final int kGroundIntakeUprightConeDegrees = 22;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 7;
@@ -137,16 +138,17 @@ public final class Constants {
 			ScoringHighCube(1),
 			ScoringMidCone(2),
 			ScoringMidCube(3),
-			ScoringHybrid(4),
-			GroundIntakeUprightCone(5),
-			GroundIntakeTippedCone(6),
-			GroundIntakeCube(7),
-			SingleSubstationIntakeCone(8),
-			SingleSubstationIntakeCube(9),
-			DoubleSubstationIntakeCone(10),
-			DoubleSubstationIntakeCube(11),
-			Stowed(12),
-			Start(13);
+			ScoringHybridCone(4),
+			ScoringHybridCube(5),
+			GroundIntakeUprightCone(6),
+			GroundIntakeTippedCone(7),
+			GroundIntakeCube(8),
+			SingleSubstationIntakeCone(9),
+			SingleSubstationIntakeCube(10),
+			DoubleSubstationIntakeCone(11),
+			DoubleSubstationIntakeCube(12),
+			Stowed(13),
+			Start(14);
 
 			private int value;
 			private static Map<Integer, Position> map = new HashMap<>();
@@ -332,7 +334,8 @@ public final class Constants {
 		public static final int kScoringHighCubeDegrees = -190;
 		public static final int kScoringMidConeDegrees = -70;
 		public static final int kScoringMidCubeDegrees = -115;
-		public static final int kScoringHybridDegrees = 43;
+		public static final int kScoringHybridConeDegrees = 43;
+		public static final int kScoringHybridCubeDegrees = 43;
 		public static final int kGroundIntakeUprightConeDegrees = 65;
 		public static final int kGroundIntakeTippedConeDegrees = 15;
 		public static final int kGroundIntakeCubeDegrees = 25;
