@@ -358,7 +358,7 @@ public final class Constants {
 	}
 
 	public static final class AUTO {
-		public static final boolean usePhotonVision = true;
+		public static final boolean usePhotonVision = false;
 
 		// Proportional gain
 		public static final double kPositionP = 4;
@@ -384,6 +384,7 @@ public final class Constants {
 		public static final PathConstraints kFastPath = new PathConstraints(3.0, 3);
 		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2);
 		public static final PathConstraints kMedium3Piece = new PathConstraints(3, 2.25);
+		public static final PathConstraints kMedium3PieceDock = new PathConstraints(3.1, 2.7);
 		public static final PathConstraints kMedium3CnCnCbPiece = new PathConstraints(2.5, 2.25);
 		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kNotAsSlowPath = new PathConstraints(2, 1.75);

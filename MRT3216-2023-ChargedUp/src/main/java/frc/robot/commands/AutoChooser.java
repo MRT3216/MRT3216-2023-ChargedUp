@@ -13,7 +13,6 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
@@ -246,12 +245,19 @@ public class AutoChooser implements Loggable {
 								intakeSubsystem.getEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kMedium3Piece))));
 
+		chooser.addOption("S-CnCbCb-Dock",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(
+								intakeSubsystem.getEjectConeCommand(),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Dock", AUTO.kMedium3PieceDock)),
+								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop())));
+
 		// chooser.addOption("S-CnCnCb",
-		// 		() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-		// 				.andThen(
-		// 						intakeSubsystem.getEjectConeCommand(),
-		// 						autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCnCb", AUTO.kSlowPath,
-		// 								AUTO.kMedium3CnCnCbPiece))));
+		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+		// .andThen(
+		// intakeSubsystem.getEjectConeCommand(),
+		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCnCb", AUTO.kSlowPath,
+		// AUTO.kMedium3CnCnCbPiece))));
 
 		chooser.addOption("S-CnCb-Balance",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
