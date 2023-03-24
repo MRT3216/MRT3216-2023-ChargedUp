@@ -354,7 +354,7 @@ public final class Constants {
 		public static final double kConeOuttakeSpeed = 0.7;
 		public static final double kCubeIntakeSpeed = 0.52;
 		public static final double kCubeOuttakeSpeed = -0.5;
-		public static final double kCubeShootSpeed = 1.0;
+		public static final double kCubeShootSpeed = -1.0;
 	}
 
 	public static final class AUTO {
