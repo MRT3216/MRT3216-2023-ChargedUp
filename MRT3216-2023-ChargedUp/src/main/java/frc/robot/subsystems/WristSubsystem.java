@@ -324,12 +324,12 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         this.wMCube = wMCube;
     }
 
-    @Config.NumberSlider(name = "Wrist Hy Cone", defaultValue = WRIST.kScoringHybridCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Hy Cone", defaultValue = WRIST.kScoringHybridConeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
     public void setWHyCone(int wHyCone) {
         this.wHyCone = wHyCone;
     }
 
-    @Config.NumberSlider(name = "Wrist Hy Cone", defaultValue = WRIST.kScoringHybridCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
+    @Config.NumberSlider(name = "Wrist Hy Cube", defaultValue = WRIST.kScoringHybridCubeDegrees, min = 2, max = 190, blockIncrement = 1, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
     public void setWHyCube(int wHyCube) {
         this.wHyCube = wHyCube;
     }
