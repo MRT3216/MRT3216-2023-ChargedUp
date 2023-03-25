@@ -8,7 +8,6 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -116,7 +115,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
         // Shuffleboard.getTab("WristSubsystem")
         // .add("Wrist PID", wristPidController)
-        // .withSize(2, 2) // make the widget 2x1
+        // .withSize(2, 2)
         // .withPosition(4, 0);
 
         // endregion
