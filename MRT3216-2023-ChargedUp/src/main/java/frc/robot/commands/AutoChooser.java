@@ -222,15 +222,14 @@ public class AutoChooser implements Loggable {
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Dock", AUTO.kSlowPath,
-										AUTO.kSlowPath)),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Dock", AUTO.kSlowPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(true)));
 
 		chooser.addOption("C-Cn+Cb-Dock",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Cn+Cb-Dock", AUTO.kMediumSlowPath)),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Cn+Cb-Dock", AUTO.kMediumPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
 		chooser.addOption("C-CnCb-Leave",
@@ -239,17 +238,24 @@ public class AutoChooser implements Loggable {
 								intakeSubsystem.getEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Leave", AUTO.kFastPath))));
 
+		chooser.addOption("S-CnCb-Balance",
+				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+						.andThen(
+								intakeSubsystem.getEjectConeCommand(),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Balance", AUTO.kFastPath)),
+								AutoBalance.getInstance().getAutoBalanceCommand(false)));
+
 		chooser.addOption("S-CnCbCb",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kMedium3Piece))));
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCbCb-Dock",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Dock", AUTO.kMedium3PieceDock)),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Dock", AUTO.kFastestPath)),
 								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop())));
 
 		// chooser.addOption("S-CnCnCb",
@@ -258,13 +264,6 @@ public class AutoChooser implements Loggable {
 		// intakeSubsystem.getEjectConeCommand(),
 		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCnCb", AUTO.kSlowPath,
 		// AUTO.kMedium3CnCnCbPiece))));
-
-		chooser.addOption("S-CnCb-Balance",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Balance", AUTO.kMedium3Piece)),
-								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
 		// TODO: These are stretch goals if the others work fine
 

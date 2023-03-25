@@ -381,13 +381,9 @@ public final class Constants {
 		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;
 
-		public static final PathConstraints kFastPath = new PathConstraints(3.0, 3);
-		public static final PathConstraints kMediumPath = new PathConstraints(2.5, 2);
-		public static final PathConstraints kMedium3Piece = new PathConstraints(3, 2.25);
-		public static final PathConstraints kMedium3PieceDock = new PathConstraints(3.1, 2.7);
-		public static final PathConstraints kMedium3CnCnCbPiece = new PathConstraints(2.5, 2.25);
-		public static final PathConstraints kMediumSlowPath = new PathConstraints(2, 1.75);
-		public static final PathConstraints kNotAsSlowPath = new PathConstraints(2, 1.75);
+		public static final PathConstraints kFastestPath = new PathConstraints(3.1, 2.7);
+		public static final PathConstraints kFastPath = new PathConstraints(3, 2.25);
+		public static final PathConstraints kMediumPath = new PathConstraints(2, 1.75);
 		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
 		public static final PathConstraints kReallySlowPath = new PathConstraints(.75, .75);
 	}
