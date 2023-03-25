@@ -90,9 +90,9 @@ public final class Constants {
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
 		public static final double kZeroOffset = 0.0;
-		public static final double kZeroOffsetInDegrees = 0.0;
+		public static final double kZeroOffsetInDegrees = -2.0;
 		public static final double kScaleFactor = 192.86;
-		public static final double kLimitSwitchOffset = 0.3170284;
+		public static final double kLimitSwitchOffset = 0.4020084;
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -122,11 +122,11 @@ public final class Constants {
 		public static final int kScoringHybridConeDegrees = 30;
 		public static final int kScoringHybridCubeDegrees = 45;
 		public static final int kGroundIntakeUprightConeDegrees = 22;
-		public static final int kGroundIntakeTippedConeDegrees = 9;
+		public static final int kGroundIntakeTippedConeDegrees = 8;
 		public static final int kGroundIntakeCubeDegrees = 7;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
-		public static final int kDoubleSubstationIntakeConeDegrees = 55;
+		public static final int kDoubleSubstationIntakeConeDegrees = 53;
 		public static final int kDoubleSubstationIntakeCubeDegrees = 55;
 		public static final int kStowedDegrees = 50;
 		public static final int kStartDegrees = 65;
