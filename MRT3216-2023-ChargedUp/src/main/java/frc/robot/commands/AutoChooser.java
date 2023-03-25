@@ -88,8 +88,8 @@ public class AutoChooser implements Loggable {
 
 		Shuffleboard.getTab("Driver")
 				.add("Auto Mode", chooser)
-				.withSize(2, 1) // make the widget 2x1
-				.withPosition(7, 0); // place it in the top-left corner
+				.withSize(2, 1)
+				.withPosition(7, 0);
 	}
 
 	public void init() {

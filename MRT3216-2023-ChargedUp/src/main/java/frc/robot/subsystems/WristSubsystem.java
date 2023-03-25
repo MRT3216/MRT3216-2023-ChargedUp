@@ -114,10 +114,10 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         System.out.println("Wrist Setpoint after reset:" + wristPidController.getSetpoint().position);
         System.out.println("Wrist Initial Goal: " + wristPidController.getGoal().position);
 
-        Shuffleboard.getTab("WristSubsystem")
-                .add("Wrist PID", wristPidController)
-                .withSize(2, 2) // make the widget 2x1
-                .withPosition(4, 0); // place it in the top-left corner
+        // Shuffleboard.getTab("WristSubsystem")
+        // .add("Wrist PID", wristPidController)
+        // .withSize(2, 2) // make the widget 2x1
+        // .withPosition(4, 0);
 
         // endregion
     }
@@ -302,7 +302,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     // #endregion
 
     // #region Wrist Scoring Positions Column 1
-    // Column 2, Rows 0-4
+    // Column 1, Rows 0-5
 
     @Config(name = "Wrist High Cone", defaultValueNumeric = WRIST.kScoringHighConeDegrees, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public void setWHCone(int wHCone) {
@@ -324,12 +324,12 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         this.wMCube = wMCube;
     }
 
-    @Config(name = "Wrist Hy Cone", defaultValueNumeric = WRIST.kScoringHybridConeDegrees, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "W Hybrid Cone", defaultValueNumeric = WRIST.kScoringHybridConeDegrees, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
     public void setWHyCone(int wHyCone) {
         this.wHyCone = wHyCone;
     }
 
-    @Config(name = "Wrist Hy Cube", defaultValueNumeric = WRIST.kScoringHybridCubeDegrees, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "W Hybrid Cube", defaultValueNumeric = WRIST.kScoringHybridCubeDegrees, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
     public void setWHyCube(int wHyCube) {
         this.wHyCube = wHyCube;
     }
@@ -337,7 +337,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     // #endregion
 
     // #region Wrist Pickup Positions Column 2
-    // Column 2, Rows
+    // Column 2, Rows 0-4
 
     @Config(name = "W G Up Cone", defaultValueNumeric = WRIST.kGroundIntakeUprightConeDegrees, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public void setWGUprightCone(int wGUprightCone) {

@@ -152,10 +152,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         System.out.println("Arm Setpoint after reset:" + armPidController.getSetpoint().position);
         System.out.println("Arm Initial Goal: " + armPidController.getGoal().position);
 
-        Shuffleboard.getTab("ArmSubsystem")
-                .add("Arm PID", armPidController)
-                .withSize(2, 2) // make the widget 2x1
-                .withPosition(4, 0); // place it in the top-left corner
+        // Shuffleboard.getTab("ArmSubsystem")
+        //         .add("Arm PID", armPidController)
+        //         .withSize(2, 2)
+        //         .withPosition(4, 0);
 
         // endregion
     }
@@ -481,7 +481,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #endregion
 
     // #region Arm Scoring Positions Column 1
-    // Column 2, Rows 0-4
+    // Column 1, Rows 0-5
 
     @Config(name = "Arm High Cone", defaultValueNumeric = ARM.kScoringHighConeDegrees, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public void setAHCone(int aHCone) {
@@ -503,12 +503,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.aMCube = aMCube;
     }
 
-    @Config(name = "Arm Hy Cone", defaultValueNumeric = ARM.kScoringHybridConeDegrees, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "A Hybrid Cone", defaultValueNumeric = ARM.kScoringHybridConeDegrees, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
     public void setAHyCone(int aHyCone) {
         this.aHyCone = aHyCone;
     }
 
-    @Config(name = "Arm Hy Cube", defaultValueNumeric = ARM.kScoringHybridCubeDegrees, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "A Hybrid Cube", defaultValueNumeric = ARM.kScoringHybridCubeDegrees, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
     public void setAHyCube(int aHyCube) {
         this.aHyCube = aHyCube;
     }
@@ -516,7 +516,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #endregion
 
     // #region Arm Pickup Positions Column 2
-    // Column 2, Rows 0-5
+    // Column 2, Rows 0-4
 
     @Config(name = "A G Up Cone", defaultValueNumeric = ARM.kGroundIntakeUprightConeDegrees, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public void setAGUprightCone(int aGUprightCone) {
