@@ -90,6 +90,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
         this.gp = GamePiece.Cube;
         this.sH = ScoringHeight.High;
+        this.sub = Substation.Double;
 
         // #region Arm Motor Initialization
 
@@ -264,7 +265,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                 return this.aMCube;
             case ScoringHybridCone:
                 return this.aHyCone;
-                case ScoringHybridCube:
+            case ScoringHybridCube:
                 return this.aHyCube;
             case GroundIntakeUprightCone:
                 return this.aGUprightCone;
@@ -577,7 +578,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         armOffset = calculateNativeUnitsFromDegrees(offset);
     }
 
-    @Config.ToggleSwitch(name = "Double Substation?", tabName = "Driver", rowIndex = 1, columnIndex = 7, height = 1, width = 2)
+    @Config.ToggleSwitch(name = "Double Substation?", tabName = "Driver", defaultValue = true, rowIndex = 1, columnIndex = 7, height = 1, width = 2)
     public void setSubstation(boolean isDouble) {
         this.sub = isDouble ? ARM.Substation.Double : ARM.Substation.Single;
     }
