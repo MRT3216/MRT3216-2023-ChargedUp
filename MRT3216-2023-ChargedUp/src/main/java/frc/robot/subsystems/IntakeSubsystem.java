@@ -84,7 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
                         .finallyDo((end) -> motor.set(0)));
     }
 
-    public Command getEjectConeCommand() {
+    public Command getAutoEjectConeCommand() {
         return new ProxyCommand(
                 () -> Commands.run(() -> motor.set(kConeOuttakeSpeed))
                         .withTimeout(AUTO.kMaxOuttakeTime)

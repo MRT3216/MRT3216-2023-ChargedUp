@@ -134,44 +134,43 @@ public class AutoChooser implements Loggable {
 				Map.ofEntries(
 						Map.entry("armToHighCone",
 								Commands.print("Moving arm to High Cone")
-										.andThen(armSubsystem.getCommand(Position.ScoringHighCone, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringHighCone),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToMidCone",
 								Commands.print("Moving arm to Mid Cone")
-										.andThen(armSubsystem.getCommand(Position.ScoringMidCone, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringMidCone),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToHybridCone",
 								Commands.print("Moving arm to Hybrid Cone")
-										.andThen(armSubsystem.getCommand(Position.ScoringHybridCone, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringHybridCone),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToHighCube",
 								Commands.print("Moving arm to High Cube")
-										.andThen(armSubsystem.getCommand(Position.ScoringHighCube, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringHighCube),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToMidCube",
 								Commands.print("Moving arm to Mid Cube")
-										.andThen(armSubsystem.getCommand(Position.ScoringMidCube, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringMidCube),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToHybridCube",
 								Commands.print("Moving arm to Hybrid Cube")
-										.andThen(armSubsystem.getCommand(Position.ScoringHybridCube, false),
+										.andThen(armSubsystem.getCommand(Position.ScoringHybridCube),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToIntakeCone",
 								Commands.print("Moving arm to Intake Cone")
 										.andThen(
-												armSubsystem.getCommand(Position.GroundIntakeTippedCone,
-														false),
+												armSubsystem.getCommand(Position.GroundIntakeTippedCone),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("armToIntakeCube",
 								Commands.print("Moving arm to Intake Cube")
-										.andThen(armSubsystem.getCommand(Position.GroundIntakeCube, false),
+										.andThen(armSubsystem.getCommand(Position.GroundIntakeCube),
 												Commands.print("Finished moving arm"))),
 
 						Map.entry("intakeCone",
@@ -209,49 +208,49 @@ public class AutoChooser implements Loggable {
 		chooser = new SendableChooser<>();
 
 		chooser.setDefaultOption("A-Cn-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
+								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
 										AUTO.kReallySlowPath))));
 
 		chooser.addOption("M-Cn+Cb-Balance",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
+								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Balance", AUTO.kSlowPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(true)));
 
 		chooser.addOption("C-Cn+Cb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
+								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Cn+Cb-Dock", AUTO.kMediumPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
 		chooser.addOption("C-CnCb-Leave",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
+								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCb-Balance",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
+								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Balance", AUTO.kFastPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
 		chooser.addOption("S-CnCbCb",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
+								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCbCb-Dock",
-				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
-								intakeSubsystem.getEjectConeCommand(),
+								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Dock", AUTO.kFastestPath)),
 								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop())));
 

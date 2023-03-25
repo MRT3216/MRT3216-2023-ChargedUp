@@ -312,12 +312,12 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     // Ground intake - needs piece
     public Command getGroundIntakeCommand() {
-        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground), false);
+        return this.getCommand(getArmAndWristIntakePosition(ARM.IntakePosition.Ground));
     }
 
     // // Ground tipped cone intake - needs nothing
     public Command getGroundTippedConeIntakeCommand() {
-        return this.getCommand(ARM.Position.GroundIntakeTippedCone, false);
+        return this.getCommand(ARM.Position.GroundIntakeTippedCone);
     }
 
     // Substation pickup -- needs piece
@@ -330,7 +330,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getStowedCommand() {
-        return getCommand(ARM.Position.Stowed, false);
+        return getCommand(ARM.Position.Stowed);
     }
 
     public Command getStartCommand() {
@@ -338,10 +338,14 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     }
 
     public Command getCommand(ARM.Position position) {
+        return getCommand(position, false);
+    }
+
+    public Command getCommandAndWait(ARM.Position position) {
         return getCommand(position, true);
     }
 
-    public Command getCommand(ARM.Position position, boolean wait) {
+    private Command getCommand(ARM.Position position, boolean wait) {
         return getArmAndWristGotoCommand(
                 getArmDegreesByPosition(position),
                 wristSubsystem.getWristDegreesByPosition(position), wait);
