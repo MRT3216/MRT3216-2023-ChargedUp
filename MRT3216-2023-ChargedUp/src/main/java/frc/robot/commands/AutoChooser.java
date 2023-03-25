@@ -218,11 +218,11 @@ public class AutoChooser implements Loggable {
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
 										AUTO.kReallySlowPath))));
 
-		chooser.addOption("M-Cn+Cb-Dock",
+		chooser.addOption("M-Cn+Cb-Balance",
 				() -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 						.andThen(
 								intakeSubsystem.getEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Dock", AUTO.kSlowPath)),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Balance", AUTO.kSlowPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(true)));
 
 		chooser.addOption("C-Cn+Cb-Dock",
@@ -258,23 +258,6 @@ public class AutoChooser implements Loggable {
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Dock", AUTO.kFastestPath)),
 								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop())));
 
-		// chooser.addOption("S-CnCnCb",
-		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-		// .andThen(
-		// intakeSubsystem.getEjectConeCommand(),
-		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCnCb", AUTO.kSlowPath,
-		// AUTO.kMedium3CnCnCbPiece))));
-
-		// TODO: These are stretch goals if the others work fine
-
-		// chooser.addOption("S-CnCb+Cb-Dock",
-		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-		// .andThen(
-		// intakeSubsystem.getAutoConeCommand(false),
-		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb+Cb-Dock",
-		// AUTO.kMediumPath)),
-		// AutoBalance.getInstance().getAutoBalanceCommand(true)));
-
 		// chooser.addOption("C-CnCb-Dock",
 		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
 		// .andThen(
@@ -282,20 +265,6 @@ public class AutoChooser implements Loggable {
 		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Dock",
 		// AUTO.kMediumSlowPath)),
 		// AutoBalance.getInstance().getAutoBalanceCommand(false)));
-
-		// TODO: Add the speed constraints to this option to make the speed change over
-		// the cable
-		// chooser.addOption("C-CnCb-LeaveCopy",
-		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
-		// .andThen(
-		// intakeSubsystem.getAutoConeCommand(false),
-		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Leave",
-		// AUTO.kFastPath))));
-
-		// chooser.addOption("C-Test-Dock",
-		// () -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Test-Dock",
-		// new PathConstraints(3, 3)))
-		// .andThen(AutoBalance.getInstance().getAutoBalanceCommand(true)));
 	}
 
 	public Command getAutoCommand() {
