@@ -39,7 +39,6 @@ public class RobotContainer {
 	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
 	private SwerveSubsystem swerveSubsystem;
 	private AutoChooser autoChooser;
-	private AutoBalance autoBalance;
 	private double autoStartDelayTime;
 	private double translationExpo;
 	private double rotationExpo;
@@ -74,7 +73,6 @@ public class RobotContainer {
 	public void initSubsystems() {
 		this.swerveSubsystem = SwerveSubsystem.getInstance();
 		this.autoChooser = AutoChooser.getInstance();
-		this.autoBalance = AutoBalance.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
 		this.wristSubsystem = WristSubsystem.getInstance();
 		this.intakeSubsystem = IntakeSubsystem.getInstance();
@@ -122,32 +120,12 @@ public class RobotContainer {
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
-		// controller.leftBumper().whileTrue(Commands.run(() ->
-		// this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
-		// this.armSystem.enable();
-		// this.armSystem.stopWristMotorAndResetPID();
-		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		// }));
-
-		// controller.rightBumper().whileTrue(Commands.run(() ->
-		// this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
-		// this.armSystem.enable();
-		// this.armSystem.stopWristMotorAndResetPID();
-		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		// }));
-
-		controller.back().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
-
-		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		// controller.b().onTrue(new
-		
+		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));		
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 		controller.start().onTrue(new ProxyCommand(armSystem::getStartCommand));
-
-		// controller.rightStick().onTrue(new
-		// ProxyCommand(armSystem::getStowedCommand));
+		controller.back().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 
 		controller.povLeft().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Hybrid)));
 		controller.povUp().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Mid)));
