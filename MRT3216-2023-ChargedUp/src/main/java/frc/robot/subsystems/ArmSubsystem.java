@@ -67,7 +67,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private int aDSCube = ARM.kDoubleSubstationIntakeCubeDegrees;
     private int aStowed = ARM.kStowedDegrees;
     private int aStart = ARM.kStartDegrees;
-    private static double armOffset = ARM.kZeroOffset;
+    private static double armOffset = ARM.kZeroOffsetInDegrees;
 
     // #endregion
 
@@ -145,11 +145,15 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         armPidController.setGoal(getArmDegrees());
 
         armPidController.setTolerance(ARM.kArmPositionTolerance);// , ARM.kArmVelocityTolerance);
-        System.out.println("Arm Setpoint before reset:" + armPidController.getSetpoint().position);
-        System.out.println("Arm Resetting PIDController; current degrees: " + getArmDegrees());
+        if (Constants.showPrintStatements) {
+            System.out.println("Arm Setpoint before reset:" + armPidController.getSetpoint().position);
+            System.out.println("Arm Resetting PIDController; current degrees: " + getArmDegrees());
+        }
         armPidController.reset(getArmDegrees());
-        System.out.println("Arm Setpoint after reset:" + armPidController.getSetpoint().position);
-        System.out.println("Arm Initial Goal: " + armPidController.getGoal().position);
+        if (Constants.showPrintStatements) {
+            System.out.println("Arm Setpoint after reset:" + armPidController.getSetpoint().position);
+            System.out.println("Arm Initial Goal: " + armPidController.getGoal().position);
+        }
 
         // Shuffleboard.getTab("ArmSubsystem")
         // .add("Arm PID", armPidController)
@@ -165,7 +169,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             if (Math.abs(armPidController.getSetpoint().position - getArmDegrees()) < 20) {
                 double armPidVoltage = -armPidController.calculate(getArmDegrees());
                 leadMotor.setVoltage(armPidVoltage);
-                // System.out.println("Arm Voltage: " + armPidVoltage);
             } else {
                 this.setArmGoal(armPidController.getGoal().position);
             }
@@ -220,7 +223,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm
 
     public void setArmGoal(double degrees) {
-        // System.out.println("Arm Goal Degrees before min and max: " + degrees);
         degrees = Math.min(ARM.kMaxLimitDegrees, Math.max(degrees, ARM.kMinLimitDegrees));
         armPidController.setGoal(degrees);
     }

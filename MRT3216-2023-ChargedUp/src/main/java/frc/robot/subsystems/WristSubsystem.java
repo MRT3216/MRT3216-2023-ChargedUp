@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
 import frc.robot.settings.Constants.WRIST;
 import frc.robot.settings.RobotMap.ROBOT;
@@ -107,11 +108,15 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         wristPidController.setGoal(getWristDegreesWrtArm());
 
         wristPidController.setTolerance(WRIST.kWristPositionTolerance);
-        System.out.println("Wrist Setpoint before reset:" + wristPidController.getSetpoint().position);
-        System.out.println("Wrist Resetting PIDController; current degrees: " + getWristDegreesWrtArm());
+        if (Constants.showPrintStatements) {
+            System.out.println("Wrist Setpoint before reset:" + wristPidController.getSetpoint().position);
+            System.out.println("Wrist Resetting PIDController; current degrees: " + getWristDegreesWrtArm());
+        }
         wristPidController.reset(getWristDegreesWrtArm());
-        System.out.println("Wrist Setpoint after reset:" + wristPidController.getSetpoint().position);
-        System.out.println("Wrist Initial Goal: " + wristPidController.getGoal().position);
+        if (Constants.showPrintStatements) {
+            System.out.println("Wrist Setpoint after reset:" + wristPidController.getSetpoint().position);
+            System.out.println("Wrist Initial Goal: " + wristPidController.getGoal().position);
+        }
 
         // Shuffleboard.getTab("WristSubsystem")
         // .add("Wrist PID", wristPidController)
@@ -126,22 +131,8 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         if (this.enabled) {
             if (Math.abs(wristPidController.getSetpoint().position - getWristDegreesWrtArm()) < 20) {
                 double wristPidVoltage = -wristPidController.calculate(getWristDegreesWrtArm());
-                // TODO: Finish this
-                // Calculate the acceleration based on the speed at the last time stamp
-                // double acceleration = (wristPidController.getSetpoint().velocity - lastSpeed)
-                // / (Timer.getFPGATimestamp() - lastTime);
-                // Calculate the feedforward based on the current velocity and acceleration
-                // double setpoint = calculateWristDegreesWrtGround(getArmDegrees(),
-                // wristPidController.getSetpoint().position);
-                // double ff = -wristFeedforward.calculate(setpoint,
-                // wristPidController.getSetpoint().velocity);
                 wristMotor.setVoltage(wristPidVoltage);
-                // System.out.println("Wrist: " + wristPidVoltage);
-                // System.out.println("FF: " + ff);
 
-                // Save the current speed and time for the next loop
-                // lastSpeed = wristPidController.getSetpoint().velocity;
-                // lastTime = Timer.getFPGATimestamp();
             } else {
                 this.setWristGoal(wristPidController.getGoal().position);
             }
@@ -184,8 +175,6 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     // #region Wrist
 
     public void setWristGoal(double degrees) {
-        // (degrees, WRIST.kReverseLimitDegrees));
-        // System.out.println("Wrist Goal Degrees: " + degrees);
         wristPidController.setGoal(degrees);
     }
 

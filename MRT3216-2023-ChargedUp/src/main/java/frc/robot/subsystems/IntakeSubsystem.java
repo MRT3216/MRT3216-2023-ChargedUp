@@ -56,16 +56,13 @@ public class IntakeSubsystem extends SubsystemBase {
         // This method will be called once per scheduler
         if (limitSwitch.isPressed()) {
             wristSubsystem.resetWristEncoderPosition();
-            // System.out.println("Encoder position reset by limit switch");
         }
     }
 
     public Command getCommand(boolean intake, GamePiece piece, ScoringHeight height) {
         if (piece == GamePiece.Cone) {
-            System.out.println("Running cone intake");
             return getIntakeCommand(intake ? kConeIntakeSpeed : kConeOuttakeSpeed);
         } else {
-            System.out.println("Running cube intake");
             if (height == ScoringHeight.Hybrid) {
                 return getIntakeCommand(intake ? kCubeIntakeSpeed : kCubeShootSpeed);
             } else {

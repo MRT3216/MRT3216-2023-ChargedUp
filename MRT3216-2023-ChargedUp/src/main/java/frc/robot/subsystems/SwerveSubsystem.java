@@ -266,7 +266,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	public void setCurrentRobotPose(Pose2d pose) {
-		System.out.println("Setting Pose: " + pose.getRotation().getDegrees());
+		// System.out.println("Setting Pose: " + pose.getRotation().getDegrees());
 
 		this.poseEstimator
 				.resetPosition(getGyroscopeRotation(),
@@ -318,7 +318,9 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	 * facing to the 'forwards' direction.
 	 */
 	public void zeroGyroscope() {
-		System.out.println("Zeroing Gyroscope");
+		if (Constants.showPrintStatements) {
+			System.out.println("Zeroing Gyroscope");
+		}
 		this.navx.reset();
 		setCurrentRobotPose(poseEstimator.getEstimatedPosition());
 		/*

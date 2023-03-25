@@ -4,6 +4,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.AUTO_BALANCE;
 import frc.robot.settings.Constants.DRIVETRAIN;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -46,7 +47,6 @@ public class AutoBalance implements Loggable {
         this.isFieldSide = isFieldSide;
         direction = isFieldSide ? 1 : -1;
 
-        System.out.println("robotSpeedSlow: " + robotSpeedSlow);
         return new ProxyCommand(
                 () -> Commands.run(
                         () -> swerveSubsystem.drive(
@@ -90,7 +90,8 @@ public class AutoBalance implements Loggable {
         switch (state) {
             // drive forwards to approach station, exit when tilt is detected
             case 0:
-                System.out.println("Case 0: drive forwards to approach station, exit when tilt is detected");
+                if (Constants.showPrintStatements)
+                    System.out.println("Case 0: drive forwards to approach station, exit when tilt is detected");
                 if (getTilt() > onChargeStationDegree) {
                     debounceCount++;
                 }
@@ -102,7 +103,8 @@ public class AutoBalance implements Loggable {
                 return robotSpeedFast;
             // driving up charge station, drive slower, stopping when level
             case 1:
-                System.out.println("Case 1: driving up charge station, drive slower, stopping when level");
+                if (Constants.showPrintStatements)
+                    System.out.println("Case 1: driving up charge station, drive slower, stopping when level");
                 if (getTilt() < levelDegree) {
                     debounceCount++;
                 }
@@ -114,7 +116,8 @@ public class AutoBalance implements Loggable {
                 return robotSpeedSlow;
             // on charge station, stop motors and wait for end of auto
             case 2:
-                System.out.println("Case 2: on charge station, stop motors and wait for end of auto");
+                if (Constants.showPrintStatements)
+                    System.out.println("Case 2: on charge station, stop motors and wait for end of auto");
                 if (Math.abs(getTilt()) <= levelDegree / 2) {
                     debounceCount++;
                 }

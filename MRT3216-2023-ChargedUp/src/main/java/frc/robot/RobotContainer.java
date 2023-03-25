@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
-import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutoChooser;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
@@ -87,7 +86,6 @@ public class RobotContainer {
 	 * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
-		System.out.println(DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND);
 		if (swerveSubsystem != null && controller != null) {
 			swerveSubsystem.setDefaultCommand(
 					new TeleDrive(
@@ -120,7 +118,7 @@ public class RobotContainer {
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
-		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));		
+		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));

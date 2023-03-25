@@ -21,12 +21,9 @@ import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.ArmSubsystem;
 
 public final class Constants {
+	public static final boolean showPrintStatements = false;
+
 	public static final class DRIVETRAIN {
-		// TODO: set these values
-		// public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54);
-		// public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
-		// public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.15);
-		// public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
 		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.31 + 180);
 		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(202.14 + 180);
 		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.33 + 180);
@@ -89,7 +86,6 @@ public final class Constants {
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
-		public static final double kZeroOffset = 0.0;
 		public static final double kZeroOffsetInDegrees = -2.0;
 		public static final double kScaleFactor = 192.86;
 		public static final double kLimitSwitchOffset = 0.4020084;

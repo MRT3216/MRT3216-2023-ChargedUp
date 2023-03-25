@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM.Position;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
@@ -125,10 +126,6 @@ public class AutoChooser implements Loggable {
 					maxRotationError = Math.max(maxRotationError, rotationError.getDegrees());
 					currentXError = translationError.getX();
 					currentYError = translationError.getY();
-
-					// Log path following error
-					// System.out.println("Translation Error: " + translationError.getNorm());
-					// System.out.println("Rotation Error: " + rotationError.getDegrees());
 				});
 	}
 
@@ -278,7 +275,8 @@ public class AutoChooser implements Loggable {
 		for (int i = 0; i < files.length; i++) {
 			try {
 				Path trajectoryPath = files[i].toPath();
-				System.out.println("PATH " + i + ": " + trajectoryPath.toString());
+				if (Constants.showPrintStatements)
+					System.out.println("PATH " + i + ": " + trajectoryPath.toString());
 				if (files[i].isFile()) {
 					trajectories.put(files[i].getName(), TrajectoryUtil.fromPathweaverJson(trajectoryPath));
 				}
