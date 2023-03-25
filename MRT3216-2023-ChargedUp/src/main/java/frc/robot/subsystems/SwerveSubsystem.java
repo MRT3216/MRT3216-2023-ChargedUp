@@ -44,10 +44,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.DRIVETRAIN;
 import io.github.oblarg.oblog.Loggable;
@@ -266,8 +265,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	public void setCurrentRobotPose(Pose2d pose) {
-		// System.out.println("Setting Pose: " + pose.getRotation().getDegrees());
-
 		this.poseEstimator
 				.resetPosition(getGyroscopeRotation(),
 						new SwerveModulePosition[] {
