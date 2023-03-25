@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
@@ -484,32 +483,32 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm Scoring Positions Column 1
     // Column 2, Rows 0-4
 
-    @Config.NumberSlider(name = "Arm High Cone", defaultValue = ARM.kScoringHighConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "Arm High Cone", defaultValueNumeric = ARM.kScoringHighConeDegrees, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public void setAHCone(int aHCone) {
         this.aHCone = aHCone;
     }
 
-    @Config.NumberSlider(name = "Arm High Cube", defaultValue = ARM.kScoringHighCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "Arm High Cube", defaultValueNumeric = ARM.kScoringHighCubeDegrees, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public void setAHCube(int aHCube) {
         this.aHCube = aHCube;
     }
 
-    @Config.NumberSlider(name = "Arm Mid Cone", defaultValue = ARM.kScoringMidConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "Arm Mid Cone", defaultValueNumeric = ARM.kScoringMidConeDegrees, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
     public void setAMCone(int aMCone) {
         this.aMCone = aMCone;
     }
 
-    @Config.NumberSlider(name = "Arm Mid Cube", defaultValue = ARM.kScoringMidCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "Arm Mid Cube", defaultValueNumeric = ARM.kScoringMidCubeDegrees, rowIndex = 3, columnIndex = 1, height = 1, width = 1)
     public void setAMCube(int aMCube) {
         this.aMCube = aMCube;
     }
 
-    @Config.NumberSlider(name = "Arm Hy Cone", defaultValue = ARM.kScoringHybridConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "Arm Hy Cone", defaultValueNumeric = ARM.kScoringHybridConeDegrees, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
     public void setAHyCone(int aHyCone) {
         this.aHyCone = aHyCone;
     }
 
-    @Config.NumberSlider(name = "Arm Hy Cube", defaultValue = ARM.kScoringHybridCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "Arm Hy Cube", defaultValueNumeric = ARM.kScoringHybridCubeDegrees, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
     public void setAHyCube(int aHyCube) {
         this.aHyCube = aHyCube;
     }
@@ -519,27 +518,27 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm Pickup Positions Column 2
     // Column 2, Rows 0-5
 
-    @Config.NumberSlider(name = "A G Up Cone", defaultValue = ARM.kGroundIntakeUprightConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
+    @Config(name = "A G Up Cone", defaultValueNumeric = ARM.kGroundIntakeUprightConeDegrees, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
     public void setAGUprightCone(int aGUprightCone) {
         this.aGUprightCone = aGUprightCone;
     }
 
-    @Config.NumberSlider(name = "A G Down Cone", defaultValue = ARM.kGroundIntakeTippedConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
+    @Config(name = "A G Down Cone", defaultValueNumeric = ARM.kGroundIntakeTippedConeDegrees, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
     public void setAGTippedCone(int aGTippedCone) {
         this.aGTippedCone = aGTippedCone;
     }
 
-    @Config.NumberSlider(name = "A Ground Cube", defaultValue = ARM.kGroundIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
+    @Config(name = "A Ground Cube", defaultValueNumeric = ARM.kGroundIntakeCubeDegrees, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
     public void setAGCube(int aGCube) {
         this.aGCube = aGCube;
     }
 
-    @Config.NumberSlider(name = "A SSub Cone", defaultValue = ARM.kSingleSubstationIntakeConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
+    @Config(name = "A SSub Cone", defaultValueNumeric = ARM.kSingleSubstationIntakeConeDegrees, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
     public void setASSCone(int aSSCone) {
         this.aSSCone = aSSCone;
     }
 
-    @Config.NumberSlider(name = "A SSub Cube", defaultValue = ARM.kSingleSubstationIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
+    @Config(name = "A SSub Cube", defaultValueNumeric = ARM.kSingleSubstationIntakeCubeDegrees, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
     public void setASSCube(int aSSCube) {
         this.aSSCube = aSSCube;
     }
@@ -549,22 +548,22 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Start and Stowed Positions and Double Substation Column 3
     // Column 3, Rows 0-1, 3-4
 
-    @Config.NumberSlider(name = "Arm Start", defaultValue = ARM.kStartDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
+    @Config(name = "Arm Start", defaultValueNumeric = ARM.kStartDegrees, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
     public void setAStart(int aStart) {
         this.aStart = aStart;
     }
 
-    @Config.NumberSlider(name = "Arm Stowed", defaultValue = ARM.kStowedDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
+    @Config(name = "Arm Stowed", defaultValueNumeric = ARM.kStowedDegrees, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
     public void setAStowed(int aStowed) {
         this.aStowed = aStowed;
     }
 
-    @Config.NumberSlider(name = "A DSub Cone", defaultValue = ARM.kDoubleSubstationIntakeConeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
+    @Config(name = "A DSub Cone", defaultValueNumeric = ARM.kDoubleSubstationIntakeConeDegrees, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
     public void setADSCone(int aDSCone) {
         this.aDSCone = aDSCone;
     }
 
-    @Config.NumberSlider(name = "A DSub Cube", defaultValue = ARM.kDoubleSubstationIntakeCubeDegrees, min = 2, max = 130, blockIncrement = 1, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
+    @Config(name = "A DSub Cube", defaultValueNumeric = ARM.kDoubleSubstationIntakeCubeDegrees, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
     public void setADSCube(int aDSCube) {
         this.aDSCube = aDSCube;
     }
