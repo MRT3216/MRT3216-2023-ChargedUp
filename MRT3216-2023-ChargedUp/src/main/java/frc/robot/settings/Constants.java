@@ -97,8 +97,8 @@ public final class Constants {
 		public static final double kArmKp = 0.2;
 		public static final double kArmKi = 0;
 		public static final double kArmKd = 0;
-		public static final double kArmPositionTolerance = 4;
-		public static final double kArmVelocityTolerance = 20;
+		public static final double kArmPositionPIDTolerance = 2;
+		public static final double kArmPositionLooseTolerance = 6;
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -278,22 +278,10 @@ public final class Constants {
 	}
 
 	public static final class WRIST {
-		// TODO add in actual limits for manipulator encoder
-		// public static final float kForwardLimit = -1f;
-		// public static final float kReverseLimit = .35f;
-
 		public static final int kMotorCurrentLimit = 40;
-
 		public static final boolean kMotorInverted = false;
-
-		// public static final double kReverseLimitDegrees =
-		// WristSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
-		// public static final double kForwardLimitDegrees =
-		// WristSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
-
 		public static final double kZeroOffset = 0;
 		public static final double kScaleFactor = 180;
-
 		public static final double kLimitSwitchPosition = 0;
 
 		/*
@@ -303,8 +291,8 @@ public final class Constants {
 		public static final double kWristKp = .25;
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
-		public static final double kWristPositionTolerance = 4;
-		public static final double kWristVelocityTolerance = 20;
+		public static final double kWristPositionPIDTolerane = 2;
+		public static final double kWristPositionLooseTolerance = 6;
 
 		// Feed-Forward from SysID
 		// public static final double kWristKs = 0.29522;
@@ -320,7 +308,6 @@ public final class Constants {
 		 */
 		public static final double kWristMaxVelocity = 225; // degrees/s
 		public static final double kWristMaxAcceleration = 225; // degrees/s^2
-		// public static final double kWristStartingPos = 0; // 60 degrees wrt arm
 
 		/*
 		 * ----------------------------------------------------------------------------

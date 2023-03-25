@@ -144,7 +144,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
         armPidController.setGoal(getArmDegrees());
 
-        armPidController.setTolerance(ARM.kArmPositionTolerance);// , ARM.kArmVelocityTolerance);
+        armPidController.setTolerance(ARM.kArmPositionPIDTolerance);
         if (Constants.showPrintStatements) {
             System.out.println("Arm Setpoint before reset:" + armPidController.getSetpoint().position);
             System.out.println("Arm Resetting PIDController; current degrees: " + getArmDegrees());
@@ -214,10 +214,6 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         wristSubsystem.setWristGoal(wristDegrees);
     }
 
-    public boolean armWristAtGoal() {
-        return armAtGoal() && wristSubsystem.wristAtGoal();
-    }
-
     // #endregion
 
     // #region Arm
@@ -227,9 +223,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         armPidController.setGoal(degrees);
     }
 
-    public boolean armAtGoal() {
-        return armPidController.getPositionTolerance() >= Math
-                .abs(getArmDegrees() - armPidController.getGoal().position);
+    public boolean armWithinLooseTolerance() {
+        return ARM.kArmPositionLooseTolerance >= Math.abs(getArmDegrees() - armPidController.getGoal().position);
     }
 
     public void runArmMotors(double speed) {
@@ -359,19 +354,9 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                             wristSubsystem.setWristGoal(wristDegrees);
                             this.enable();
                         }, this),
-                                Commands.waitUntil(() -> (armAtGoal() && wristSubsystem.wristAtGoal()))
+                                Commands.waitUntil(() -> (armWithinLooseTolerance() && wristSubsystem.wristWithinLooseTolerance()))
                                         .unless(() -> !wait),
                                 Commands.print("Arm and wrist at goal")));
-    }
-
-    public Command getWristGotoCommand(double wristDegrees) {
-        return Commands.print("Setting wrist goal")
-                .andThen(Commands.runOnce(() -> {
-                    wristSubsystem.setWristGoal(wristDegrees);
-                    this.enable();
-                }, this))
-                .andThen(Commands.waitUntil(() -> wristSubsystem.wristAtGoal()))
-                .andThen(Commands.print("Wrist at goal"));
     }
 
     // #endregion

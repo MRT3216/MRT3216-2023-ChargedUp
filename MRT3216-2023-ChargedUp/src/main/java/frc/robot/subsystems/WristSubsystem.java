@@ -107,7 +107,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
         wristPidController.setGoal(getWristDegreesWrtArm());
 
-        wristPidController.setTolerance(WRIST.kWristPositionTolerance);
+        wristPidController.setTolerance(WRIST.kWristPositionPIDTolerane);
         if (Constants.showPrintStatements) {
             System.out.println("Wrist Setpoint before reset:" + wristPidController.getSetpoint().position);
             System.out.println("Wrist Resetting PIDController; current degrees: " + getWristDegreesWrtArm());
@@ -178,8 +178,8 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         wristPidController.setGoal(degrees);
     }
 
-    public boolean wristAtGoal() {
-        return wristPidController.getPositionTolerance() >= Math
+    public boolean wristWithinLooseTolerance() {
+        return WRIST.kWristPositionLooseTolerance >= Math
                 .abs(getWristDegreesWrtArm() - wristPidController.getGoal().position);
     }
 
@@ -242,20 +242,6 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     public boolean isWristZeroed() {
         return isWristZeroed;
-    }
-
-    // #endregion
-
-    // #region Command Factories
-
-    public Command getWristGotoCommand(double wristDegrees) {
-        return Commands.print("Setting wrist goal")
-                .andThen(Commands.runOnce(() -> {
-                    setWristGoal(wristDegrees);
-                    this.enable();
-                }, this))
-                .andThen(Commands.waitUntil(() -> wristAtGoal()))
-                .andThen(Commands.print("Wrist at goal"));
     }
 
     // #endregion
