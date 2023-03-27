@@ -14,15 +14,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.settings.Constants;
+import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.Position;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
@@ -41,7 +36,6 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
-/** Add your docs here. */
 public class AutoChooser implements Loggable {
 	private static AutoChooser instance;
 	private static HashMap<String, Command> eventMap;
@@ -59,26 +53,29 @@ public class AutoChooser implements Loggable {
 	@Log.Exclude
 	@Config.Exclude
 	private static IntakeSubsystem intakeSubsystem;
-	@Log
-	private double maxTranslationError = 0;
-	@Log
-	private double maxRotationError = 0;
-	@Log
-	private double curentTranslationError = 0;
-	@Log
-	private double currentRotationError = 0;
-	@Log
-	private double translationSetpoint = 0;
-	@Log
-	private double rotationSetpoint = 0;
-	@Log
-	private double currentXError = 0;
-	@Log
-	private double currentYError = 0;
-	@Log
-	private double xSetpoint = 0;
-	@Log
-	private double ySetpoint = 0;
+
+	// #region Logging
+	// @Log
+	// private double maxTranslationError = 0;
+	// @Log
+	// private double maxRotationError = 0;
+	// @Log
+	// private double curentTranslationError = 0;
+	// @Log
+	// private double currentRotationError = 0;
+	// @Log
+	// private double translationSetpoint = 0;
+	// @Log
+	// private double rotationSetpoint = 0;
+	// @Log
+	// private double currentXError = 0;
+	// @Log
+	// private double currentYError = 0;
+	// @Log
+	// private double xSetpoint = 0;
+	// @Log
+	// private double ySetpoint = 0;
+	// #endregion
 
 	private AutoChooser() {
 		swerveSubsystem = SwerveSubsystem.getInstance();
@@ -106,102 +103,49 @@ public class AutoChooser implements Loggable {
 				true,
 				swerveSubsystem);
 
-		PPSwerveControllerCommand.setLoggingCallbacks(
-				(PathPlannerTrajectory activeTrajectory) -> {
-					// Log current trajectory
-				},
-				(Pose2d targetPose) -> {
-					// Log target pose
-					rotationSetpoint = targetPose.getRotation().getDegrees();
-					xSetpoint = targetPose.getX();
-					ySetpoint = targetPose.getY();
-				},
-				(ChassisSpeeds setpointSpeeds) -> {
-					// Log setpoint ChassisSpeeds
-				},
-				(Translation2d translationError, Rotation2d rotationError) -> {
-					curentTranslationError = translationError.getNorm();
-					currentRotationError = rotationError.getDegrees();
-					maxTranslationError = Math.max(maxTranslationError, translationError.getNorm());
-					maxRotationError = Math.max(maxRotationError, rotationError.getDegrees());
-					currentXError = translationError.getX();
-					currentYError = translationError.getY();
-				});
+		// #region Logging
+		// PPSwerveControllerCommand.setLoggingCallbacks(
+		// (PathPlannerTrajectory activeTrajectory) -> {
+		// // Log current trajectory
+		// },
+		// (Pose2d targetPose) -> {
+		// // Log target pose
+		// rotationSetpoint = targetPose.getRotation().getDegrees();
+		// xSetpoint = targetPose.getX();
+		// ySetpoint = targetPose.getY();
+		// },
+		// (ChassisSpeeds setpointSpeeds) -> {
+		// // Log setpoint ChassisSpeeds
+		// },
+		// (Translation2d translationError, Rotation2d rotationError) -> {
+		// curentTranslationError = translationError.getNorm();
+		// currentRotationError = rotationError.getDegrees();
+		// maxTranslationError = Math.max(maxTranslationError,
+		// translationError.getNorm());
+		// maxRotationError = Math.max(maxRotationError, rotationError.getDegrees());
+		// currentXError = translationError.getX();
+		// currentYError = translationError.getY();
+		// });
+		// #endregion
 	}
 
 	private static HashMap<String, Command> buildEventMapReal() {
 		return new HashMap<>(
 				Map.ofEntries(
-						Map.entry("armToHighCone",
-								Commands.print("Moving arm to High Cone")
-										.andThen(armSubsystem.getCommand(Position.ScoringHighCone),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("armToMidCone",
-								Commands.print("Moving arm to Mid Cone")
-										.andThen(armSubsystem.getCommand(Position.ScoringMidCone),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("armToHybridCone",
-								Commands.print("Moving arm to Hybrid Cone")
-										.andThen(armSubsystem.getCommand(Position.ScoringHybridCone),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("armToHighCube",
-								Commands.print("Moving arm to High Cube")
-										.andThen(armSubsystem.getCommand(Position.ScoringHighCube),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("armToMidCube",
-								Commands.print("Moving arm to Mid Cube")
-										.andThen(armSubsystem.getCommand(Position.ScoringMidCube),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("armToHybridCube",
-								Commands.print("Moving arm to Hybrid Cube")
-										.andThen(armSubsystem.getCommand(Position.ScoringHybridCube),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("armToIntakeCone",
-								Commands.print("Moving arm to Intake Cone")
-										.andThen(
-												armSubsystem.getCommand(Position.GroundIntakeTippedCone),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("armToIntakeCube",
-								Commands.print("Moving arm to Intake Cube")
-										.andThen(armSubsystem.getCommand(Position.GroundIntakeCube),
-												Commands.print("Finished moving arm"))),
-
-						Map.entry("intakeCone",
-								Commands.print("Intaking Cone")
-										.andThen(intakeSubsystem.getAutoConeCommand(true),
-												Commands.print("Finished intaking"))),
-
-						Map.entry("intakeCube",
-								Commands.print("Intaking Cube")
-										.andThen(intakeSubsystem.getAutoCubeCommand(true),
-												Commands.print("Finished intaking"))),
-
-						Map.entry("ejectCone",
-								Commands.print("Ejecting Cone")
-										.andThen(intakeSubsystem.getAutoConeCommand(false),
-												Commands.print("Finished ejecting"))),
-
-						Map.entry("ejectCube",
-								Commands.print("Eject Cube")
-										.andThen(intakeSubsystem.getAutoCubeCommand(false),
-												Commands.print("Finished ejecting"))),
-
-						Map.entry("start",
-								Commands.print("Arm to Start")
-										.andThen(armSubsystem.getStartCommand(),
-												Commands.print("Finished to start"))),
-
-						Map.entry("stow",
-								Commands.print("Stowing arm")
-										.andThen(armSubsystem.getStowedCommand(),
-												Commands.print("Finished stowing")))));
+						Map.entry("armToHighCone", armSubsystem.getCommand(Position.ScoringHighCone)),
+						Map.entry("armToMidCone", armSubsystem.getCommand(Position.ScoringMidCone)),
+						Map.entry("armToHybridCone", armSubsystem.getCommand(Position.ScoringHybridCone)),
+						Map.entry("armToHighCube", armSubsystem.getCommand(Position.ScoringHighCube)),
+						Map.entry("armToMidCube", armSubsystem.getCommand(Position.ScoringMidCube)),
+						Map.entry("armToHybridCube", armSubsystem.getCommand(Position.ScoringHybridCube)),
+						Map.entry("armToIntakeCone", armSubsystem.getCommand(Position.GroundIntakeTippedCone)),
+						Map.entry("armToIntakeCube", armSubsystem.getCommand(Position.GroundIntakeCube)),
+						Map.entry("intakeCone", intakeSubsystem.getAutoConeCommand(true)),
+						Map.entry("intakeCube", intakeSubsystem.getAutoCubeCommand(true)),
+						Map.entry("ejectCone", intakeSubsystem.getAutoConeCommand(false)),
+						Map.entry("ejectCube", intakeSubsystem.getAutoCubeCommand(false)),
+						Map.entry("start", armSubsystem.getStartCommand()),
+						Map.entry("stow", armSubsystem.getStowedCommand())));
 	}
 
 	private void populateAutoChooser() {
@@ -245,14 +189,16 @@ public class AutoChooser implements Loggable {
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
 								intakeSubsystem.getAutoEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kFastPath))));
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kFastPath)),
+								// Set the
+								Commands.run(() -> armSubsystem.setGamePiece(GamePiece.Cone), armSubsystem)));
 
 		chooser.addOption("S-CnCbCb-Dock",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
 								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Dock", AUTO.kFastestPath)),
-								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop())));
+								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem)));
 
 		chooser.addOption("S-CnCbCb-Balance",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
@@ -260,7 +206,7 @@ public class AutoChooser implements Loggable {
 								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Balance", AUTO.kFastestPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false),
-								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop())));
+								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem)));
 
 		// chooser.addOption("C-CnCb-Dock",
 		// () -> armSubsystem.getCommand(Position.ScoringHighCone, true)
