@@ -40,7 +40,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.DRIVETRAIN;
@@ -72,7 +71,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	private final SwerveModule[] swerveModules;
 
 	public final SwerveDrivePoseEstimator poseEstimator;
-	public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
@@ -144,8 +142,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
-
-		this.field2d = new Field2d();
 	}
 
 	@Override
@@ -430,11 +426,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	// #endregion
-
-	@Log.Field2d(name = "Field2D", tabName = "Field", rowIndex = 0, columnIndex = 0, height = 4, width = 8)
-	public Field2d getField2D() {
-		return this.field2d;
-	}
 
 	// #endregion
 

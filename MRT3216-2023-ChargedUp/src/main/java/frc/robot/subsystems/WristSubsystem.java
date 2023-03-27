@@ -7,7 +7,6 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
@@ -27,36 +26,14 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     private ProfiledPIDController wristPidController;
     private CANSparkMax wristMotor;
-    // private SparkMaxAbsoluteEncoder wristEncoder;
     private RelativeEncoder wristEncoderQuad;
     private boolean isWristZeroed;
 
     // #endregion
 
-    // #region Wrist PID
-
-    private double lastSpeed = 0;
-    private double lastTime = Timer.getFPGATimestamp();
-
-    // #endregion
-
     // #region Wrist Positions
 
-    private int wHCone = WRIST.kScoringHighConeDegrees;
-    private int wHCube = WRIST.kScoringHighCubeDegrees;
-    private int wMCone = WRIST.kScoringMidConeDegrees;
-    private int wMCube = WRIST.kScoringMidCubeDegrees;
-    private int wHyCone = WRIST.kScoringHybridConeDegrees;
-    private int wHyCube = WRIST.kScoringHybridCubeDegrees;
-    private int wGUprightCone = WRIST.kGroundIntakeUprightConeDegrees;
-    private int wGTippedCone = WRIST.kGroundIntakeTippedConeDegrees;
-    private int wGCube = WRIST.kGroundIntakeCubeDegrees;
-    private int wSSCone = WRIST.kSingleSubstationIntakeConeDegrees;
-    private int wSSCube = WRIST.kSingleSubstationIntakeCubeDegrees;
-    private int wDSCone = WRIST.kDoubleSubstationIntakeConeDegrees;
-    private int wDSCube = WRIST.kDoubleSubstationIntakeCubeDegrees;
     private int wStowed = WRIST.kStowedDegrees;
-    private int wStart = WRIST.kStartDegrees;
 
     // #endregion
 
@@ -197,34 +174,33 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     public double getWristDegreesByPosition(ARM.Position position) {
         switch (position) {
             case ScoringHighCone:
-                return this.wHCone;
+                return WRIST.kScoringHighConeDegrees;
             case ScoringHighCube:
-                return this.wHCube;
+                return WRIST.kScoringHighCubeDegrees;
             case ScoringMidCone:
-                return this.wMCone;
+                return WRIST.kScoringMidConeDegrees;
             case ScoringMidCube:
-                return this.wMCube;
+                return WRIST.kScoringMidCubeDegrees;
             case ScoringHybridCone:
-                return this.wHyCone;
+                return WRIST.kScoringHybridConeDegrees;
             case ScoringHybridCube:
-                return this.wHyCube;
+                return WRIST.kScoringHybridCubeDegrees;
             case GroundIntakeUprightCone:
-                return this.wGUprightCone;
+                return ARM.kGroundIntakeUprightConeDegrees;
             case GroundIntakeTippedCone:
-                return this.wGTippedCone;
+                return ARM.kGroundIntakeTippedConeDegrees;
             case GroundIntakeCube:
-                return this.wGCube;
+                return ARM.kGroundIntakeCubeDegrees;
             case SingleSubstationIntakeCone:
-                return this.wSSCone;
+                return ARM.kSingleSubstationIntakeConeDegrees;
             case SingleSubstationIntakeCube:
-                return this.wSSCube;
+                return ARM.kSingleSubstationIntakeCubeDegrees;
             case DoubleSubstationIntakeCone:
-                return this.wDSCone;
+                return ARM.kDoubleSubstationIntakeConeDegrees;
             case DoubleSubstationIntakeCube:
-                return this.wDSCube;
+                return ARM.kDoubleSubstationIntakeCubeDegrees;
             case Start:
-                return this.wStart;
-            // ARM.Positions.Stowed
+                return ARM.kStartDegrees;
             default:
                 return this.wStowed;
         }
@@ -273,92 +249,12 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
 
     // #endregion
 
-    // #region Wrist Scoring Positions Column 1
-    // Column 1, Rows 0-5
-
-    @Config(name = "Wrist High Cone", defaultValueNumeric = WRIST.kScoringHighConeDegrees, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
-    public void setWHCone(int wHCone) {
-        this.wHCone = wHCone;
-    }
-
-    @Config(name = "Wrist High Cube", defaultValueNumeric = WRIST.kScoringHighCubeDegrees, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
-    public void setWHCube(int wHCube) {
-        this.wHCube = wHCube;
-    }
-
-    @Config(name = "Wrist Mid Cone", defaultValueNumeric = WRIST.kScoringMidConeDegrees, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
-    public void setWMCone(int wMCone) {
-        this.wMCone = wMCone;
-    }
-
-    @Config(name = "Wrist Mid Cube", defaultValueNumeric = WRIST.kScoringMidCubeDegrees, rowIndex = 3, columnIndex = 1, height = 1, width = 1)
-    public void setWMCube(int wMCube) {
-        this.wMCube = wMCube;
-    }
-
-    @Config(name = "W Hybrid Cone", defaultValueNumeric = WRIST.kScoringHybridConeDegrees, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
-    public void setWHyCone(int wHyCone) {
-        this.wHyCone = wHyCone;
-    }
-
-    @Config(name = "W Hybrid Cube", defaultValueNumeric = WRIST.kScoringHybridCubeDegrees, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
-    public void setWHyCube(int wHyCube) {
-        this.wHyCube = wHyCube;
-    }
-
-    // #endregion
-
-    // #region Wrist Pickup Positions Column 2
-    // Column 2, Rows 0-4
-
-    @Config(name = "W G Up Cone", defaultValueNumeric = WRIST.kGroundIntakeUprightConeDegrees, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
-    public void setWGUprightCone(int wGUprightCone) {
-        this.wGUprightCone = wGUprightCone;
-    }
-
-    @Config(name = "W G Down Cone", defaultValueNumeric = WRIST.kGroundIntakeTippedConeDegrees, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
-    public void setWGTippedCone(int wGTippedCone) {
-        this.wGTippedCone = wGTippedCone;
-    }
-
-    @Config(name = "W Ground Cube", defaultValueNumeric = WRIST.kGroundIntakeCubeDegrees, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
-    public void setWGCube(int wGCube) {
-        this.wGCube = wGCube;
-    }
-
-    @Config(name = "W SSub Cone", defaultValueNumeric = WRIST.kSingleSubstationIntakeConeDegrees, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
-    public void setWSCone(int wSSCone) {
-        this.wSSCone = wSSCone;
-    }
-
-    @Config(name = "W SSub Cube", defaultValueNumeric = WRIST.kSingleSubstationIntakeCubeDegrees, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
-    public void setWSSCube(int wSSCube) {
-        this.wSSCube = wSSCube;
-    }
-
-    // #endregion
-
     // #region Start and Stowed Positions and Double Substation Column 3
-    // Column 3, Rows 0-1, 3-4
+    // Column 3, Rows 0
 
-    @Config(name = "Wrist Start", defaultValueNumeric = WRIST.kStowedDegrees, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
-    public void setWStart(int wStart) {
-        this.wStart = wStart;
-    }
-
-    @Config(name = "Wrist Stowed", defaultValueNumeric = WRIST.kStowedDegrees, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
+    @Config(name = "Wrist Stowed/Test", tabName = "ArmSubsystem", defaultValueNumeric = WRIST.kStowedDegrees, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
-    }
-
-    @Config(name = "W DSub Cone", defaultValueNumeric = WRIST.kDoubleSubstationIntakeConeDegrees, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
-    public void setWDSCone(int wDSCone) {
-        this.wDSCone = wSSCone;
-    }
-
-    @Config(name = "W DSub Cube", defaultValueNumeric = WRIST.kDoubleSubstationIntakeCubeDegrees, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
-    public void setWDSCube(int wDSCube) {
-        this.wDSCube = wDSCube;
     }
 
     // #endregion

@@ -185,13 +185,11 @@ public class AutoChooser implements Loggable {
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCb-Balance", AUTO.kFastPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false)));
 
-		chooser.addOption("S-CnCbCb",
+		chooser.addOption("S-CnCbCb-Leave",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
 								intakeSubsystem.getAutoEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb", AUTO.kFastPath)),
-								// Set the
-								Commands.run(() -> armSubsystem.setGamePiece(GamePiece.Cone), armSubsystem)));
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCbCb-Dock",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)

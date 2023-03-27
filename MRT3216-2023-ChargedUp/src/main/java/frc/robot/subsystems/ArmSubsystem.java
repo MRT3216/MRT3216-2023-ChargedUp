@@ -47,26 +47,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     private CANSparkMax rightBottomMotor;
     private CANSparkMax leadMotor;
     private SparkMaxAbsoluteEncoder armEncoder;
-
-    // #endregion
-
-    // #region Arm Positions
-
-    private int aHCone = ARM.kScoringHighConeDegrees;
-    private int aHCube = ARM.kScoringHighCubeDegrees;
-    private int aMCone = ARM.kScoringMidConeDegrees;
-    private int aMCube = ARM.kScoringMidCubeDegrees;
-    private int aHyCone = ARM.kScoringHybridConeDegrees;
-    private int aHyCube = ARM.kScoringHybridCubeDegrees;
-    private int aGUprightCone = ARM.kGroundIntakeUprightConeDegrees;
-    private int aGTippedCone = ARM.kGroundIntakeTippedConeDegrees;
-    private int aGCube = ARM.kGroundIntakeCubeDegrees;
-    private int aSSCone = ARM.kSingleSubstationIntakeConeDegrees;
-    private int aSSCube = ARM.kSingleSubstationIntakeCubeDegrees;
-    private int aDSCone = ARM.kDoubleSubstationIntakeConeDegrees;
-    private int aDSCube = ARM.kDoubleSubstationIntakeCubeDegrees;
     private int aStowed = ARM.kStowedDegrees;
-    private int aStart = ARM.kStartDegrees;
     private static double armOffset = ARM.kZeroOffsetInDegrees;
 
     // #endregion
@@ -251,33 +232,33 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     public double getArmDegreesByPosition(ARM.Position position) {
         switch (position) {
             case ScoringHighCone:
-                return this.aHCone;
+                return ARM.kScoringHighConeDegrees;
             case ScoringHighCube:
-                return this.aHCube;
+                return ARM.kScoringHighCubeDegrees;
             case ScoringMidCone:
-                return this.aMCone;
+                return ARM.kScoringMidConeDegrees;
             case ScoringMidCube:
-                return this.aMCube;
+                return ARM.kScoringMidCubeDegrees;
             case ScoringHybridCone:
-                return this.aHyCone;
+                return ARM.kScoringHybridConeDegrees;
             case ScoringHybridCube:
-                return this.aHyCube;
+                return ARM.kScoringHybridCubeDegrees;
             case GroundIntakeUprightCone:
-                return this.aGUprightCone;
+                return ARM.kGroundIntakeUprightConeDegrees;
             case GroundIntakeTippedCone:
-                return this.aGTippedCone;
+                return ARM.kGroundIntakeTippedConeDegrees;
             case GroundIntakeCube:
-                return this.aGCube;
+                return ARM.kGroundIntakeCubeDegrees;
             case SingleSubstationIntakeCone:
-                return this.aSSCone;
+                return ARM.kSingleSubstationIntakeConeDegrees;
             case SingleSubstationIntakeCube:
-                return this.aSSCube;
+                return ARM.kSingleSubstationIntakeCubeDegrees;
             case DoubleSubstationIntakeCone:
-                return this.aDSCone;
+                return ARM.kDoubleSubstationIntakeConeDegrees;
             case DoubleSubstationIntakeCube:
-                return this.aDSCube;
+                return ARM.kDoubleSubstationIntakeCubeDegrees;
             case Start:
-                return this.aStart;
+                return ARM.kStartDegrees;
             // Stowed
             default:
                 return this.aStowed;
@@ -472,91 +453,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #endregion
 
     // #region Arm Scoring Positions Column 1
-    // Column 1, Rows 0-5
+    // Column 1, Rows 0-1
 
-    @Config(name = "Arm High Cone", defaultValueNumeric = ARM.kScoringHighConeDegrees, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
-    public void setAHCone(int aHCone) {
-        this.aHCone = aHCone;
-    }
-
-    @Config(name = "Arm High Cube", defaultValueNumeric = ARM.kScoringHighCubeDegrees, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
-    public void setAHCube(int aHCube) {
-        this.aHCube = aHCube;
-    }
-
-    @Config(name = "Arm Mid Cone", defaultValueNumeric = ARM.kScoringMidConeDegrees, rowIndex = 2, columnIndex = 1, height = 1, width = 1)
-    public void setAMCone(int aMCone) {
-        this.aMCone = aMCone;
-    }
-
-    @Config(name = "Arm Mid Cube", defaultValueNumeric = ARM.kScoringMidCubeDegrees, rowIndex = 3, columnIndex = 1, height = 1, width = 1)
-    public void setAMCube(int aMCube) {
-        this.aMCube = aMCube;
-    }
-
-    @Config(name = "A Hybrid Cone", defaultValueNumeric = ARM.kScoringHybridConeDegrees, rowIndex = 4, columnIndex = 1, height = 1, width = 1)
-    public void setAHyCone(int aHyCone) {
-        this.aHyCone = aHyCone;
-    }
-
-    @Config(name = "A Hybrid Cube", defaultValueNumeric = ARM.kScoringHybridCubeDegrees, rowIndex = 5, columnIndex = 1, height = 1, width = 1)
-    public void setAHyCube(int aHyCube) {
-        this.aHyCube = aHyCube;
-    }
-
-    // #endregion
-
-    // #region Arm Pickup Positions Column 2
-    // Column 2, Rows 0-4
-
-    @Config(name = "A G Up Cone", defaultValueNumeric = ARM.kGroundIntakeUprightConeDegrees, rowIndex = 0, columnIndex = 2, height = 1, width = 1)
-    public void setAGUprightCone(int aGUprightCone) {
-        this.aGUprightCone = aGUprightCone;
-    }
-
-    @Config(name = "A G Down Cone", defaultValueNumeric = ARM.kGroundIntakeTippedConeDegrees, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
-    public void setAGTippedCone(int aGTippedCone) {
-        this.aGTippedCone = aGTippedCone;
-    }
-
-    @Config(name = "A Ground Cube", defaultValueNumeric = ARM.kGroundIntakeCubeDegrees, rowIndex = 2, columnIndex = 2, height = 1, width = 1)
-    public void setAGCube(int aGCube) {
-        this.aGCube = aGCube;
-    }
-
-    @Config(name = "A SSub Cone", defaultValueNumeric = ARM.kSingleSubstationIntakeConeDegrees, rowIndex = 3, columnIndex = 2, height = 1, width = 1)
-    public void setASSCone(int aSSCone) {
-        this.aSSCone = aSSCone;
-    }
-
-    @Config(name = "A SSub Cube", defaultValueNumeric = ARM.kSingleSubstationIntakeCubeDegrees, rowIndex = 4, columnIndex = 2, height = 1, width = 1)
-    public void setASSCube(int aSSCube) {
-        this.aSSCube = aSSCube;
-    }
-
-    // #endregion
-
-    // #region Start and Stowed Positions and Double Substation Column 3
-    // Column 3, Rows 0-1, 3-4
-
-    @Config(name = "Arm Start", defaultValueNumeric = ARM.kStartDegrees, rowIndex = 0, columnIndex = 3, height = 1, width = 1)
-    public void setAStart(int aStart) {
-        this.aStart = aStart;
-    }
-
-    @Config(name = "Arm Stowed", defaultValueNumeric = ARM.kStowedDegrees, rowIndex = 1, columnIndex = 3, height = 1, width = 1)
-    public void setAStowed(int aStowed) {
-        this.aStowed = aStowed;
-    }
-
-    @Config(name = "A DSub Cone", defaultValueNumeric = ARM.kDoubleSubstationIntakeConeDegrees, rowIndex = 3, columnIndex = 3, height = 1, width = 1)
-    public void setADSCone(int aDSCone) {
-        this.aDSCone = aDSCone;
-    }
-
-    @Config(name = "A DSub Cube", defaultValueNumeric = ARM.kDoubleSubstationIntakeCubeDegrees, rowIndex = 4, columnIndex = 3, height = 1, width = 1)
-    public void setADSCube(int aDSCube) {
-        this.aDSCube = aDSCube;
+    @Config(name = "Arm Stowed/Test", defaultValueNumeric = ARM.kStowedDegrees, rowIndex = 0, columnIndex = 1, height = 1, width = 1)
+    public void setAStowed(int kStowedDegrees) {
+        this.aStowed = kStowedDegrees;
     }
 
     // #endregion
