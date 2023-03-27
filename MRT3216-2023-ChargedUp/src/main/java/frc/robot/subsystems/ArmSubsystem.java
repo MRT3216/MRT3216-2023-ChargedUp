@@ -354,7 +354,8 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
                             wristSubsystem.setWristGoal(wristDegrees);
                             this.enable();
                         }, this),
-                                Commands.waitUntil(() -> (armWithinLooseTolerance() && wristSubsystem.wristWithinLooseTolerance()))
+                                Commands.waitUntil(
+                                        () -> (armWithinLooseTolerance() && wristSubsystem.wristWithinLooseTolerance()))
                                         .unless(() -> !wait),
                                 Commands.print("Arm and wrist at goal")));
     }

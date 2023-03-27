@@ -23,10 +23,6 @@ import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_ANGLE;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_CANCODER;
 import static frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN.RIGHT_REAR_DRIVE;
 
-import java.util.Optional;
-
-import org.photonvision.EstimatedRobotPose;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.MkModuleConfiguration;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
@@ -47,7 +43,6 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
-import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.DRIVETRAIN;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -80,7 +75,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-	//private PhotonCameraWrapper photonCameraWrapper;
 
 	// #endregion
 
@@ -148,8 +142,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				this.frontLeftModule, this.frontRightModule, this.backLeftModule, this.backRightModule
 		};
 
-		//this.photonCameraWrapper = PhotonCameraWrapper.getInstance();
-
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
 
@@ -159,9 +151,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	@Override
 	public void periodic() {
 		this.poseEstimator.update(getGyroscopeRotation(), getPositions());
-		if (AUTO.usePhotonVision) {
-			//this.updatePoseWithVision();
-		}
 
 		final double zeroDeadzone = 0.001;
 
@@ -275,36 +264,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						pose);
 	}
 
-	// private void updatePoseWithVision() {
-	// 	Optional<EstimatedRobotPose> leftResult = photonCameraWrapper
-	// 			.getEstimatedGlobalPoseFromLeftCam(poseEstimator.getEstimatedPosition());
-
-	// 	if (leftResult.isPresent()) {
-	// 		EstimatedRobotPose leftCamPose = leftResult.get();
-	// 		poseEstimator.addVisionMeasurement(
-	// 				leftCamPose.estimatedPose.toPose2d(), leftCamPose.timestampSeconds);
-	// 		field2d.getObject("Left Cam Est Pos").setPose(leftCamPose.estimatedPose.toPose2d());
-	// 	} else {
-	// 		// move it way off the screen to make it disappear
-	// 		field2d.getObject("Left Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
-	// 	}
-
-	// 	Optional<EstimatedRobotPose> rightResult = photonCameraWrapper
-	// 			.getEstimatedGlobalPoseFromRightCam(poseEstimator.getEstimatedPosition());
-
-	// 	if (rightResult.isPresent()) {
-	// 		EstimatedRobotPose rightCamPose = rightResult.get();
-	// 		poseEstimator.addVisionMeasurement(
-	// 				rightCamPose.estimatedPose.toPose2d(), rightCamPose.timestampSeconds);
-	// 		field2d.getObject("Right Cam Est Pos").setPose(rightCamPose.estimatedPose.toPose2d());
-	// 	} else {
-	// 		// move it way off the screen to make it disappear
-	// 		field2d.getObject("Right Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
-	// 	}
-
-	// 	field2d.setRobotPose(this.poseEstimator.getEstimatedPosition());
-	// }
-
 	// #endregion
 
 	// #region Gyro
@@ -320,18 +279,6 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		}
 		this.navx.reset();
 		setCurrentRobotPose(poseEstimator.getEstimatedPosition());
-		/*
-		 * Lande - I can't remember why we had this last year, but I'm removing it for
-		 * now
-		 * // Reset the odometry with new 0 heading but same position.
-		 * this.odometry.resetPosition(
-		 * Rotation2d.fromDegrees(this.navx.getFusedHeading()),
-		 * new SwerveModulePosition[] { this.frontLeftModule.getPosition(),
-		 * this.frontRightModule.getPosition(),
-		 * this.backLeftModule.getPosition(), this.backRightModule.getPosition() },
-		 * new Pose2d(this.odometry.getPoseMeters().getTranslation(),
-		 * Rotation2d.fromDegrees(0.0)));
-		 */
 	}
 
 	/**

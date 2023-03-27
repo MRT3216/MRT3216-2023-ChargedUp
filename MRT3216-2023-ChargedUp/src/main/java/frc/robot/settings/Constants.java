@@ -13,9 +13,6 @@ import java.util.Map;
 import com.pathplanner.lib.PathConstraints;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -341,8 +338,6 @@ public final class Constants {
 	}
 
 	public static final class AUTO {
-		public static final boolean usePhotonVision = false;
-
 		// Proportional gain
 		public static final double kPositionP = 4;
 		// Integral gain
@@ -402,61 +397,6 @@ public final class Constants {
 		// Speed it goes the other way when it tips backs
 		public static final double kForwardCorrectionSpeed = 0.05;
 	}
-
-	// public static final class LIMELIGHT {
-	// 	public static final String NTtable = "limelight";
-
-	// 	// modes:
-	// 	// 0 = use the LED Mode set in the current pipeline
-	// 	// 1 = force off
-	// 	// 2 = force blink
-	// 	// 3 = force on
-	// 	public enum LEDMode {
-	// 		PIPELINE,
-	// 		OFF,
-	// 		BLINK,
-	// 		ON
-	// 	}
-
-	// 	// modes:
-	// 	// 0 = vision processor
-	// 	// 1 = driver camera
-	// 	public enum CameraMode {
-	// 		VISION,
-	// 		DRIVER
-	// 	}
-
-	// 	// Set stream:
-	// 	// 0 = Standard - Side-by-side streams if a webcam is attached to Limelight
-	// 	// 1 = PiP Main - The secondary camera stream is placed in the lower-right
-	// 	// corner of the primary camera stream
-	// 	// 2 = PiP Secondary - The primary camera stream is placed in the lower-right
-	// 	// corner of the secondary camera stream
-	// 	public enum CameraStream {
-	// 		Standard,
-	// 		PiPMain,
-	// 		PiPSecondary
-	// 	}
-	// }
-
-	// public static final class PHOTONVISION {
-	// 	// TODO: Set these to our robot
-	// 	public static final Transform3d robotToLeftCam = new Transform3d(
-	// 			new Translation3d(-0.11, 0.25, 0.39),
-	// 			new Rotation3d(
-	// 					0, 0,
-	// 					-0.261799)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-	// 	// from center.
-	// 	public static final Transform3d robotToRighttCam = new Transform3d(
-	// 			new Translation3d(-0.11, -0.25, 0.39),
-	// 			new Rotation3d(
-	// 					0, 0,
-	// 					0.261799)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-	// 	// from center.
-
-	// 	public static final String leftCameraName = "MRT3216-LeftCam";
-	// 	public static final String rightCameraName = "MRT3216-RightCam";
-	// }
 
 	public static final class OI {
 		public static final double kJoystickDeadband = 0.1;
