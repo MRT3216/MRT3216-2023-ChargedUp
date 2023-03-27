@@ -80,7 +80,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public final Field2d field2d;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-	private PhotonCameraWrapper photonCameraWrapper;
+	//private PhotonCameraWrapper photonCameraWrapper;
 
 	// #endregion
 
@@ -148,7 +148,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 				this.frontLeftModule, this.frontRightModule, this.backLeftModule, this.backRightModule
 		};
 
-		this.photonCameraWrapper = PhotonCameraWrapper.getInstance();
+		//this.photonCameraWrapper = PhotonCameraWrapper.getInstance();
 
 		this.poseEstimator = new SwerveDrivePoseEstimator(
 				kinematics, getGyroscopeRotation(), getPositions(), new Pose2d());
@@ -160,7 +160,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public void periodic() {
 		this.poseEstimator.update(getGyroscopeRotation(), getPositions());
 		if (AUTO.usePhotonVision) {
-			this.updatePoseWithVision();
+			//this.updatePoseWithVision();
 		}
 
 		final double zeroDeadzone = 0.001;
@@ -275,35 +275,35 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 						pose);
 	}
 
-	private void updatePoseWithVision() {
-		Optional<EstimatedRobotPose> leftResult = photonCameraWrapper
-				.getEstimatedGlobalPoseFromLeftCam(poseEstimator.getEstimatedPosition());
+	// private void updatePoseWithVision() {
+	// 	Optional<EstimatedRobotPose> leftResult = photonCameraWrapper
+	// 			.getEstimatedGlobalPoseFromLeftCam(poseEstimator.getEstimatedPosition());
 
-		if (leftResult.isPresent()) {
-			EstimatedRobotPose leftCamPose = leftResult.get();
-			poseEstimator.addVisionMeasurement(
-					leftCamPose.estimatedPose.toPose2d(), leftCamPose.timestampSeconds);
-			field2d.getObject("Left Cam Est Pos").setPose(leftCamPose.estimatedPose.toPose2d());
-		} else {
-			// move it way off the screen to make it disappear
-			field2d.getObject("Left Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
-		}
+	// 	if (leftResult.isPresent()) {
+	// 		EstimatedRobotPose leftCamPose = leftResult.get();
+	// 		poseEstimator.addVisionMeasurement(
+	// 				leftCamPose.estimatedPose.toPose2d(), leftCamPose.timestampSeconds);
+	// 		field2d.getObject("Left Cam Est Pos").setPose(leftCamPose.estimatedPose.toPose2d());
+	// 	} else {
+	// 		// move it way off the screen to make it disappear
+	// 		field2d.getObject("Left Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+	// 	}
 
-		Optional<EstimatedRobotPose> rightResult = photonCameraWrapper
-				.getEstimatedGlobalPoseFromRightCam(poseEstimator.getEstimatedPosition());
+	// 	Optional<EstimatedRobotPose> rightResult = photonCameraWrapper
+	// 			.getEstimatedGlobalPoseFromRightCam(poseEstimator.getEstimatedPosition());
 
-		if (rightResult.isPresent()) {
-			EstimatedRobotPose rightCamPose = rightResult.get();
-			poseEstimator.addVisionMeasurement(
-					rightCamPose.estimatedPose.toPose2d(), rightCamPose.timestampSeconds);
-			field2d.getObject("Right Cam Est Pos").setPose(rightCamPose.estimatedPose.toPose2d());
-		} else {
-			// move it way off the screen to make it disappear
-			field2d.getObject("Right Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
-		}
+	// 	if (rightResult.isPresent()) {
+	// 		EstimatedRobotPose rightCamPose = rightResult.get();
+	// 		poseEstimator.addVisionMeasurement(
+	// 				rightCamPose.estimatedPose.toPose2d(), rightCamPose.timestampSeconds);
+	// 		field2d.getObject("Right Cam Est Pos").setPose(rightCamPose.estimatedPose.toPose2d());
+	// 	} else {
+	// 		// move it way off the screen to make it disappear
+	// 		field2d.getObject("Right Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+	// 	}
 
-		field2d.setRobotPose(this.poseEstimator.getEstimatedPosition());
-	}
+	// 	field2d.setRobotPose(this.poseEstimator.getEstimatedPosition());
+	// }
 
 	// #endregion
 
