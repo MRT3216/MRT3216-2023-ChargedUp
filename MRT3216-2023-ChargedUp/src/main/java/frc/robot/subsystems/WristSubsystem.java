@@ -186,21 +186,21 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
             case ScoringHybridCube:
                 return WRIST.kScoringHybridCubeDegrees;
             case GroundIntakeUprightCone:
-                return ARM.kGroundIntakeUprightConeDegrees;
+                return WRIST.kGroundIntakeUprightConeDegrees;
             case GroundIntakeTippedCone:
-                return ARM.kGroundIntakeTippedConeDegrees;
+                return WRIST.kGroundIntakeTippedConeDegrees;
             case GroundIntakeCube:
-                return ARM.kGroundIntakeCubeDegrees;
+                return WRIST.kGroundIntakeCubeDegrees;
             case SingleSubstationIntakeCone:
-                return ARM.kSingleSubstationIntakeConeDegrees;
+                return WRIST.kSingleSubstationIntakeConeDegrees;
             case SingleSubstationIntakeCube:
-                return ARM.kSingleSubstationIntakeCubeDegrees;
+                return WRIST.kSingleSubstationIntakeCubeDegrees;
             case DoubleSubstationIntakeCone:
-                return ARM.kDoubleSubstationIntakeConeDegrees;
+                return WRIST.kDoubleSubstationIntakeConeDegrees;
             case DoubleSubstationIntakeCube:
-                return ARM.kDoubleSubstationIntakeCubeDegrees;
+                return WRIST.kDoubleSubstationIntakeCubeDegrees;
             case Start:
-                return ARM.kStartDegrees;
+                return WRIST.kStartDegrees;
             default:
                 return this.wStowed;
         }

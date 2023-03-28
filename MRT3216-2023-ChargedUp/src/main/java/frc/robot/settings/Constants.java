@@ -119,7 +119,7 @@ public final class Constants {
 		public static final int kGroundIntakeCubeDegrees = 7;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
-		public static final int kDoubleSubstationIntakeConeDegrees = 55;
+		public static final int kDoubleSubstationIntakeConeDegrees = 52;
 		public static final int kDoubleSubstationIntakeCubeDegrees = 55;
 		public static final int kStowedDegrees = 50;
 		public static final int kStartDegrees = 65;
@@ -321,7 +321,7 @@ public final class Constants {
 		public static final int kGroundIntakeCubeDegrees = 25;
 		public static final int kSingleSubstationIntakeConeDegrees = 110;
 		public static final int kSingleSubstationIntakeCubeDegrees = 90;
-		public static final int kDoubleSubstationIntakeConeDegrees = 110;
+		public static final int kDoubleSubstationIntakeConeDegrees = 117;
 		public static final int kDoubleSubstationIntakeCubeDegrees = -20;
 		public static final int kStowedDegrees = 0;
 		public static final int kStartDegrees = 20;
@@ -334,7 +334,7 @@ public final class Constants {
 		public static final double kConeOuttakeSpeed = 0.7;
 		public static final double kCubeIntakeSpeed = 0.52;
 		public static final double kCubeOuttakeSpeed = -0.5;
-		public static final double kCubeShootSpeed = -1.0;
+		public static final double kCubeShootSpeed = -0.5;
 	}
 
 	public static final class AUTO {
