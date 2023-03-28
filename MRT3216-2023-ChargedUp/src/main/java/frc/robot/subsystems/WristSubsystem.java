@@ -225,34 +225,34 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     // #region Logging
 
     // #region Wrist Position PID Controller Column 0
-    // Column 0, Rows 0-3
+    // Column 1, Rows 0-3 in ArmSubsystem
 
-    @Log.NumberBar(name = "Wrist Encoder", rowIndex = 0, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Encoder", tabName = "ArmSubsystem", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public double getEncoderPosition() {
         return this.wristEncoderQuad.getPosition();
     }
 
-    @Log.NumberBar(name = "Wrist Degrees Wrt A", rowIndex = 1, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Degrees Wrt A", tabName = "ArmSubsystem", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public double getWristDegreesWrtArm() {
         return calculateWristDegreesWrtArm(wristEncoderQuad.getPosition());
     }
 
-    @Log.NumberBar(name = "Wrist Goal", rowIndex = 2, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Goal", tabName = "ArmSubsystem", rowIndex = 2, columnIndex = 1, height = 1, width = 1)
     public double getWristGoal() {
         return wristPidController.getGoal().position;
     }
 
-    @Log.NumberBar(name = "Wrist Setpoint", rowIndex = 3, columnIndex = 0, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Setpoint", tabName = "ArmSubsystem", rowIndex = 3, columnIndex = 1, height = 1, width = 1)
     public double getWristSetpoint() {
         return wristPidController.getSetpoint().position;
     }
 
     // #endregion
 
-    // #region Start and Stowed Positions and Double Substation Column 3
-    // Column 3, Rows 0
+    // #region Stowed Position
+    // Column 2, Rows 1 in ArmSubsystem
 
-    @Config(name = "Wrist Stowed/Test", tabName = "ArmSubsystem", defaultValueNumeric = WRIST.kStowedDegrees, rowIndex = 1, columnIndex = 1, height = 1, width = 1)
+    @Config(name = "Wrist Stowed/Test", tabName = "ArmSubsystem", defaultValueNumeric = WRIST.kStowedDegrees, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
     }
