@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.settings.Constants;
-import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.Position;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
@@ -190,6 +189,12 @@ public class AutoChooser implements Loggable {
 						.andThen(
 								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Leave", AUTO.kFastPath))));
+
+		chooser.addOption("S-CnCbCb-PrepCn",
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
+						.andThen(
+								intakeSubsystem.getAutoEjectConeCommand(),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb--PrepCn", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCbCb-Dock",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)

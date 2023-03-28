@@ -12,7 +12,6 @@ import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
-import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -38,7 +37,6 @@ public class RobotContainer {
 	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
 	private SwerveSubsystem swerveSubsystem;
 	private AutoChooser autoChooser;
-	private double autoStartDelayTime;
 	private double translationExpo;
 	private double rotationExpo;
 	private CommandXboxController controller;
@@ -53,7 +51,6 @@ public class RobotContainer {
 	 */
 	private RobotContainer() {
 		this.controller = new CommandXboxController(0);
-		this.autoStartDelayTime = Constants.AUTO.kStartDelayTime;
 		this.translationExpo = Constants.OI.kTranslationExpo;
 		this.rotationExpo = Constants.OI.kRotationnExpo;
 
@@ -173,25 +170,19 @@ public class RobotContainer {
 
 	// #region Logging
 
-	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = AUTO.kStartDelayTime, methodTypes = {
-			double.class }, rowIndex = 1, columnIndex = 0)
-	public void setStartDelayTime(double startDelayTime) {
-		this.autoStartDelayTime = startDelayTime;
-	}
+	// @Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue =
+	// Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1,
+	// rowIndex = 0, columnIndex = 0, height = 1, width = 1)
+	// public void setTranslationExpo(double expo) {
+	// this.translationExpo = expo;
+	// }
 
-	public double getAutoStartDelayTime() {
-		return this.autoStartDelayTime;
-	}
-
-	@Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue = Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 0, columnIndex = 0, height = 1, width = 1)
-	public void setTranslationExpo(double expo) {
-		this.translationExpo = expo;
-	}
-
-	@Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 1, columnIndex = 0, height = 1, width = 1)
-	public void setRotationExpo(double expo) {
-		this.rotationExpo = expo;
-	}
+	// @Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue
+	// = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1,
+	// rowIndex = 1, columnIndex = 0, height = 1, width = 1)
+	// public void setRotationExpo(double expo) {
+	// this.rotationExpo = expo;
+	// }
 
 	@Log.BooleanBox(name = "Game Piece", tabName = "Driver", rowIndex = 0, columnIndex = 0, height = 3, width = 3, colorWhenTrue = "#EFBE00", colorWhenFalse = "#7450E8")
 	public boolean getGamePiece() {
@@ -216,11 +207,6 @@ public class RobotContainer {
 	@Log.BooleanBox(name = "Wrist Zeroed", tabName = "Driver", rowIndex = 0, columnIndex = 6, height = 1, width = 1)
 	public boolean isWristZeroed() {
 		return this.wristSubsystem.isWristZeroed();
-	}
-
-	@Log.BooleanBox(name = "Arm Zeroed", tabName = "Driver", rowIndex = 0, columnIndex = 9, height = 1, width = 1)
-	public boolean isArmZeroed() {
-		return this.armSystem.isArmZeroed();
 	}
 
 	// #endregion
