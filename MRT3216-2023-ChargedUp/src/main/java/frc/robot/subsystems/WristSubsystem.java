@@ -232,7 +232,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         return this.wristEncoderQuad.getPosition();
     }
 
-    @Log.NumberBar(name = "Wrist Degrees Wrt A", tabName = "ArmSubsystem", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
+    @Log.NumberBar(name = "Wrist Degrees", tabName = "ArmSubsystem", rowIndex = 1, columnIndex = 1, height = 1, width = 1)
     public double getWristDegreesWrtArm() {
         return calculateWristDegreesWrtArm(wristEncoderQuad.getPosition());
     }
