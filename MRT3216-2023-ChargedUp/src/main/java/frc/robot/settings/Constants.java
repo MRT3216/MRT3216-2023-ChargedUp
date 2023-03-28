@@ -410,6 +410,11 @@ public final class Constants {
 		public static final String gamePiece = "gamePiece";
 	}
 
+	public static final class LEDS{
+		public static final int numLEDs = 30;
+		
+	}
+
 	public static final class Directories {
 		public static final String deployDirectory = Filesystem.getDeployDirectory().getAbsolutePath();
 		public static final String pathsDirectory = deployDirectory + "/paths/";

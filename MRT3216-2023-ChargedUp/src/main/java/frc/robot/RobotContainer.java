@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
@@ -15,6 +16,7 @@ import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.settings.Constants.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import io.github.oblarg.oblog.Logger;
@@ -43,6 +45,8 @@ public class RobotContainer {
 	private ArmSubsystem armSystem;
 	private WristSubsystem wristSubsystem;
 	private IntakeSubsystem intakeSubsystem;
+	private LEDSubsystem ledSubsystem;
+	private boolean hasWristZeroed = false;
 
 	// #endregion
 
@@ -72,6 +76,8 @@ public class RobotContainer {
 		this.armSystem = ArmSubsystem.getInstance();
 		this.wristSubsystem = WristSubsystem.getInstance();
 		this.intakeSubsystem = IntakeSubsystem.getInstance();
+		this.ledSubsystem = LEDSubsystem.getInstance();
+		this.ledSubsystem.setColor(Color.kRed);
 	}
 
 	/**
@@ -206,7 +212,12 @@ public class RobotContainer {
 
 	@Log.BooleanBox(name = "Wrist Zeroed", tabName = "Driver", rowIndex = 0, columnIndex = 6, height = 1, width = 1)
 	public boolean isWristZeroed() {
-		return this.wristSubsystem.isWristZeroed();
+		boolean isWristZeroed = this.wristSubsystem.isWristZeroed();
+		if (isWristZeroed != this.hasWristZeroed) {
+			this.hasWristZeroed = isWristZeroed;
+			ledSubsystem.setColor(Color.kGreen);
+		}
+		return isWristZeroed;
 	}
 
 	// #endregion

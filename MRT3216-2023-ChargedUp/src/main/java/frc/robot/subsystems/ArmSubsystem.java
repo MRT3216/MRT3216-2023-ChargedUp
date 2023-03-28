@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
@@ -32,6 +33,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Log.Exclude
     @Config.Exclude
     private WristSubsystem wristSubsystem;
+    private LEDSubsystem ledSubsystem;
     protected boolean enabled;
     private NetworkTable streamDeckNT;
     private boolean isArmZeroed;
@@ -64,6 +66,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.enabled = false;
         this.isArmZeroed = false;
         this.wristSubsystem = WristSubsystem.getInstance();
+        this.ledSubsystem = LEDSubsystem.getInstance();
         NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
         this.streamDeckNT = table;
 
@@ -411,6 +414,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public void setGamePiece(GamePiece gp) {
         this.gp = gp;
+        setLEDColor();
     }
 
     public void toggleGamePiece() {
@@ -420,7 +424,15 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
             this.gp = GamePiece.Cone;
         }
 
-        System.out.println("Setting game piece to " + gp);
+        setLEDColor();
+    }
+
+    private void setLEDColor() {
+        if (this.gp == GamePiece.Cone) {
+            this.ledSubsystem.setColor(Color.kYellow);
+        } else {
+            this.ledSubsystem.setColor(Color.kPurple);
+        }
     }
 
     // #endregion
