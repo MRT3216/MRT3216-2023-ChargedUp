@@ -151,15 +151,15 @@
     },
     {
       "anchorPoint": {
-        "x": 6.346854659509574,
-        "y": 0.9866801618875259
+        "x": 6.389363906056372,
+        "y": 1.9200851566110946
       },
       "prevControl": {
-        "x": 5.589654344910459,
-        "y": 0.9866801618875259
+        "x": 5.703107364588592,
+        "y": 1.6000784758657056
       },
       "nextControl": null,
-      "holonomicAngle": 180.0,
+      "holonomicAngle": -166.90810693565314,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -218,6 +218,18 @@
       "position": 4.02,
       "names": [
         "stow"
+      ]
+    },
+    {
+      "position": 5.0,
+      "names": [
+        "armToIntakeCube"
+      ]
+    },
+    {
+      "position": 5.748099269302313,
+      "names": [
+        "intakeCube"
       ]
     }
   ]
