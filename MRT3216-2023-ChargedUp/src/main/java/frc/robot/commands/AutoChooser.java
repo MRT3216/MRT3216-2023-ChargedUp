@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.settings.Constants;
+import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.Position;
 import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.Constants.Directories;
@@ -163,7 +164,9 @@ public class AutoChooser implements Loggable {
 								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("M-Cn+Cb-Balance", AUTO.kSlowPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(true),
-								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem)));
+								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem))
+						.finallyDo(
+								(end) -> armSubsystem.setGamePiece(GamePiece.Cube)));
 
 		chooser.addOption("C-Cn+Cb-Dock",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
@@ -171,15 +174,14 @@ public class AutoChooser implements Loggable {
 								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Cn+Cb-Dock", AUTO.kMediumPath)),
 								AutoBalance.getInstance().getAutoBalanceCommand(false),
-								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem)));
+								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem))
+						.finallyDo(
+								(end) -> armSubsystem.setGamePiece(GamePiece.Cube)));
 
 		chooser.addOption("C-CnCb-Leave",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
 								intakeSubsystem.getAutoEjectConeCommand(),
-								// new ProxyCommand(Commands.runOnce(() ->
-								// armSubsystem.setGamePiece(GamePiece.Cube),
-								// armSubsystem)),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-CnCb-Leave", AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCb-Balance",
