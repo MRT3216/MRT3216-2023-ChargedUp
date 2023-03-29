@@ -3,11 +3,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.LEDS;
 import frc.robot.settings.RobotMap.ROBOT;
 
-public class LEDSubsystem extends SubsystemBase {
+public class LEDSubsystem {
     private final AddressableLEDBuffer ledBuffer;
     private final AddressableLED led;
     private static LEDSubsystem instance;
