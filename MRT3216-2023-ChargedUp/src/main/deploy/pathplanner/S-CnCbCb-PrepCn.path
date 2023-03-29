@@ -105,12 +105,12 @@
         "y": 3.6541338039941036
       },
       "prevControl": {
-        "x": 5.6781053733047635,
-        "y": 4.065223856943441
+        "x": 5.4953986831050585,
+        "y": 4.099481361355886
       },
       "nextControl": {
-        "x": 5.6781053733047635,
-        "y": 4.065223856943441
+        "x": 5.4953986831050585,
+        "y": 4.099481361355886
       },
       "holonomicAngle": 155.0,
       "isReversal": true,
@@ -128,16 +128,16 @@
     },
     {
       "anchorPoint": {
-        "x": 3.9652301526825275,
-        "y": 4.56766725499263
+        "x": 1.8298457109734734,
+        "y": 4.396379732930406
       },
       "prevControl": {
-        "x": 5.895069567916913,
-        "y": 4.544828918717667
+        "x": 5.891681284075835,
+        "y": 5.237439747347398
       },
       "nextControl": {
-        "x": 3.228767507721363,
-        "y": 4.576382789252525
+        "x": 1.5320065026616159,
+        "y": 4.3347079482585835
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -153,42 +153,17 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9097798879358443,
-        "y": 4.373541396655443
+        "x": 6.559178243776195,
+        "y": 3.3347292114242766
       },
       "prevControl": {
-        "x": 1.8869415516608812,
-        "y": 4.510571414305222
-      },
-      "nextControl": {
-        "x": 2.0637642424943476,
-        "y": 3.449635269304422
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 3.7739924031022833,
-        "y": 3.0099990237223864
-      },
-      "prevControl": {
-        "x": 2.2209855364047892,
-        "y": 2.9186456786225343
+        "x": 6.559178243776195,
+        "y": 4.970039683854811
       },
       "nextControl": null,
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 110.0,
       "isReversal": false,
-      "velOverride": 1.37,
+      "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -246,15 +221,15 @@
       ]
     },
     {
-      "position": 5.905454545454501,
+      "position": 5.0,
       "names": [
         "ejectCube"
       ]
     },
     {
-      "position": 6.109090909090938,
+      "position": 5.176859619690892,
       "names": [
-        "start"
+        "event"
       ]
     }
   ]

@@ -225,6 +225,12 @@
       "names": [
         "ejectCube"
       ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "stow"
+      ]
     }
   ]
 }

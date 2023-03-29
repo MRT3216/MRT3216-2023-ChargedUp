@@ -70,7 +70,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
         this.streamDeckNT = table;
 
-        this.gp = GamePiece.Cube;
+        this.gp = GamePiece.Cone;
         this.sH = ScoringHeight.High;
         this.sub = Substation.Double;
 
