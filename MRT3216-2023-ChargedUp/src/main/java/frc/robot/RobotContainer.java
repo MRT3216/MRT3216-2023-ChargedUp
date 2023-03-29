@@ -20,7 +20,6 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 /**
@@ -136,7 +135,7 @@ public class RobotContainer {
 		controller.leftStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cone)));
 		controller.rightStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cube)));
 
-		// Place piece
+		// Eject
 		controller.leftBumper()
 				.whileTrue(new ProxyCommand(
 						() -> intakeSubsystem.getCommand(false, armSystem.getGamePiece(),
@@ -159,6 +158,7 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+		armSystem.setGamePiece(GamePiece.Cone);
 		return this.autoChooser.getAutoCommand();
 	}
 
@@ -215,7 +215,7 @@ public class RobotContainer {
 		boolean isWristZeroed = this.wristSubsystem.isWristZeroed();
 		if (isWristZeroed != this.hasWristZeroed) {
 			this.hasWristZeroed = isWristZeroed;
-			ledSubsystem.setColor(Color.kGreen);
+			ledSubsystem.setTopGreen();
 		}
 		return isWristZeroed;
 	}

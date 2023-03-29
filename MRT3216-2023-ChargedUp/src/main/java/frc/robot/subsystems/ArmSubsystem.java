@@ -404,6 +404,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
          * entry.getInteger(Constants.ARM.kStowedDegrees));
          * }
          */
+        // setLEDColor();
         return this.gp;
     }
 
@@ -419,12 +420,10 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
 
     public void toggleGamePiece() {
         if (this.gp == GamePiece.Cone) {
-            this.gp = GamePiece.Cube;
+            setGamePiece(GamePiece.Cube);
         } else {
-            this.gp = GamePiece.Cone;
+            setGamePiece(GamePiece.Cone);
         }
-
-        setLEDColor();
     }
 
     private void setLEDColor() {

@@ -73,6 +73,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	public final SwerveDrivePoseEstimator poseEstimator;
 
 	private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+	private boolean gyroHasConnected = false;
 
 	// #endregion
 
@@ -302,7 +303,13 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	public boolean gyroConnected() {
-		return this.navx.isConnected();
+		boolean isGyroConnected = this.navx.isConnected();
+		if (isGyroConnected != gyroHasConnected){
+			gyroHasConnected = true;
+			LEDSubsystem.getInstance().setBottomGreen();
+		}
+
+		return isGyroConnected;
 	}
 
 	// #endregion
