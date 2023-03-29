@@ -306,7 +306,7 @@ public class SwerveSubsystem extends SubsystemBase implements Loggable {
 		boolean isGyroConnected = this.navx.isConnected();
 		if (isGyroConnected != gyroHasConnected){
 			gyroHasConnected = true;
-			LEDSubsystem.getInstance().setBottomGreen();
+			LEDS.getInstance().setBottomGreen();
 		}
 
 		return isGyroConnected;

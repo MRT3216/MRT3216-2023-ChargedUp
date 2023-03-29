@@ -3,32 +3,32 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.settings.Constants.LEDS;
+import frc.robot.settings.Constants;
 import frc.robot.settings.RobotMap.ROBOT;
 
-public class LEDSubsystem {
+public class LEDS {
     private final AddressableLEDBuffer ledBuffer;
     private final AddressableLED led;
-    private static LEDSubsystem instance;
+    private static LEDS instance;
 
-    private LEDSubsystem() {
+    private LEDS() {
         led = new AddressableLED(ROBOT.LEDS.PWM_PORT);
-        ledBuffer = new AddressableLEDBuffer(LEDS.numLEDs);
+        ledBuffer = new AddressableLEDBuffer(Constants.LEDS.numLEDs);
         led.setLength(ledBuffer.getLength());
         led.setData(ledBuffer);
         led.start();
     }
 
-    public static LEDSubsystem getInstance() {
+    public static LEDS getInstance() {
         if (instance == null) {
             // if instance is null, initialize
-            instance = new LEDSubsystem();
+            instance = new LEDS();
         }
         return instance;
     }
 
     private void setYellow() {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 239, 190, 0);
         }
 
@@ -36,7 +36,7 @@ public class LEDSubsystem {
     }
 
     private void setPurple() {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 150, 50, 255);
         }
 
@@ -44,7 +44,7 @@ public class LEDSubsystem {
     }
 
     private void setGreen() {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 0, 255, 0);
         }
 
@@ -52,7 +52,7 @@ public class LEDSubsystem {
     }
 
     public void setTopGreen() {
-        for (int i = LEDS.numLEDs / 2; i < LEDS.numLEDs; i++) {
+        for (int i = Constants.LEDS.numLEDs / 2; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 0, 255, 0);
         }
 
@@ -60,7 +60,7 @@ public class LEDSubsystem {
     }
 
     public void setBottomGreen() {
-        for (int i = 0; i < LEDS.numLEDs / 2; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs / 2; i++) {
             ledBuffer.setRGB(i, 0, 255, 0);
         }
 
@@ -68,7 +68,7 @@ public class LEDSubsystem {
     }
 
     private void setRed() {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 255, 0, 0);
         }
 
@@ -76,7 +76,7 @@ public class LEDSubsystem {
     }
 
     private void setBlue() {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 0, 0, 255);
         }
 
@@ -84,7 +84,7 @@ public class LEDSubsystem {
     }
 
     private void setWhite() {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 255, 255, 255);
         }
 
@@ -92,7 +92,7 @@ public class LEDSubsystem {
     }
 
     public void setRGBValue(int r, int g, int b) {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, r, g, b);
         }
     }
@@ -116,7 +116,7 @@ public class LEDSubsystem {
     }
 
     public void setOff() {
-        for (int i = 0; i < LEDS.numLEDs; i++) {
+        for (int i = 0; i < Constants.LEDS.numLEDs; i++) {
             ledBuffer.setRGB(i, 0, 0, 0);
         }
         led.setData(ledBuffer);
