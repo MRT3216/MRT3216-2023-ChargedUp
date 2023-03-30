@@ -466,7 +466,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     // #region Arm Scoring Positions Column 1
     // Column 1, Rows 0-1
 
-    @Log(name = "Arm Stowed/Test", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
+    @Log(name = "Arm Test", rowIndex = 0, columnIndex = 1, height = 1, width = 1)
     public void setAStowed(int kStowedDegrees) {
         this.aStowed = kStowedDegrees;
     }

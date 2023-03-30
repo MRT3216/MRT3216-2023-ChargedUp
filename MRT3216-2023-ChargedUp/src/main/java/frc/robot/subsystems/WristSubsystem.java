@@ -252,7 +252,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     // #region Stowed Position
     // Column 2, Rows 1 in ArmSubsystem
 
-    @Config(name = "Wrist Stowed/Test", tabName = "ArmSubsystem", defaultValueNumeric = WRIST.kStowedDegrees, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
+    @Config(name = "Wrist Test", tabName = "ArmSubsystem", defaultValueNumeric = WRIST.kStowedDegrees, rowIndex = 1, columnIndex = 2, height = 1, width = 1)
     public void setWStowed(int wStowed) {
         this.wStowed = wStowed;
     }
