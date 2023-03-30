@@ -276,7 +276,7 @@ public final class Constants {
 
 	public static final class WRIST {
 		public static final int kMotorCurrentLimit = 40;
-		public static final boolean kMotorInverted = false;
+		public static final boolean kMotorInverted = true;
 		public static final double kZeroOffset = 0;
 		public static final double kScaleFactor = 180;
 		public static final double kLimitSwitchPosition = 0;
