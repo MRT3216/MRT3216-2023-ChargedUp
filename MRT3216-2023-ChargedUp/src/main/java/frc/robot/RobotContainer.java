@@ -155,7 +155,7 @@ public class RobotContainer {
 		controller.leftStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cone)));
 		controller.rightStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cube)));
 
-		// controller.rightStick().onTrue(new ProxyCommand(wristSubsystem::getZeroMode));
+		// controller.rightStick().onTrue(new ProxyCommand(armSubsystem::getZeroMode));
 
 		// Eject
 		controller.leftBumper()

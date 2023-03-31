@@ -216,9 +216,8 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     }
 
     // TODO: Finish this Command if it breaks and set the LEDs
-    public Command getZeroMode() {
-        this.isWristZeroed = false;
-        return null;
+    public void setIsWristZeroed(boolean isWristZeroed) {
+        this.isWristZeroed = isWristZeroed;
     }
 
     public boolean isWristZeroed() {
