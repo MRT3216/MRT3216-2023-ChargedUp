@@ -120,10 +120,10 @@ public class RobotContainer {
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
-		// boolean thing = true;
 		// controller.rightTrigger()
-		// 		.whileTrue(new ProxyCommand(thing ? Commands
-		// 				.run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis() / 7),
+		// 		.whileTrue(new ProxyCommand(wristSubsystem.isWristZeroed() ? Commands
+		// 				.run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis()
+		// 						/ 7),
 		// 						wristSubsystem)
 		// 				.finallyDo((end) -> {
 		// 					this.wristSubsystem.enable();
@@ -131,7 +131,8 @@ public class RobotContainer {
 		// 					this.wristSubsystem.setWristGoal(this.wristSubsystem.getWristDegreesWrtArm());
 		// 				})
 		// 				: Commands
-		// 						.run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis() / 7),
+		// 						.run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis()
+		// 								/ 7),
 		// 								wristSubsystem)
 		// 						.finallyDo((end) -> {
 		// 							this.wristSubsystem.enable();
@@ -153,6 +154,8 @@ public class RobotContainer {
 
 		controller.leftStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cone)));
 		controller.rightStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cube)));
+
+		// controller.rightStick().onTrue(new ProxyCommand(wristSubsystem::getZeroMode));
 
 		// Eject
 		controller.leftBumper()
