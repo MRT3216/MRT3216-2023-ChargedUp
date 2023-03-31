@@ -173,7 +173,7 @@ public class AutoChooser implements Loggable {
 						.andThen(
 								intakeSubsystem.getAutoEjectConeCommand(),
 								autoBuilder.fullAuto(PathPlanner.loadPathGroup("C-Cn+Cb-Dock", AUTO.kMediumPath)),
-								AutoBalance.getInstance().getAutoBalanceCommand(false),
+								AutoBalance.getInstance().getAutoBalanceCommand(true),
 								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem))
 						.finallyDo(
 								(end) -> armSubsystem.setGamePiece(GamePiece.Cube)));
