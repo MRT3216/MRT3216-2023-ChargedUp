@@ -434,6 +434,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
+    public Command getZeroMode(){
+        wristSubsystem.setIsWristZeroed(false);
+        return new ProxyCommand(this::getStowedCommand);
+    }
+
     // #endregion
 
     // #region Logging

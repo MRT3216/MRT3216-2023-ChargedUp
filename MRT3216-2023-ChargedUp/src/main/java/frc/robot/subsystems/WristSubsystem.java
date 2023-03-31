@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM;
@@ -212,6 +213,11 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
         if (!isWristZeroed) {
             isWristZeroed = true;
         }
+    }
+
+    // TODO: Finish this Command if it breaks and set the LEDs
+    public void setIsWristZeroed(boolean isWristZeroed) {
+        this.isWristZeroed = isWristZeroed;
     }
 
     public boolean isWristZeroed() {
