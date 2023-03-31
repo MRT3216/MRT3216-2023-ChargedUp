@@ -83,7 +83,7 @@ public final class Constants {
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
-		public static final double kZeroOffsetInDegrees = -3.0;
+		public static final double kZeroOffsetInDegrees = 0;
 		public static final double kScaleFactor = 192.86;
 		public static final double kLimitSwitchOffset = 0.4430394;
 
@@ -108,18 +108,18 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = 122;
+		public static final int kScoringHighConeDegrees = 118;
 		public static final int kScoringHighCubeDegrees = 117;
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridConeDegrees = 30;
 		public static final int kScoringHybridCubeDegrees = 45;
-		public static final int kGroundIntakeUprightConeDegrees = 23;
+		public static final int kGroundIntakeUprightConeDegrees = 25;
 		public static final int kGroundIntakeTippedConeDegrees = 8;
 		public static final int kGroundIntakeCubeDegrees = 7;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
-		public static final int kDoubleSubstationIntakeConeDegrees = 52;
+		public static final int kDoubleSubstationIntakeConeDegrees = 57;
 		public static final int kDoubleSubstationIntakeCubeDegrees = 55;
 		public static final int kStowedDegrees = 50;
 		public static final int kStartDegrees = 65;
@@ -321,7 +321,7 @@ public final class Constants {
 		public static final int kGroundIntakeCubeDegrees = 20;
 		public static final int kSingleSubstationIntakeConeDegrees = 110;
 		public static final int kSingleSubstationIntakeCubeDegrees = 90;
-		public static final int kDoubleSubstationIntakeConeDegrees = 115;
+		public static final int kDoubleSubstationIntakeConeDegrees = 96;
 		public static final int kDoubleSubstationIntakeCubeDegrees = -20;
 		public static final int kStowedDegrees = 0;
 		public static final int kStartDegrees = 20;

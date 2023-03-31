@@ -208,6 +208,7 @@ public class WristSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void resetWristEncoderPosition() {
+        System.out.println("Zeroing encoding");
         wristEncoderQuad.setPosition(WRIST.kLimitSwitchPosition);
 
         if (!isWristZeroed) {
