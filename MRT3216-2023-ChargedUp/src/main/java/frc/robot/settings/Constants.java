@@ -289,7 +289,7 @@ public final class Constants {
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
 		public static final double kWristPositionPIDTolerane = 2;
-		public static final double kWristPositionLooseTolerance = 6;
+		public static final double kWristPositionLooseTolerance = 4;
 
 		// Feed-Forward from SysID
 		// public static final double kWristKs = 0.29522;
@@ -354,7 +354,7 @@ public final class Constants {
 		public static final double kStartDelayTime = 0;
 
 		public static final double kMaxIntakeTime = 1;
-		public static final double kMaxOuttakeTime = 0.25;
+		public static final double kMaxOuttakeTime = 0.5;
 
 		public static final double kBalanceClimbingAngle = 12.5;
 		public static final double kBalanceTippingAngle = 9.5;
