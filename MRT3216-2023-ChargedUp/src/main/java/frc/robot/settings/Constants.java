@@ -114,7 +114,7 @@ public final class Constants {
 		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridConeDegrees = 30;
 		public static final int kScoringHybridCubeDegrees = 45;
-		public static final int kGroundIntakeUprightConeDegrees = 2;
+		public static final int kGroundIntakeUprightConeDegrees = 23;
 		public static final int kGroundIntakeTippedConeDegrees = 8;
 		public static final int kGroundIntakeCubeDegrees = 7;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;

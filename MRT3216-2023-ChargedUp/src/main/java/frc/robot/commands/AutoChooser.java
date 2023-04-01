@@ -155,14 +155,14 @@ public class AutoChooser implements Loggable {
 		chooser.setDefaultOption("Do Nothing",
 				() -> new WaitCommand(0));
 
-		chooser.addOption("A-Leave",
-				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
-						AUTO.kReallySlowPath)));
-
-		chooser.addOption("A-PlaceCone",
+		chooser.addOption("A-Cn",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
 						.andThen(
 								intakeSubsystem.getAutoEjectConeCommand()));
+
+		chooser.addOption("A-Leave",
+				() -> autoBuilder.fullAuto(PathPlanner.loadPathGroup("A-Cn-Leave",
+						AUTO.kReallySlowPath)));
 
 		chooser.addOption("A-Cn-Leave",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
