@@ -95,7 +95,7 @@ public final class Constants {
 		public static final double kArmKi = 0;
 		public static final double kArmKd = 0;
 		public static final double kArmPositionPIDTolerance = 2;
-		public static final double kArmPositionLooseTolerance = 6;
+		public static final double kArmPositionLooseTolerance = 4;
 
 		/*
 		 * ----------------------------------------------------------------------------
@@ -108,18 +108,18 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = 118;
+		public static final int kScoringHighConeDegrees = 116;
 		public static final int kScoringHighCubeDegrees = 117;
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
 		public static final int kScoringHybridConeDegrees = 30;
 		public static final int kScoringHybridCubeDegrees = 45;
-		public static final int kGroundIntakeUprightConeDegrees = 25;
+		public static final int kGroundIntakeUprightConeDegrees = 2;
 		public static final int kGroundIntakeTippedConeDegrees = 8;
 		public static final int kGroundIntakeCubeDegrees = 7;
 		public static final int kSingleSubstationIntakeConeDegrees = 43;
 		public static final int kSingleSubstationIntakeCubeDegrees = 43;
-		public static final int kDoubleSubstationIntakeConeDegrees = 57;
+		public static final int kDoubleSubstationIntakeConeDegrees = 56;
 		public static final int kDoubleSubstationIntakeCubeDegrees = 55;
 		public static final int kStowedDegrees = 50;
 		public static final int kStartDegrees = 65;
@@ -310,7 +310,7 @@ public final class Constants {
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = -137;
+		public static final int kScoringHighConeDegrees = -134;
 		public static final int kScoringHighCubeDegrees = -190;
 		public static final int kScoringMidConeDegrees = -70;
 		public static final int kScoringMidCubeDegrees = -115;

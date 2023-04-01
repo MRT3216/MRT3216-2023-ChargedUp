@@ -121,24 +121,24 @@ public class RobotContainer {
 						}));
 
 		// controller.rightTrigger()
-		// 		.whileTrue(new ProxyCommand(wristSubsystem.isWristZeroed() ? Commands
-		// 				.run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis()
-		// 						/ 7),
-		// 						wristSubsystem)
-		// 				.finallyDo((end) -> {
-		// 					this.wristSubsystem.enable();
-		// 					this.wristSubsystem.stopWristMotorAndResetPID();
-		// 					this.wristSubsystem.setWristGoal(this.wristSubsystem.getWristDegreesWrtArm());
-		// 				})
-		// 				: Commands
-		// 						.run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis()
-		// 								/ 7),
-		// 								wristSubsystem)
-		// 						.finallyDo((end) -> {
-		// 							this.wristSubsystem.enable();
-		// 							this.wristSubsystem.stopWristMotorAndResetPID();
-		// 							this.wristSubsystem.setWristGoal(this.wristSubsystem.getWristDegreesWrtArm());
-		// 						})));
+		// .whileTrue(
+		// new ProxyCommand(!wristSubsystem.isWristZeroed() ? Commands
+		// .run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis()
+		// / 7),
+		// wristSubsystem)
+		// .finallyDo((end) -> {
+		// this.wristSubsystem.enable();
+		// this.wristSubsystem.stopWristMotorAndResetPID();
+		// this.wristSubsystem.setWristGoal(this.wristSubsystem.getWristDegreesWrtArm());
+		// })
+		// : Commands.run(() ->
+		// this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 7),
+		// armSystem)
+		// .finallyDo((end) -> {
+		// this.armSystem.enable();
+		// this.armSystem.stopArmMotorsAndResetPID();
+		// this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
+		// })));
 
 		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
@@ -152,10 +152,15 @@ public class RobotContainer {
 		controller.povRight().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.High)));
 		controller.povDown().onTrue(Commands.runOnce(() -> this.armSystem.toggleGamePiece()));
 
-		controller.leftStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cone)));
-		controller.rightStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cube)));
+		controller.leftStick().whileTrue(Commands.run(
+				() -> this.wristSubsystem.runWristMotor(.1), wristSubsystem)
+				.finallyDo((end) -> this.wristSubsystem.runWristMotor(0)));
+		controller.rightStick().whileTrue(
+					Commands.run(() ->   this.wristSubsystem.runWristMotor(-.1))
+				.finallyDo((end) -> this.wristSubsystem.runWristMotor(0)));
 
-		// controller.rightStick().onTrue(new ProxyCommand(armSubsystem::getZeroMode));
+		// controller.rightStick().onTrue(new
+		// ProxyCommand(this.armSystem::getZeroMode));
 
 		// Eject
 		controller.leftBumper()
