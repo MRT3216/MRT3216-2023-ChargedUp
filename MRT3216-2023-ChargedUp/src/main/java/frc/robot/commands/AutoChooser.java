@@ -152,8 +152,13 @@ public class AutoChooser implements Loggable {
 	private void populateAutoChooser() {
 		chooser = new SendableChooser<>();
 
-		chooser.setDefaultOption("Do Nothing",
-				() -> new WaitCommand(0));
+		chooser.setDefaultOption("S-CnCbCb-Leave",
+				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
+						.andThen(
+								intakeSubsystem.getAutoEjectConeCommand(),
+								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Leave", AUTO.kFastPath))));
+		// chooser.setDefaultOption("Do Nothing",
+		// () -> new WaitCommand(0));
 
 		chooser.addOption("A-Cn",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
@@ -213,11 +218,12 @@ public class AutoChooser implements Loggable {
 								AutoBalance.getInstance().getAutoBalanceCommand(false),
 								Commands.run(() -> swerveSubsystem.setModuleStatesHockeyStop(), swerveSubsystem)));
 
-		chooser.addOption("S-CnCbCb-Leave",
-				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
-						.andThen(
-								intakeSubsystem.getAutoEjectConeCommand(),
-								autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Leave", AUTO.kFastPath))));
+		// chooser.addOption("S-CnCbCb-Leave",
+		// () -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
+		// .andThen(
+		// intakeSubsystem.getAutoEjectConeCommand(),
+		// autoBuilder.fullAuto(PathPlanner.loadPathGroup("S-CnCbCb-Leave",
+		// AUTO.kFastPath))));
 
 		chooser.addOption("S-CnCbCb-PrepCn",
 				() -> armSubsystem.getCommandAndWait(Position.ScoringHighCone)
