@@ -10,25 +10,21 @@ package frc.robot.settings;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.PathConstraints;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
-import frc.robot.settings.RobotMap.ROBOT.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 
 public final class Constants {
-	public static final class Drivetrain {
-		// TODO: set these values
-		// public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(206.54);
-		// public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(81.56);
-		// public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(20.15);
-		// public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(292.41);
-		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.66 + 180);
-		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(200.04 + 180);
-		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.51 + 180);
-		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(27.6 + 180);
+	public static final boolean showPrintStatements = false;
+
+	public static final class DRIVETRAIN {
+		public static final double LEFT_FRONT_STEER_OFFSET = -Math.toRadians(115.31 + 180);
+		public static final double RIGHT_FRONT_STEER_OFFSET = -Math.toRadians(202.14 + 180);
+		public static final double LEFT_REAR_STEER_OFFSET = -Math.toRadians(260.33 + 180);
+		public static final double RIGHT_REAR_STEER_OFFSET = -Math.toRadians(24.78 + 180);
 
 		public static final double WHEELBASE_METERS = Units.inchesToMeters(23.058); // 0.5461;
 		public static final double TRACKWIDTH_METERS = Units.inchesToMeters(18.914); // 0.5588;
@@ -56,12 +52,14 @@ public final class Constants {
 		 * <p>
 		 * This is a measure of how fast the robot should be able to drive in a straight
 		 * line.
-		 */
-		public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0
+		 */ // 4.578870701248506
+		public static final double MAX_VELOCITY_METERS_PER_SECOND = 5880.0
 				/ 60.0
 				* SdsModuleConfigurations.MK4I_L2.getDriveReduction()
 				* SdsModuleConfigurations.MK4I_L2.getWheelDiameter()
 				* Math.PI;
+
+		public static final double MAX_ACCELERATION_METERS_PER_SECONDS_SQUARED = MAX_VELOCITY_METERS_PER_SECOND;
 
 		/**
 		 * The maximum angular velocity of the robot in radians per second.
@@ -77,89 +75,54 @@ public final class Constants {
 		public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
 	}
 
-	public static final class LimeLight {
-		public static final String NTtable = "limelight";
-
-		// modes:
-		// 0 = use the LED Mode set in the current pipeline
-		// 1 = force off
-		// 2 = force blink
-		// 3 = force on
-		public enum LEDMode {
-			PIPELINE,
-			OFF,
-			BLINK,
-			ON
-		}
-
-		// modes:
-		// 0 = vision processor
-		// 1 = driver camera
-		public enum CameraMode {
-			VISION,
-			DRIVER
-		}
-
-		// Set stream:
-		// 0 = Standard - Side-by-side streams if a webcam is attached to Limelight
-		// 1 = PiP Main - The secondary camera stream is placed in the lower-right
-		// corner of the primary camera stream
-		// 2 = PiP Secondary - The primary camera stream is placed in the lower-right
-		// corner of the secondary camera stream
-		public enum CameraStream {
-			Standard,
-			PiPMain,
-			PiPSecondary
-		}
-	}
-
 	public static final class ARM {
 		public static final boolean kLeftMotorsInverted = true;
 		public static final boolean kRightMotorsInverted = false;
-		public static final float kReverseLimit = .02f;
-		public static final float kForwardLimit = .74f;
+		public static final float kReverseLimit = .01f;
+		public static final float kForwardLimit = .65f;
 		public static final double kMaxLimitDegrees = ArmSubsystem.calculateArmDegrees(kForwardLimit);
 		public static final double kMinLimitDegrees = ArmSubsystem.calculateArmDegrees(kReverseLimit);
 		public static final int kMotorCurrentLimit = 40;
-		public static final double kZeroOffset = 0.0;
-		public static final double kZeroOffsetInDegrees = 0.0;
+		public static final double kZeroOffsetInDegrees = 0;
 		public static final double kScaleFactor = 192.86;
+		public static final double kLimitSwitchOffset = 0.4430394;
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * PID Constants
 		 */
-		public static final double kArmKp = .2;
+		public static final double kArmKp = 0.2;
 		public static final double kArmKi = 0;
 		public static final double kArmKd = 0;
-		public static final double kArmPositionTolerance = 2;
-		public static final double kArmVelocityTolerance = 20;
+		public static final double kArmPositionPIDTolerance = 2;
+		public static final double kArmPositionLooseTolerance = 4;
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kArmMaxVelocity = 150; // degrees/s
-		public static final double kArmMaxAcceleration = 50; // degrees/s^2
-		public static final double kArmStartingPos = 80; // 60 degrees wrt hortizontal
+		public static final double kArmMaxVelocity = 175; // degrees/s
+		public static final double kArmMaxAcceleration = 125; // degrees/s^2
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = 110;
-		public static final int kScoringHighCubeDegrees = 110;
+		public static final int kScoringHighConeDegrees = 116;
+		public static final int kScoringHighCubeDegrees = 117;
 		public static final int kScoringMidConeDegrees = 107;
 		public static final int kScoringMidCubeDegrees = 110;
-		public static final int kScoringHybridDegrees = 30;
-		public static final int kGroundIntakeUprightConeDegrees = 24;
-		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 13;
-		public static final int kSubstationIntakeConeDegrees = 43;
-		public static final int kSubstationIntakeCubeDegrees = 43;
+		public static final int kScoringHybridConeDegrees = 30;
+		public static final int kScoringHybridCubeDegrees = 110;
+		public static final int kGroundIntakeUprightConeDegrees = 23;
+		public static final int kGroundIntakeTippedConeDegrees = 8;
+		public static final int kGroundIntakeCubeDegrees = 7;
+		public static final int kSingleSubstationIntakeConeDegrees = 43;
+		public static final int kSingleSubstationIntakeCubeDegrees = 43;
+		public static final int kDoubleSubstationIntakeConeDegrees = 56;
+		public static final int kDoubleSubstationIntakeCubeDegrees = 55;
 		public static final int kStowedDegrees = 50;
-		public static final int kStartDegrees = 69;
-
+		public static final int kStartDegrees = 65;
 
 		// #region Enums
 
@@ -168,13 +131,17 @@ public final class Constants {
 			ScoringHighCube(1),
 			ScoringMidCone(2),
 			ScoringMidCube(3),
-			ScoringHybrid(4),
-			GroundIntakeUprightCone(5),
-			GroundIntakeTippedCone(6),
-			GroundIntakeCube(7),
-			SubstationIntakeCone(8),
-			SubstationIntakeCube(9),
-			Stowed(10);
+			ScoringHybridCone(4),
+			ScoringHybridCube(5),
+			GroundIntakeUprightCone(6),
+			GroundIntakeTippedCone(7),
+			GroundIntakeCube(8),
+			SingleSubstationIntakeCone(9),
+			SingleSubstationIntakeCube(10),
+			DoubleSubstationIntakeCone(11),
+			DoubleSubstationIntakeCube(12),
+			Stowed(13),
+			Start(14);
 
 			private int value;
 			private static Map<Integer, Position> map = new HashMap<>();
@@ -253,7 +220,8 @@ public final class Constants {
 
 		public enum IntakePosition {
 			Ground(0),
-			Substation(1);
+			SingleSubstation(1),
+			DoubleSubstation(2);
 
 			private int value;
 			private static Map<Integer, IntakePosition> map = new HashMap<>();
@@ -277,24 +245,40 @@ public final class Constants {
 			}
 		}
 
+		public enum Substation {
+			Single(0),
+			Double(1);
+
+			private int value;
+			private static Map<Integer, Substation> map = new HashMap<>();
+
+			private Substation(int value) {
+				this.value = value;
+			}
+
+			static {
+				for (Substation position : Substation.values()) {
+					map.put(position.value, position);
+				}
+			}
+
+			public static Substation valueOf(int position) {
+				return (Substation) map.get(position);
+			}
+
+			public int getValue() {
+				return value;
+			}
+		}
+
 		// #endregion
 	}
 
 	public static final class WRIST {
-		// TODO add in actual limits for manipulator encoder
-		public static final float kForwardLimit = -1f;
-		public static final float kReverseLimit = .35f;
-
 		public static final int kMotorCurrentLimit = 40;
-
-		public static final boolean kMotorInverted = false;
-
-		public static final double kReverseLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kReverseLimit) + 2;
-		public static final double kForwardLimitDegrees = ArmSubsystem.calculateWristDegreesWrtArm(kForwardLimit) - 2;
-
+		public static final boolean kMotorInverted = true;
 		public static final double kZeroOffset = 0;
 		public static final double kScaleFactor = 180;
-
 		public static final double kLimitSwitchPosition = 0;
 
 		/*
@@ -304,87 +288,114 @@ public final class Constants {
 		public static final double kWristKp = .25;
 		public static final double kWristKi = 0;
 		public static final double kWristKd = 0;
-		public static final double kWristPositionTolerance = 2;
-		public static final double kWristVelocityTolerance = 20;
+		public static final double kWristPositionPIDTolerane = 2;
+		public static final double kWristPositionLooseTolerance = 4;
 
 		// Feed-Forward from SysID
-		public static final double kWristKs = 0.29522;
-		public static final double kWristKv = 0.0095926;
-		public static final double kWristKa = 0.0032297;
-		public static final double kWristKg = 0.52135 * 3;
+		// public static final double kWristKs = 0.29522;
+		// public static final double kWristKv = 0.0095926;
+		// public static final double kWristKa = 0.0032297;
+		// public static final double kWristKg = 0.52135 * 3;
 
-		public static final double kVVoltSecondPerRad = 0.5;
+		// public static final double kVVoltSecondPerRad = 0.5;
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Constraint Constants
 		 */
-		public static final double kWristMaxVelocity = 180; // degrees/s
-		public static final double kWristMaxAcceleration = 120; // degrees/s^2
-		public static final double kWristStartingPos = 0; // 60 degrees wrt arm
+		public static final double kWristMaxVelocity = 255; // degrees/s
+		public static final double kWristMaxAcceleration = 225; // degrees/s^2
 
 		/*
 		 * ----------------------------------------------------------------------------
 		 * Position Constants
 		 */
-		public static final int kScoringHighConeDegrees = -175;
-		public static final int kScoringHighCubeDegrees = -175;
-		public static final int kScoringMidConeDegrees = -80;
-		public static final int kScoringMidCubeDegrees = -90;
-		public static final int kScoringHybridDegrees = 43;
-		public static final int kGroundIntakeUprightConeDegrees = 30;
-		public static final int kGroundIntakeTippedConeDegrees = 15;
-		public static final int kGroundIntakeCubeDegrees = 25;
-		public static final int kSubstationIntakeConeDegrees = 110;
-		public static final int kSubstationIntakeCubeDegrees = 90; 
-		public static final int kStowedDegrees = 46;
-		public static final int kStartDegrees = 0;
-
+		public static final int kScoringHighConeDegrees = -134;
+		public static final int kScoringHighCubeDegrees = -190;
+		public static final int kScoringMidConeDegrees = -70;
+		public static final int kScoringMidCubeDegrees = -115;
+		public static final int kScoringHybridConeDegrees = 43;
+		public static final int kScoringHybridCubeDegrees = -115;
+		public static final int kGroundIntakeUprightConeDegrees = 65;
+		public static final int kGroundIntakeTippedConeDegrees = 140;
+		public static final int kGroundIntakeCubeDegrees = 20;
+		public static final int kSingleSubstationIntakeConeDegrees = 110;
+		public static final int kSingleSubstationIntakeCubeDegrees = 90;
+		public static final int kDoubleSubstationIntakeConeDegrees = 96;
+		public static final int kDoubleSubstationIntakeCubeDegrees = -20;
+		public static final int kStowedDegrees = 0;
+		public static final int kStartDegrees = 20;
 	}
 
 	public static final class INTAKE {
 		public static final boolean kMotorInverted = true;
 		public static final int kMotorCurrentLimit = 30;
-		public static final double kConeIntakeSpeed = .7;
-		public static final double kConeOuttakeSpeed = -0.53;
-		public static final double kCubeIntakeSpeed = -0.5;
-		public static final double kCubeOuttakeSpeed = 0.52;
-		public static final double kCubeShootSpeed = 1.0;
+		public static final double kConeIntakeSpeed = -.53;
+		public static final double kConeOuttakeSpeed = 0.7;
+		public static final double kCubeIntakeSpeed = 0.52;
+		public static final double kCubeOuttakeSpeed = -0.5;
+		public static final double kCubeShootSpeed = -0.5;
 	}
 
-	public static final class Auto {
+	public static final class AUTO {
 		// Proportional gain
-		public static final double kPositionP = 0.001;
+		public static final double kPositionP = 4;
 		// Integral gain
 		public static final double kPositionI = 0;
 		// Derivative gain
 		public static final double kPositionD = 0;
 		// Proportional gain
-		public static final double kThetaP = 20;
+		public static final double kThetaP = 8;
 		// Integral gain
 		public static final double kThetaI = 0;
 		// Derivative gain
-		public static final double kThetaD = 0.6;
-
-		public static final Gains kAutoPositionGains = new Gains(kPositionP, kPositionI, kThetaD);
-		public static final Gains kAutoThetaGains = new Gains(kThetaP, kThetaI, kThetaD);
-
-		public static final double kMaxTurnError = .1; // degrees
-		public static final double kMaxTurnRateError = 1; // Degrees per second
-
-		public static final double kMaxTurnErrorAuto = 5;
-		public static final double kMaxTurnRateErrorAuto = 5;
-
-		public static final int kMaxFetchVelocity = 1;
-		public static final int kMaxFetchAcc = kMaxFetchVelocity / 2;
+		public static final double kThetaD = 0;
 
 		public static final double kStartDelayTime = 0;
-		public static final double kDriveToPlaceDelay = 0; // seconds
-		public static final double kMaxIntakeTime = 1.0; // seconds
 
-		public static final Constraints kThetaControllerConstraints = new Constraints(
-				Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-				Drivetrain.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_PER_SECOND);
+		public static final double kMaxIntakeTime = 1;
+		public static final double kMaxOuttakeTime = 0.5;
+
+		public static final double kBalanceClimbingAngle = 12.5;
+		public static final double kBalanceTippingAngle = 9.5;
+
+		public static final PathConstraints kFastestPath = new PathConstraints(3.1, 2.7);
+		public static final PathConstraints kFastPath = new PathConstraints(3, 2.25);
+		public static final PathConstraints kMediumPath = new PathConstraints(2, 1.75);
+		public static final PathConstraints kSlowPath = new PathConstraints(1, 1);
+		public static final PathConstraints kReallySlowPath = new PathConstraints(.75, .75);
+	}
+
+	public static final class AUTO_BALANCE {
+		/**********
+		 * CONFIG *
+		 **********/
+		// Speed the robot drived while scoring/approaching station, default = 0.4
+		public static final double kRobotSpeedFast = 0.25;
+
+		// Speed the robot drives while balancing itself on the charge station.
+		// Should be roughly half the fast speed, to make the robot more accurate,
+		// default = 0.2
+		public static final double kRobotSpeedSlow = 0.15;
+
+		// Angle where the robot knows it is on the charge station, default = 13.0
+		public static final double kOnChargeStationDegree = 11.0;
+
+		// Angle where the robot can assume it is level on the charging station
+		// Used for exiting the drive forward sequence as well as for auto balancing,
+		// default = 6.0
+		public static final double kLevelDegree = 4.0;
+
+		// Amount of time a sensor condition needs to be met before changing states in
+		// seconds
+		// Reduces the impact of sensor noice, but too high can make the auto run
+		// slower, default = 0.2
+		public static final double kDebounceTime = 0.05;
+
+		// Speed at which the robot reverses once charge station tips forward
+		public static final double kReverseCorrectionSpeed = -0.07;
+		// Speed it goes the other way when it tips backs
+		public static final double kForwardCorrectionSpeed = 0.05;
 	}
 
 	public static final class OI {
@@ -397,6 +408,11 @@ public final class Constants {
 		public static final String NTtable = "StreamDeck";
 		public static final String scoringHeight = "scoringHeight";
 		public static final String gamePiece = "gamePiece";
+	}
+
+	public static final class LEDS{
+		public static final int numLEDs = 30;
+		
 	}
 
 	public static final class Directories {

@@ -53,5 +53,9 @@ public final class RobotMap {
 			public static final int USB_XBOX_CONTROLLER = 0;
 			public static final int USB_JOYSTICK = 1;
 		}
+
+		public static final class LEDS{
+			public static final int PWM_PORT = 0;
+		}
 	}
 }

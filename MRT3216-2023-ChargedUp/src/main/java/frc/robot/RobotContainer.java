@@ -2,25 +2,25 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OI.OIUtils;
+import frc.robot.commands.AutoChooser;
 import frc.robot.commands.TeleDrive;
 import frc.robot.settings.Constants;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
-import frc.robot.settings.Constants.Auto;
-import frc.robot.settings.Constants.Drivetrain;
+import frc.robot.settings.Constants.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDS;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
-
-// endregion
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -36,14 +36,16 @@ public class RobotContainer {
 
 	private static RobotContainer instance;
 	@Log.BooleanBox(name = "Gyro Con.", tabName = "Driver", methodName = "gyroConnected", rowIndex = 1, columnIndex = 6, width = 1, height = 1)
-	private SwerveSubsystem driveSystem;
+	private SwerveSubsystem swerveSubsystem;
 	private AutoChooser autoChooser;
-	private double autoStartDelayTime;
 	private double translationExpo;
 	private double rotationExpo;
 	private CommandXboxController controller;
 	private ArmSubsystem armSystem;
-	private IntakeSubsystem intakeSystem;
+	private WristSubsystem wristSubsystem;
+	private IntakeSubsystem intakeSubsystem;
+	private LEDS ledSubsystem;
+	private boolean hasWristZeroed = false;
 
 	// #endregion
 
@@ -52,7 +54,6 @@ public class RobotContainer {
 	 */
 	private RobotContainer() {
 		this.controller = new CommandXboxController(0);
-		this.autoStartDelayTime = Constants.Auto.kStartDelayTime;
 		this.translationExpo = Constants.OI.kTranslationExpo;
 		this.rotationExpo = Constants.OI.kRotationnExpo;
 
@@ -69,10 +70,13 @@ public class RobotContainer {
 	}
 
 	public void initSubsystems() {
-		this.driveSystem = SwerveSubsystem.getInstance();
+		this.swerveSubsystem = SwerveSubsystem.getInstance();
 		this.autoChooser = AutoChooser.getInstance();
 		this.armSystem = ArmSubsystem.getInstance();
-		this.intakeSystem = IntakeSubsystem.getInstance();
+		this.wristSubsystem = WristSubsystem.getInstance();
+		this.intakeSubsystem = IntakeSubsystem.getInstance();
+		this.ledSubsystem = LEDS.getInstance();
+		this.ledSubsystem.setColor(Color.kRed);
 	}
 
 	/**
@@ -84,16 +88,16 @@ public class RobotContainer {
 	 * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
-		if (driveSystem != null && controller != null) {
-			driveSystem.setDefaultCommand(
+		if (swerveSubsystem != null && controller != null) {
+			swerveSubsystem.setDefaultCommand(
 					new TeleDrive(
-							driveSystem,
+							swerveSubsystem,
 							() -> OIUtils.modifyAxis(controller.getLeftY(), this.translationExpo)
-									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+									* DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND,
 							() -> OIUtils.modifyAxis(controller.getLeftX(), this.translationExpo)
-									* Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
+									* DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND,
 							() -> OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
-									* Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+									* DRIVETRAIN.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}
 
@@ -116,51 +120,62 @@ public class RobotContainer {
 							this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
 						}));
 
-		// controller.leftBumper().whileTrue(Commands.run(() ->
-		// this.armSystem.runWristMotor(.1)).finallyDo((end) -> {
+		// controller.rightTrigger()
+		// .whileTrue(
+		// new ProxyCommand(!wristSubsystem.isWristZeroed() ? Commands
+		// .run(() -> this.wristSubsystem.runWristMotor(controller.getRightTriggerAxis()
+		// / 7),
+		// wristSubsystem)
+		// .finallyDo((end) -> {
+		// this.wristSubsystem.enable();
+		// this.wristSubsystem.stopWristMotorAndResetPID();
+		// this.wristSubsystem.setWristGoal(this.wristSubsystem.getWristDegreesWrtArm());
+		// })
+		// : Commands.run(() ->
+		// this.armSystem.runArmMotors(controller.getRightTriggerAxis() / 7),
+		// armSystem)
+		// .finallyDo((end) -> {
 		// this.armSystem.enable();
-		// this.armSystem.stopWristMotorAndResetPID();
-		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		// }));
-
-		// controller.rightBumper().whileTrue(Commands.run(() ->
-		// this.armSystem.runWristMotor(-.1)).finallyDo((end) -> {
-		// this.armSystem.enable();
-		// this.armSystem.stopWristMotorAndResetPID();
-		// this.armSystem.setWristGoal(this.armSystem.getWristDegreesWrtArm());
-		// }));
+		// this.armSystem.stopArmMotorsAndResetPID();
+		// this.armSystem.setArmGoal(this.armSystem.getArmDegrees());
+		// })));
 
 		controller.a().onTrue(new ProxyCommand(armSystem::getGroundIntakeCommand));
-		// controller.b().onTrue(new
-		// ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 		controller.b().onTrue(new ProxyCommand(armSystem::getStowedCommand));
 		controller.x().onTrue(new ProxyCommand(armSystem::getScoringCommand));
 		controller.y().onTrue(new ProxyCommand(armSystem::getSubstationIntakeCommand));
 		controller.start().onTrue(new ProxyCommand(armSystem::getStartCommand));
-
-		// controller.rightStick().onTrue(new
-		// ProxyCommand(armSystem::getStowedCommand));
+		controller.back().onTrue(new ProxyCommand(armSystem::getGroundTippedConeIntakeCommand));
 
 		controller.povLeft().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Hybrid)));
 		controller.povUp().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.Mid)));
 		controller.povRight().onTrue(Commands.runOnce(() -> this.armSystem.setScoringHeight(ScoringHeight.High)));
 		controller.povDown().onTrue(Commands.runOnce(() -> this.armSystem.toggleGamePiece()));
 
-		controller.leftStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cone)));
-		controller.rightStick().onTrue(Commands.runOnce(() -> this.armSystem.setGamePiece(GamePiece.Cube)));
-		
+		controller.leftStick().whileTrue(Commands.run(
+				() -> this.wristSubsystem.runWristMotor(.1), wristSubsystem)
+				.finallyDo((end) -> this.wristSubsystem.runWristMotor(0)));
+		controller.rightStick().whileTrue(
+					Commands.run(() ->   this.wristSubsystem.runWristMotor(-.1))
+				.finallyDo((end) -> this.wristSubsystem.runWristMotor(0)));
 
-		// Place piece
+		// controller.rightStick().onTrue(new
+		// ProxyCommand(this.armSystem::getZeroMode));
+
+		// Eject
 		controller.leftBumper()
 				.whileTrue(new ProxyCommand(
-						() -> intakeSystem.getCommand(false, armSystem.getGamePiece(), armSystem.getScoringHeight())));
+						() -> intakeSubsystem.getCommand(false, armSystem.getGamePiece(),
+								armSystem.getScoringHeight())));
 		// Intake
 		controller.rightBumper()
 				.whileTrue(new ProxyCommand(
-						() -> intakeSystem.getCommand(true, armSystem.getGamePiece(), armSystem.getScoringHeight())));
+						() -> intakeSubsystem.getCommand(true, armSystem.getGamePiece(),
+								armSystem.getScoringHeight())));
 	}
 
 	public void disablePIDSubsystems() {
+		// This will disable both the arm and wrist
 		armSystem.disable();
 	}
 
@@ -170,6 +185,7 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+		armSystem.setGamePiece(GamePiece.Cone);
 		return this.autoChooser.getAutoCommand();
 	}
 
@@ -181,29 +197,25 @@ public class RobotContainer {
 		return instance;
 	}
 
-	public SwerveSubsystem getDriveSystem() {
-		return driveSystem;
+	public SwerveSubsystem getSwerveSubsystem() {
+		return swerveSubsystem;
 	}
 
-	@Config(name = "Auto Delay", tabName = "Tuning", methodName = "setStartDelayTime", defaultValueNumeric = Auto.kStartDelayTime, methodTypes = {
-			double.class }, rowIndex = 1, columnIndex = 0)
-	public void setStartDelayTime(double startDelayTime) {
-		this.autoStartDelayTime = startDelayTime;
-	}
+	// #region Logging
 
-	public double getAutoStartDelayTime() {
-		return this.autoStartDelayTime;
-	}
+	// @Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue =
+	// Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1,
+	// rowIndex = 0, columnIndex = 0, height = 1, width = 1)
+	// public void setTranslationExpo(double expo) {
+	// this.translationExpo = expo;
+	// }
 
-	@Config.NumberSlider(name = "Trans. Expo", tabName = "Tuning", defaultValue = Constants.OI.kTranslationExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 0, columnIndex = 0, height = 1, width = 1)
-	public void setTranslationExpo(double expo) {
-		this.translationExpo = expo;
-	}
-
-	@Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1, rowIndex = 1, columnIndex = 0, height = 1, width = 1)
-	public void setRotationExpo(double expo) {
-		this.rotationExpo = expo;
-	}
+	// @Config.NumberSlider(name = "Rotation Expo", tabName = "Tuning", defaultValue
+	// = Constants.OI.kRotationnExpo, min = 0, max = 100, blockIncrement = 1,
+	// rowIndex = 1, columnIndex = 0, height = 1, width = 1)
+	// public void setRotationExpo(double expo) {
+	// this.rotationExpo = expo;
+	// }
 
 	@Log.BooleanBox(name = "Game Piece", tabName = "Driver", rowIndex = 0, columnIndex = 0, height = 3, width = 3, colorWhenTrue = "#EFBE00", colorWhenFalse = "#7450E8")
 	public boolean getGamePiece() {
@@ -227,6 +239,13 @@ public class RobotContainer {
 
 	@Log.BooleanBox(name = "Wrist Zeroed", tabName = "Driver", rowIndex = 0, columnIndex = 6, height = 1, width = 1)
 	public boolean isWristZeroed() {
-		return this.armSystem.isWristZeroed();
+		boolean isWristZeroed = this.wristSubsystem.isWristZeroed();
+		if (isWristZeroed != this.hasWristZeroed) {
+			this.hasWristZeroed = isWristZeroed;
+			ledSubsystem.setTopGreen();
+		}
+		return isWristZeroed;
 	}
+
+	// #endregion
 }

@@ -8,9 +8,9 @@ import static frc.robot.settings.Constants.INTAKE.kConeIntakeSpeed;
 import static frc.robot.settings.Constants.INTAKE.kConeOuttakeSpeed;
 import static frc.robot.settings.Constants.INTAKE.kCubeIntakeSpeed;
 import static frc.robot.settings.Constants.INTAKE.kCubeOuttakeSpeed;
+import static frc.robot.settings.Constants.INTAKE.kCubeShootSpeed;
 import static frc.robot.settings.Constants.INTAKE.kMotorCurrentLimit;
 import static frc.robot.settings.Constants.INTAKE.kMotorInverted;
-import static frc.robot.settings.Constants.INTAKE.kCubeShootSpeed;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -19,11 +19,11 @@ import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.settings.Constants.ARM.GamePiece;
 import frc.robot.settings.Constants.ARM.ScoringHeight;
-import frc.robot.settings.Constants.Auto;
+import frc.robot.settings.Constants.AUTO;
 import frc.robot.settings.RobotMap;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -31,11 +31,11 @@ public class IntakeSubsystem extends SubsystemBase {
     protected boolean enabled;
     private CANSparkMax motor;
     private SparkMaxLimitSwitch limitSwitch;
-    private ArmSubsystem armSubsystem;
+    private WristSubsystem wristSubsystem;
 
     /** Creates a new IntakeSubsystem. */
     private IntakeSubsystem() {
-        this.armSubsystem = ArmSubsystem.getInstance();
+        this.wristSubsystem = WristSubsystem.getInstance();
         motor = new CANSparkMax(RobotMap.ROBOT.INTAKE.MOTOR, MotorType.kBrushless);
 
         motor.restoreFactoryDefaults();
@@ -55,17 +55,15 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler
         if (limitSwitch.isPressed()) {
-            armSubsystem.resetWristEncoderPosition();
-            System.out.println("Encoder position reset by limit switch");
+            System.out.println("Calling to reset encoder position");
+            wristSubsystem.resetWristEncoderPosition();
         }
     }
 
     public Command getCommand(boolean intake, GamePiece piece, ScoringHeight height) {
         if (piece == GamePiece.Cone) {
-            System.out.println("Running cone intake");
             return getIntakeCommand(intake ? kConeIntakeSpeed : kConeOuttakeSpeed);
         } else {
-            System.out.println("Running cube intake");
             if (height == ScoringHeight.Hybrid) {
                 return getIntakeCommand(intake ? kCubeIntakeSpeed : kCubeShootSpeed);
             } else {
@@ -81,15 +79,24 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command getAutoConeCommand(boolean intake) {
-        return new ParallelRaceGroup(
-                Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed)),
-                Commands.waitSeconds(Auto.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
+        return new ProxyCommand(
+                () -> Commands.run(() -> motor.set(intake ? kConeIntakeSpeed : kConeOuttakeSpeed))
+                        .withTimeout(intake ? AUTO.kMaxIntakeTime : AUTO.kMaxOuttakeTime)
+                        .finallyDo((end) -> motor.set(0)));
+    }
+
+    public Command getAutoEjectConeCommand() {
+        return new ProxyCommand(
+                () -> Commands.run(() -> motor.set(kConeOuttakeSpeed))
+                        .withTimeout(AUTO.kMaxOuttakeTime)
+                        .finallyDo((end) -> motor.set(0)));
     }
 
     public Command getAutoCubeCommand(boolean intake) {
-        return new ParallelRaceGroup(
-                Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed)),
-                Commands.waitSeconds(Auto.kMaxIntakeTime)).finallyDo((end) -> motor.set(0));
+        return new ProxyCommand(
+                () -> Commands.run(() -> motor.set(intake ? kCubeIntakeSpeed : kCubeOuttakeSpeed))
+                        .withTimeout(intake ? AUTO.kMaxIntakeTime : AUTO.kMaxOuttakeTime)
+                        .finallyDo((end) -> motor.set(0)));
     }
 
     public static IntakeSubsystem getInstance() {

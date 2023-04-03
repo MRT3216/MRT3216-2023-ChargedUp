@@ -2,15 +2,15 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 5.95,
-        "y": 4.61
+        "x": 1.946448286619825,
+        "y": 0.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.073777018719682,
-        "y": 4.754698063296215
+        "x": 3.5311568707098555,
+        "y": 0.5
       },
-      "holonomicAngle": 0.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -24,15 +24,15 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9350128286561847,
-        "y": 4.3912158580379925
+        "x": 6.37197051854874,
+        "y": 0.5
       },
       "prevControl": {
-        "x": 3.2109760275611703,
-        "y": 4.856173603670608
+        "x": 4.549566051534476,
+        "y": 0.5
       },
       "nextControl": null,
-      "holonomicAngle": 0.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -45,8 +45,12 @@
       }
     }
   ],
- "maxVelocity": 2.0,
-  "maxAcceleration": 1.0,
-  "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.21,
+      "names": [
+        "stow"
+      ]
+    }
+  ]
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AutoChooser;
 import io.github.oblarg.oblog.Logger;
 
 /**
@@ -32,15 +33,15 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		// Starts recording to data log
-		// TODO: Decide if this should be removed 
+		// TODO: Decide if this should be removed
 		DataLogManager.start();
 
 		// Instantiate our RobotContainer. This will perform all our button bindings,
 		// and put our autonomous chooser on the dashboard.
 		robotContainer = RobotContainer.getInstance();
-		AutoChooser.getInstance().populateAutoChooser();
-		robotContainer.getDriveSystem().calibrateGyroscope();
-		robotContainer.getDriveSystem().zeroGyroscope();
+		AutoChooser.getInstance().init();
+		robotContainer.getSwerveSubsystem().calibrateGyroscope();
+		robotContainer.getSwerveSubsystem().zeroGyroscope();
 		PowerDistribution pdh = new PowerDistribution();
 		pdh.clearStickyFaults();
 		pdh.close();
@@ -75,7 +76,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.disablePIDSubsystems();
-		// LimelightSubsystem.getInstance().setLEDMode(LEDMode.OFF);
 	}
 
 	@Override
@@ -88,9 +88,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		// LimelightSubsystem.getInstance().setLEDMode(LEDMode.ON);
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
-		if (robotContainer.getDriveSystem() != null) {
+		if (robotContainer.getSwerveSubsystem() != null) {
 			// schedule the autonomous command
 			if (m_autonomousCommand != null) {
 				m_autonomousCommand.schedule();
