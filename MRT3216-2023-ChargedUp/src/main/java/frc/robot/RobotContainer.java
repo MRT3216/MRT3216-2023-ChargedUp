@@ -16,7 +16,7 @@ import frc.robot.settings.Constants.ARM.ScoringHeight;
 import frc.robot.settings.Constants.DRIVETRAIN;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LEDS;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import io.github.oblarg.oblog.Logger;
@@ -44,7 +44,7 @@ public class RobotContainer {
 	private ArmSubsystem armSystem;
 	private WristSubsystem wristSubsystem;
 	private IntakeSubsystem intakeSubsystem;
-	private LEDS ledSubsystem;
+	private LEDs ledSubsystem;
 	private boolean hasWristZeroed = false;
 
 	// #endregion
@@ -75,7 +75,7 @@ public class RobotContainer {
 		this.armSystem = ArmSubsystem.getInstance();
 		this.wristSubsystem = WristSubsystem.getInstance();
 		this.intakeSubsystem = IntakeSubsystem.getInstance();
-		this.ledSubsystem = LEDS.getInstance();
+		this.ledSubsystem = LEDs.getInstance();
 		this.ledSubsystem.setColor(Color.kRed);
 	}
 

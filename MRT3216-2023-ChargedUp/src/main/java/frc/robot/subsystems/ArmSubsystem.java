@@ -33,7 +33,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
     @Log.Exclude
     @Config.Exclude
     private WristSubsystem wristSubsystem;
-    private LEDS ledSubsystem;
+    private LEDs ledSubsystem;
     protected boolean enabled;
     private NetworkTable streamDeckNT;
     private boolean isArmZeroed;
@@ -66,7 +66,7 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.enabled = false;
         this.isArmZeroed = false;
         this.wristSubsystem = WristSubsystem.getInstance();
-        this.ledSubsystem = LEDS.getInstance();
+        this.ledSubsystem = LEDs.getInstance();
         NetworkTable table = NetworkTableInstance.getDefault().getTable(Constants.StreamDeck.NTtable);
         this.streamDeckNT = table;
 

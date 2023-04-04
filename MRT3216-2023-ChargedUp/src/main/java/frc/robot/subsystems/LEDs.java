@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.settings.Constants;
 import frc.robot.settings.RobotMap.ROBOT;
 
-public class LEDS {
+public class LEDs {
     private final AddressableLEDBuffer ledBuffer;
     private final AddressableLED led;
-    private static LEDS instance;
+    private static LEDs instance;
 
-    private LEDS() {
+    private LEDs() {
         led = new AddressableLED(ROBOT.LEDS.PWM_PORT);
         ledBuffer = new AddressableLEDBuffer(Constants.LEDS.numLEDs);
         led.setLength(ledBuffer.getLength());
@@ -19,10 +19,10 @@ public class LEDS {
         led.start();
     }
 
-    public static LEDS getInstance() {
+    public static LEDs getInstance() {
         if (instance == null) {
             // if instance is null, initialize
-            instance = new LEDS();
+            instance = new LEDs();
         }
         return instance;
     }
