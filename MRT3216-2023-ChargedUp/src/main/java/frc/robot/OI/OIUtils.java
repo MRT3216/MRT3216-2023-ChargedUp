@@ -3,7 +3,8 @@ package frc.robot.OI;
 import frc.robot.settings.Constants.OI;
 
 public class OIUtils {
-	public static double modifyAxis(double value, double expo) {
+	public static double 
+	modifyAxis(double value, double expo) {
 		// Deadband
 		value = deadband(value, OI.kJoystickDeadband);
 
@@ -27,6 +28,6 @@ public class OIUtils {
 		double adjValue =
 				(1 - ((100 - expo) / 100)) * Math.pow(value, 3) + (value * ((100 - expo) / 100));
 
-		return adjValue;
+		return adjValue;	
 	}
 }

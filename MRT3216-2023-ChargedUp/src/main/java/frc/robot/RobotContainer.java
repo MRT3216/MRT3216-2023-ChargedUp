@@ -92,11 +92,11 @@ public class RobotContainer {
 			swerveSubsystem.setDefaultCommand(
 					new TeleDrive(
 							swerveSubsystem,
-							() -> OIUtils.modifyAxis(controller.getLeftY(), this.translationExpo)
+							() -> OIUtils.modifyAxis(controller.getLeftY()/2, this.translationExpo)
 									* DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND,
-							() -> OIUtils.modifyAxis(controller.getLeftX(), this.translationExpo)
+							() -> OIUtils.modifyAxis(controller.getLeftX()/2, this.translationExpo)
 									* DRIVETRAIN.MAX_VELOCITY_METERS_PER_SECOND,
-							() -> OIUtils.modifyAxis(-controller.getRightX(), this.rotationExpo)
+							() -> OIUtils.modifyAxis(-controller.getRightX()/2, this.rotationExpo)
 									* DRIVETRAIN.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 							true));
 		}

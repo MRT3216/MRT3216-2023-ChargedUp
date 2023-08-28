@@ -490,6 +490,11 @@ public class ArmSubsystem extends SubsystemBase implements Loggable {
         this.sub = isDouble ? ARM.Substation.Double : ARM.Substation.Single;
     }
 
+    // @Config.ToggleSwitch(name = "Outreach Event?", tabName = "Driver", defaultValue = true, rowIndex = 2, columnIndex = 7, height = 1, width = 2)
+    // public void setOutreach(boolean isOutreach) {
+    //     this.
+    // }
+
     // #endregion
 
     // #endregion
